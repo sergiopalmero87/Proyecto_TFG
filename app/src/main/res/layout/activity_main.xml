@@ -18,7 +18,7 @@
         app:lottie_autoPlay="false"
         app:lottie_colorFilter="@color/button"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/logout"
+        app:lottie_rawRes="@raw/out"
         app:lottie_speed="2.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
