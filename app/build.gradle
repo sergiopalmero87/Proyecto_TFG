@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -39,6 +40,13 @@ dependencies {
 
     // Gson para simplificar el proceso de manejar datos JSON.
     implementation 'com.google.code.gson:gson:2.10.1'
+
+    //BOM de firebase
+    implementation platform('com.google.firebase:firebase-bom:32.7.4')
+
+    //Analytics de firebase
+    implementation 'com.google.firebase:firebase-analytics'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

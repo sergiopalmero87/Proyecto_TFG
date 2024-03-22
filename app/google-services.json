@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922915579598",
+    "project_id": "proyecto-tfg-d0486",
+    "storage_bucket": "proyecto-tfg-d0486.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922915579598:android:ef03181f156e267479d29f",
+        "android_client_info": {
+          "package_name": "com.edix.tfc.proyecto_tfg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdiItse7bTFLdCvTqsjArr04pEGu-GmUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
