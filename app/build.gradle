@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'com.edix.tfc.proyecto_tfg'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.edix.tfc.proyecto_tfg"
