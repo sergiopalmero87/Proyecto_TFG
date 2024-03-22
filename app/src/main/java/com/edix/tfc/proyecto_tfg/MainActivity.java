@@ -1,10 +1,14 @@
 package com.edix.tfc.proyecto_tfg;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         logOutButton = findViewById(R.id.logOut);
 
+
+        logOut();
+    }
+
+
+    private void logOut () {
         // Establecer el OnClickListener para el botón de salida
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
