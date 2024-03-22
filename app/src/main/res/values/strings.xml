@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Proyecto_TFG</string>
+    <string name="app_name">SportHub</string>
+    <string name="hintEmail">Email</string>
+    <string name="hintPassword">Password</string>
+    <string name="buttonAcceder">Acceder</string>
+    <string name="registrar">Registrar usuario</string>
 </resources>
