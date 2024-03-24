@@ -81,35 +81,6 @@ public class AuthActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AuthActivity.this, RegistActivity.class);
                 startActivity(intent);
-                // Almacenamos en estas variables y pasamos a string las varibales emailText y passText
-                String email = emailText.getText().toString();
-                String password = passText.getText().toString();
-
-                if(email.isEmpty()){
-                    emailText.setError("The email can not be empty");
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    emailText.setError("Incorrect email");
-                } else if(password.length() < 6){
-                    passText.setError("Minimum 6 characters");
-                }else {
-                    // Crear usuario en FiraBase con email y pass
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                //Al completar la info del nuevo usuario y darle a crear usuario:
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        // User registrado correctamente
-                                        Toast.makeText(AuthActivity.this, "User registered", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(AuthActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                    } else{
-                                        Toast.makeText(AuthActivity.this, "Something went wrong. Try it again", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
-
 
             }
         });
