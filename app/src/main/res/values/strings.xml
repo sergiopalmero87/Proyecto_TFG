@@ -2,6 +2,12 @@
     <string name="app_name">SportHub</string>
     <string name="hintEmail">Email</string>
     <string name="hintPassword">Password</string>
+    <string name="hintNombreUser">Nombre usuario</string>
     <string name="buttonAcceder">Acceder</string>
     <string name="registrar">Registrar usuario</string>
+    <string name="registrarUsuario">Registrar</string>
+    <string name="futbol">Fútbol</string>
+    <string name="baloncesto">Baloncesto</string>
+    <string name="tenis">tenis\n</string>
+    <string name="formula1">f1</string>
 </resources>

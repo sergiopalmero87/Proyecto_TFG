@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".AuthActivity">
+
+
+    <TextView
+        android:id="@+id/tituloApp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@color/cardview_light_background"
+        android:elevation="20dp"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="@color/button"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/cajaNombreUser"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/black"
+        android:layout_width="350dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="60dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tituloApp"
+        android:textColorHint="@color/black"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:fontFamily="@font/cascadia"
+            android:id="@+id/textoNombreUser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hintNombreUser"
+            android:padding="2dp"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/cajaEmailRegist"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/black"
+        android:layout_width="350dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cajaNombreUser"
+        android:textColorHint="@color/black"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:fontFamily="@font/cascadia"
+            android:id="@+id/textoEmail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hintEmail"
+            android:padding="2dp"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="350dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cajaEmailRegist"
+        android:id="@+id/cajaPasswordRegist"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/black"
+        android:textColorHint="@color/black" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:fontFamily="@font/cascadia"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hintPassword"
+            android:id="@+id/textoPassword"
+            android:padding="2dp"
+            android:inputType="textPassword"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="35dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:columnCount="4"
+        android:rowCount="1"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/cajaPasswordRegist"
+        >
+
+            <CheckBox
+                android:id="@+id/chFutbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/futbol"
+                android:layout_row="0"
+                android:layout_marginLeft="30dp"
+                android:layout_column="0"
+                />
+
+            <CheckBox
+                android:id="@+id/chBaloncesto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/baloncesto"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_marginStart="30dp"
+                />
+
+            <CheckBox
+                android:id="@+id/chF1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/formula1"
+                android:layout_row="0"
+                android:layout_column="2"
+                android:layout_marginStart="20dp"
+                />
+    </GridLayout>
+
+
+
+    <Button
+        android:fontFamily="@font/cascadia"
+        android:id="@+id/loginButtonRegist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:backgroundTint="@color/button"
+        android:text="@string/registrarUsuario"
+        android:textSize="28sp"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cajaPasswordRegist"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

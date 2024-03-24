@@ -79,6 +79,8 @@ public class AuthActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(AuthActivity.this, RegistActivity.class);
+                startActivity(intent);
                 // Almacenamos en estas variables y pasamos a string las varibales emailText y passText
                 String email = emailText.getText().toString();
                 String password = passText.getText().toString();
