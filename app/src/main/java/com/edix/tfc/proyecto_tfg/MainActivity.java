@@ -7,28 +7,38 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private LottieAnimationView logOutButton, configButton;
+    private TextView nombreUserMain;
     private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mAuth = FirebaseAuth.getInstance();
         logOutButton = findViewById(R.id.logOut);
         configButton = findViewById(R.id.config);
+        nombreUserMain = findViewById(R.id.nombreUserMain);
 
         logOut();
         config();
+        nombreUserMain();
+
     }
 
 
@@ -76,5 +86,19 @@ public class MainActivity extends AppCompatActivity {
                 );
             }
         });
+    }
+
+    private void nombreUserMain(){
+        // Obtener el nombre de usuario del Intent RegistActivity
+        String nombreUsuario = getIntent().getStringExtra("nombreUsuario");
+
+        // Verificar si el nombre de usuario es nulo y lo mostramos
+        if (nombreUsuario != null) {
+            // Establecer el nombre de usuario en el TextView
+            nombreUserMain.setText("Hola " + nombreUsuario);
+        } else {
+            // Si el nombre de usuario es nulo, mostrar un mensaje predeterminado
+            nombreUserMain.setText("Hola user");
+        }
     }
 }

@@ -25,13 +25,24 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="3dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/logOut"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="false"
         app:lottie_colorFilter="@color/button"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/configuracion"
         app:lottie_speed="2.0" />
+
+    <TextView
+        android:id="@+id/nombreUserMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="20dp"
+        android:textSize="30sp"
+        android:layout_marginTop="16dp"
+        android:text="hola user"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

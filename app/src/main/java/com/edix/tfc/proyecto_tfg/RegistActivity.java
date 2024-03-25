@@ -60,6 +60,8 @@ public class RegistActivity extends AppCompatActivity {
                                         // User registrado correctamente
                                         Toast.makeText(RegistActivity.this, "Usuario registrado", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(RegistActivity.this, MainActivity.class);
+                                        //Mandamos el nombre del usuario al intent MainActivity para que el usuario vea la UI mas personalizada.
+                                        intent.putExtra("nombreUsuario", nombreUser);
                                         startActivity(intent);
                                     } else{
                                         Toast.makeText(RegistActivity.this, "Algo salió mal. Intentelo de nuevo", Toast.LENGTH_SHORT).show();
