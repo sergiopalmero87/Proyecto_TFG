@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
@@ -25,14 +26,27 @@ public class AuthActivity extends AppCompatActivity {
     TextView signUpButton;
     private FirebaseAuth mAuth;
     EditText emailText, passText;
+    private FirebaseFirestore db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
+        iniciarVariables();
+        iniciarSesion();
+        botonRegistrar();
+
+
+    }
+
+
+    private void iniciarVariables() {
         // Inicializamos Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
+        db = FirebaseFirestore.getInstance();
 
         // Inicializamos emailText y passText con el contenido de la caja.
         emailText = findViewById(R.id.textoEmail);
@@ -40,7 +54,10 @@ public class AuthActivity extends AppCompatActivity {
 
         //inicializamos la variable del loginButton y lo ponemos a la escucha
         loginButton = findViewById(R.id.loginButton);
+    }
 
+
+    private void iniciarSesion() {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,31 +66,45 @@ public class AuthActivity extends AppCompatActivity {
                 String email = emailText.getText().toString();
                 String password = passText.getText().toString();
 
-                if(email.isEmpty()){
+                if (email.isEmpty()) {
                     emailText.setError("The email can not be empty");
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     emailText.setError("Incorrect email");
-                } else if(password.length() < 6){
+                } else if (password.length() < 6) {
                     passText.setError("Minimum 6 characters");
-                } else{
-                    // Accedemos con email y pass a nuestra cuenta
-                    mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        // User registrado correctamente
-                                        Intent intent = new Intent(AuthActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(AuthActivity.this, "Something went wrong. Try it again", Toast.LENGTH_LONG).show();
-                                    }
+                } else {
+                    //Comprobamos en la bbdd si el email existe
+                    db.collection("users")
+                            .whereEqualTo("email", email)
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                //Si lo que obtenemos de la bbdd esta vacio es porque no existe.
+                                if (task.getResult().isEmpty()) {
+                                    Toast.makeText(AuthActivity.this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // Accedemos con email y pass a nuestra cuenta
+                                    mAuth.signInWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        // User autenticado correctamente
+                                                        Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                    } else {
+                                                        Toast.makeText(AuthActivity.this, "Algo salió mal. Inténtelo de nuevo", Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            });
                                 }
                             });
                 }
             }
         });
+    }
 
+
+    private void botonRegistrar() {
         //Inicializamos la variable del signUpButton y la ponemos a la escucha
         signUpButton = findViewById(R.id.signUpButton);
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -85,5 +116,6 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
     }
+
 }
 
