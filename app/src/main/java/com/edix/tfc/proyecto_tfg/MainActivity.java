@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Funcion para cuando se pulse el icono de log out
     private void logOut () {
         // Listener para el botón de logOut
         logOutButton.setOnClickListener(new View.OnClickListener() {
@@ -74,8 +75,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // Funcion para cuando se pulse el icono de configuracion
     private void config () {
-        // Establecer el OnClickListener para el botón de salida
+        // Establecer el OnClickListener para el botón de config
         configButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
