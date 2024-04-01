@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +33,7 @@ public class RegistActivity extends AppCompatActivity {
     Button registButton;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private LottieAnimationView volver;
 
 
     @Override
@@ -42,6 +44,7 @@ public class RegistActivity extends AppCompatActivity {
 
         iniciarVariables();
         registrarUser();
+        volver();
 
     }
 
@@ -56,6 +59,7 @@ public class RegistActivity extends AppCompatActivity {
         emailText = findViewById(R.id.textoEmail);
         passwordText = findViewById(R.id.textoPassword);
         registButton = findViewById(R.id.loginButtonRegist);
+        volver = findViewById(R.id.volver);
     }
 
     private void registrarUser(){
@@ -129,6 +133,28 @@ public class RegistActivity extends AppCompatActivity {
                                 }
                             });
                 }
+            }
+        });
+    }
+
+
+    private void volver(){
+        volver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Reproducir la animación
+                volver.playAnimation();
+
+                // Cerrar sesión después de un breve retraso
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                startActivity(new Intent(RegistActivity.this, AuthActivity.class));
+                                finish();
+                            }
+                        },
+                        1000 // Retraso de 1 segundo para dar tiempo a la animación
+                );
             }
         });
     }
