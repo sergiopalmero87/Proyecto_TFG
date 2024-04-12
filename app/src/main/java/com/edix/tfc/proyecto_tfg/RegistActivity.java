@@ -83,6 +83,7 @@ public class RegistActivity extends AppCompatActivity {
                             .whereEqualTo("email", email)
                             .get()
                             .addOnCompleteListener(task -> {
+                                // Si el task de comparar si existe el email en la collection es exitoso:
                                 if (task.isSuccessful()) {
                                     //Si lo que obtenemos de la bbdd no esta vacio es porque el correo ya esta usado
                                     if (!task.getResult().isEmpty()) {
@@ -105,7 +106,7 @@ public class RegistActivity extends AppCompatActivity {
                                                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                                         @Override
                                                                         public void onSuccess(DocumentReference documentReference) {
-                                                                            Toast.makeText(RegistActivity.this, "Usuario registrado", Toast.LENGTH_SHORT).show();
+
                                                                         }
                                                                     })
                                                                     .addOnFailureListener(new OnFailureListener() {
@@ -117,6 +118,7 @@ public class RegistActivity extends AppCompatActivity {
 
                                                             // Ir a la actividad principal y mandamos el nombre de usuario para que la UI sea mas personal.
                                                             Intent intent = new Intent(RegistActivity.this, MainActivity.class);
+                                                            intent.putExtra("nombreUsuario",nombreUser);
                                                             startActivity(intent);
                                                         } else {
                                                             // Error al crear el usuario

@@ -9,8 +9,7 @@ import android.os.Bundle;
 
 
 import android.view.View;
-
-
+import android.widget.Toast;
 
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        recibirNombreUserRegist();
         iniciarVariables();
         logOut();
         config();
@@ -48,6 +47,17 @@ public class MainActivity extends AppCompatActivity {
         logOutButton = findViewById(R.id.logOut);
         configButton = findViewById(R.id.config);
 
+    }
+
+
+    private void recibirNombreUserRegist(){
+        Intent intent = getIntent();
+        if(intent.hasExtra("nombreUsuario")){
+            String nombreUserRegist = intent.getStringExtra("nombreUsuario");
+            Toast.makeText(this,"Hola " + nombreUserRegist,Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this,"Bienvenid@",Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Funcion para cuando se pulse el icono de log out
