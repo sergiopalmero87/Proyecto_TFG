@@ -67,10 +67,12 @@ public class AuthActivity extends AppCompatActivity {
         botonVerContraseña.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Iniciar o detener la animación según el estado de la contraseña
+                //Si cuando demos al boton la contraseña esta visible, el ojo se cierra y la contraseña se oculta
                 if (passText.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)) {
                     botonVerContraseña.setBackgroundResource(R.drawable.cerrar); // Usar setBackgroundResource para establecer un drawable
                     passText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+                    //Si cuando demos al boton la contraseña no se ve, el ojo se abre y la contraseña se muestra
                 } else {
                     botonVerContraseña.setBackgroundResource(R.drawable.abrir); // Usar setBackgroundResource para establecer un drawable
                     passText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
