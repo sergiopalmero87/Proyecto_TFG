@@ -77,8 +77,19 @@
             android:hint="@string/hintPassword"
             android:id="@+id/textoPassword"
             android:padding="2dp"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
+
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/botonVerContraseña"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/cerrar"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/layoutPassword"
+        app:layout_constraintTop_toTopOf="@id/layoutPassword"/>
 
     <Button
         android:fontFamily="@font/cascadia"
