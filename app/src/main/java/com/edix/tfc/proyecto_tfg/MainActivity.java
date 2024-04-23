@@ -22,6 +22,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+<<<<<<< HEAD
+=======
+
+import java.lang.ref.Cleaner;
+
+import retrofit2.Retrofit;
+>>>>>>> sergio
 
 
 public class MainActivity extends AppCompatActivity {
@@ -108,7 +115,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 }
