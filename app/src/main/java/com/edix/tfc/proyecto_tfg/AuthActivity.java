@@ -61,6 +61,7 @@ public class AuthActivity extends AppCompatActivity {
 
         //Incializamos el boton de ver contraseña.
         botonVerContraseña = findViewById(R.id.botonVerContraseña);
+
     }
 
     private void verContraseña() {

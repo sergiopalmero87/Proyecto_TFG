@@ -8,25 +8,27 @@ import android.content.Intent;
 import android.os.Bundle;
 
 
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.airbnb.lottie.LottieAnimationView;
 
 import com.google.firebase.auth.FirebaseAuth;
-
-
-
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private LottieAnimationView logOutButton, configButton;
-
     private FirebaseAuth mAuth;
-
-
+    TextView nombreUsuario;
 
 
     @Override
@@ -34,11 +36,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recibirNombreUserRegist();
+        ponerNombreUser();
         iniciarVariables();
         logOut();
         config();
-
 
     }
 
@@ -46,17 +47,17 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         logOutButton = findViewById(R.id.logOut);
         configButton = findViewById(R.id.config);
-
+        nombreUsuario = findViewById(R.id.textoNombreUser);
     }
 
 
-    private void recibirNombreUserRegist(){
+    private void ponerNombreUser(){
         Intent intent = getIntent();
         if(intent.hasExtra("nombreUsuario")){
             String nombreUserRegist = intent.getStringExtra("nombreUsuario");
             Toast.makeText(this,"Hola " + nombreUserRegist,Toast.LENGTH_SHORT).show();
         }else {
-            Toast.makeText(this,"Bienvenid@",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Hola 👋🏼",Toast.LENGTH_SHORT).show();
         }
     }
 
