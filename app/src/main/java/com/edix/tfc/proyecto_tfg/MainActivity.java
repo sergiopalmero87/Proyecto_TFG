@@ -23,6 +23,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.lang.ref.Cleaner;
+
+import retrofit2.Retrofit;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,7 +112,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 }

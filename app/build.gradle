@@ -29,6 +29,8 @@ android {
     }
 }
 
+
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -55,6 +57,10 @@ dependencies {
 
     //BBDD firebase
     implementation("com.google.firebase:firebase-firestore")
+
+    // Also add the dependency for the Google Play services library
+    implementation("com.google.android.gms:play-services-auth:21.1.0")
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
