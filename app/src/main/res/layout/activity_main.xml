@@ -42,7 +42,7 @@
         android:layout_marginStart="20dp"
         android:textSize="30sp"
         android:layout_marginTop="16dp"
-        android:text="hola user"
+        android:text="hola"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
