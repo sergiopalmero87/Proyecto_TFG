@@ -2,7 +2,8 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardViewFutbol"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardFutbol"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
@@ -11,45 +12,59 @@
     app:cardUseCompatPadding="true">
 
     <LinearLayout
+        android:id="@+id/linearLayoutCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/relativeLayoutNoticia"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:padding="5dp" >
+            android:padding="5dp"
+            tools:ignore="UselessParent">
 
             <ImageView
-                android:id="@+id/futbolbalon"
+                android:id="@+id/imagenCard"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:src="@drawable/futbolbalon"
-                />
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/futbolbalon" />
 
-        <LinearLayout
-            android:id="@+id/linearlayout"
+            <ImageView
+                android:id="@+id/imagenCardTwitter"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="330dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/twitter" />
+
+            <LinearLayout
+            android:id="@+id/linearlayoutTextoNoticia"
             android:orientation="vertical"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/futbolbalon"
+            android:layout_toEndOf="@+id/imagenCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"/>
+            android:layout_marginTop="2dp" >
 
             <TextView
+                android:id="@+id/textoNoticiaFutbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
-                android:layout_marginStart="70dp"
-                android:text="@string/futbol"
+                android:text="futbol"
                 android:textSize="20sp"
+                android:fontFamily="@font/cascadia"
                 />
-        </RelativeLayout>
-
+        </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
