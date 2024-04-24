@@ -1,42 +1,28 @@
 package com.edix.tfc.proyecto_tfg;
 
-
 import androidx.appcompat.app.AppCompatActivity;
-
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
-
-
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.airbnb.lottie.LottieAnimationView;
-
+import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapter;
+import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-<<<<<<< HEAD
-=======
-
-import java.lang.ref.Cleaner;
-
-import retrofit2.Retrofit;
->>>>>>> sergio
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private LottieAnimationView logOutButton, configButton;
     private FirebaseAuth mAuth;
     TextView nombreUsuario;
-
+    private RecyclerView recyclerView;
+    private ListAdapter listAdapter;
+    private List<ListElement> itemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +34,19 @@ public class MainActivity extends AppCompatActivity {
         logOut();
         config();
 
+        // Inicializa el RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // lista de elementos de ejemplo
+        itemList = new ArrayList<>();
+        itemList.add(new ListElement("Noticia 1"));
+        itemList.add(new ListElement("Noticia 2"));
+        itemList.add(new ListElement("Noticia 3"));
+        itemList.add(new ListElement("Noticia 4"));
+
+        // Inicializa el adaptador con la lista de elementos
+        listAdapter = new ListAdapter(this, itemList);
+        recyclerView.setAdapter(listAdapter);
     }
 
     private void iniciarVariables(){
@@ -55,29 +54,24 @@ public class MainActivity extends AppCompatActivity {
         logOutButton = findViewById(R.id.logOut);
         configButton = findViewById(R.id.config);
         nombreUsuario = findViewById(R.id.textoNombreUser);
+        recyclerView = findViewById(R.id.recyclerView);
     }
-
 
     private void ponerNombreUser(){
         Intent intent = getIntent();
         if(intent.hasExtra("nombreUsuario")){
             String nombreUserRegist = intent.getStringExtra("nombreUsuario");
             Toast.makeText(this,"Hola " + nombreUserRegist,Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             Toast.makeText(this,"Hola 👋🏼",Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Funcion para cuando se pulse el icono de log out
     private void logOut () {
-        // Listener para el botón de logOut
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Reproducir la animación
                 logOutButton.playAnimation();
-
-                // Cerrar sesión después de un breve retraso
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
@@ -92,17 +86,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    // Funcion para cuando se pulse el icono de configuracion
     private void config () {
-        // Establecer el OnClickListener para el botón de config
         configButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Reproducir la animación
                 configButton.playAnimation();
-
-                // Cerrar sesión después de un breve retraso
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
@@ -115,5 +103,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }

@@ -2,41 +2,42 @@ package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 
 public class Posts {
 
-    private String author;
-    private String title;
+    private int id;
+    private String name;
     private String description;
     private String url;
-    private String urlToImage;
-    private String publishedAt;
-    private String content;
+    private String category;
+    private String language;
+    private String country;
 
     public Posts() {
     }
 
-    public Posts(String author, String title, String description, String url, String urlToImage, String publishedAt, String content) {
-        this.author = author;
-        this.title = title;
+    public Posts(int id, String name, String description, String url, String category, String language, String country) {
+        this.id = id;
+        this.name = name;
         this.description = description;
         this.url = url;
-        this.urlToImage = urlToImage;
-        this.publishedAt = publishedAt;
-        this.content = content;
+        this.category = category;
+        this.language = language;
+        this.country = country;
     }
 
-    public String getAuthor() {
-        return author;
+
+    public int getId() {
+        return id;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -55,27 +56,28 @@ public class Posts {
         this.url = url;
     }
 
-    public String getUrlToImage() {
-        return urlToImage;
+    public String getCategory() {
+        return category;
     }
 
-    public void setUrlToImage(String urlToImage) {
-        this.urlToImage = urlToImage;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getPublishedAt() {
-        return publishedAt;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setPublishedAt(String publishedAt) {
-        this.publishedAt = publishedAt;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
-    public String getContent() {
-        return content;
+    public String getCountry() {
+        return country;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setCountry(String country) {
+        this.country = country;
     }
 }
+

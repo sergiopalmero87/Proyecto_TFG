@@ -29,19 +29,15 @@ android {
     }
 }
 
-
-
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    //Retrofit
+    //Retrofit(API) y Gson para simplificar el proceso de manejar datos JSON.
     implementation 'com.squareup.retrofit2:retrofit:2.10.0'
-
-    // Gson para simplificar el proceso de manejar datos JSON.
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.10.0'
 
     //BOM de firebase
     implementation platform('com.google.firebase:firebase-bom:32.7.4')
@@ -64,6 +60,9 @@ dependencies {
     // Recyclerview y Cardview
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
     implementation 'androidx.cardview:cardview:1.0.0'
+
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.8'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
