@@ -42,8 +42,8 @@
                 android:id="@+id/imagenCardTwitter"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginStart="330dp"
+                android:layout_marginTop="70dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/twitter" />
 
@@ -63,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:text="futbol"
+                android:padding="3dp"
                 android:textSize="20sp"
                 android:fontFamily="@font/cascadia"
                 />

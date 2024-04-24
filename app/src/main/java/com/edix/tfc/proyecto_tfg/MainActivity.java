@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         // lista de elementos de ejemplo
         itemList = new ArrayList<>();
-        itemList.add(new ListElement("Noticia 1"));
-        itemList.add(new ListElement("Noticia 2"));
+        itemList.add(new ListElement("Este texto es de prueba para las noticias para ver como se adapta a la card"));
+        itemList.add(new ListElement("okalsnjdkaksdmñjalkdklañndjmkalsndklasdnm´kañsjdjañklksjdmañjs-kn.dmajslmdbnakjslbdakjslbdajklbsdjaksbdjaksndkjasndkalñnsdalkñsndl"));
         itemList.add(new ListElement("Noticia 3"));
         itemList.add(new ListElement("Noticia 4"));
 

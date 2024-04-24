@@ -38,10 +38,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // Vincular los datos a la vista de cada elemento
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Obtener el elemento de datos en la posición actual
         ListElement element = mData.get(position);
-        // Aquí puedes establecer los datos en las vistas de tu ViewHolder
-        // por ejemplo: holder.textView.setText(element.getText());
+
+        // Establecer el texto en la TextView dentro de la tarjeta
+        holder.textoNoticia.setText(element.getTextoNoticia());
     }
+
 
     // Devolver el tamaño de la lista de datos
     @Override
