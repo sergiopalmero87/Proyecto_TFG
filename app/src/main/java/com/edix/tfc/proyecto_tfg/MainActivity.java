@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         logOut();
         config();
 
+
         // Inicializa el RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -103,4 +104,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

@@ -1,14 +1,19 @@
 package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.edix.tfc.proyecto_tfg.AuthActivity;
+import com.edix.tfc.proyecto_tfg.MainActivity;
 import com.edix.tfc.proyecto_tfg.R;
 
 import java.util.List;
@@ -18,6 +23,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<ListElement> mData;
     private LayoutInflater mInflater;
     private Context context;
+    private LottieAnimationView guardarNoticia;
 
     // Constructor
     public ListAdapter(Context context, List<ListElement> itemList) {
@@ -43,6 +49,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         // Establecer el texto en la TextView dentro de la tarjeta
         holder.textoNoticia.setText(element.getTextoNoticia());
+
+        holder.guardarNoticia(element);
     }
 
 
@@ -52,17 +60,35 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return mData.size();
     }
 
-    // ViewHolder que contendrá las vistas de los elementos de la lista
+    //Esta clase static lo que hace es que si o si ambas clases están relacionadas,
+    // lo que es bueno para simplificar el codigo y hacer que sea mas fácil de entender.
+    // Tambien simplifica el codigo ya que no necesito crear codigo innecesario (getter and setter)
+    // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
+    // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // Aquí declaras las vistas de tu layout de elemento de lista (por ejemplo: TextView, ImageView, etc.)
+
         public TextView textoNoticia;
+        public LottieAnimationView guardarNoticia;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Inicializar aqui las vistas
+            // Inicializar las vistas
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
+            guardarNoticia = itemView.findViewById(R.id.guardarNoticia);
         }
 
+        // Método guardar la noticia en bbdd
+        public void guardarNoticia(final ListElement item) {
+            guardarNoticia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Toast.makeText(itemView.getContext(), "Guardado", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        //Sirva para actualizar los elementos de que haya en el ViewHolder
         void bindData(final ListElement item){
 
         }
