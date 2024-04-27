@@ -11,11 +11,11 @@ public class ListElement {
         this.textoNoticia = textoNoticia;
     }
 
-    public String getTextoNoticia() {
+    public String getTextoCategoriaNoticia() {
         return textoNoticia;
     }
 
-    public void setTextoNoticia(String textoNoticia) {
+    public void setTextoCategoriaNoticia(String textoNoticia) {
         this.textoNoticia = textoNoticia;
     }
 }

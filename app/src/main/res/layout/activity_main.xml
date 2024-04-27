@@ -33,6 +33,19 @@
         app:lottie_rawRes="@raw/configuracion"
         app:lottie_speed="2.0" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/verNoticiasGuardadas"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintRight_toLeftOf="@+id/config"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="false"
+        app:lottie_speed="2.0"
+        app:lottie_loop="true"
+
+        />
+
     <TextView
         android:id="@+id/nombreUserMain"
         android:layout_width="wrap_content"
@@ -46,7 +59,7 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerViewMain"
         android:layout_width="409dp"
         android:layout_height="663dp"
         android:layout_marginStart="1dp"

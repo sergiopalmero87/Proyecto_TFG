@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ponerNombreUser();
+
         iniciarVariables();
         recyclerViewLayoutManager();
         mostrarTarjetas();
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         logOutButton = findViewById(R.id.logOut);
         configButton = findViewById(R.id.config);
         nombreUsuario = findViewById(R.id.textoNombreUser);
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerViewMain);
 
     }
 
@@ -80,16 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Seteamos el adapter dentro del recyclerView(contenedor)
         recyclerView.setAdapter(listAdapter);
-    }
-
-    private void ponerNombreUser(){
-        Intent intent = getIntent();
-        if(intent.hasExtra("nombreUsuario")){
-            String nombreUserRegist = intent.getStringExtra("nombreUsuario");
-            Toast.makeText(this,"Hola " + nombreUserRegist,Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this,"Hola 👋🏼",Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void logOut () {
