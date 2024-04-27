@@ -20,8 +20,13 @@ public class MainActivity extends AppCompatActivity {
     private LottieAnimationView logOutButton, configButton;
     private FirebaseAuth mAuth;
     TextView nombreUsuario;
+
+    //Contenedor que aloja las cards
     private RecyclerView recyclerView;
+    //Comunica la parte back con la front de las cards. Hace
+    //Hace que se muestren las cosas en las cards
     private ListAdapter listAdapter;
+    //La lista de las cards a mostrar
     private List<ListElement> itemList;
 
     @Override
@@ -31,23 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
         ponerNombreUser();
         iniciarVariables();
+        recyclerViewLayoutManager();
+        mostrarTarjetas();
         logOut();
         config();
 
 
-        // Inicializa el RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // lista de elementos de ejemplo
-        itemList = new ArrayList<>();
-        itemList.add(new ListElement("Este texto es de prueba para las noticias para ver como se adapta a la card"));
-        itemList.add(new ListElement("okalsnjdkaksdmñjalkdklañndjmkalsndklasdnm´kañsjdjañklksjdmañjs-kn.dmajslmdbnakjslbdakjslbdajklbsdjaksbdjaksndkjasndkalñnsdalkñsndl"));
-        itemList.add(new ListElement("Noticia 3"));
-        itemList.add(new ListElement("Noticia 4"));
-
-        // Inicializa el adaptador con la lista de elementos
-        listAdapter = new ListAdapter(this, itemList);
-        recyclerView.setAdapter(listAdapter);
     }
 
     private void iniciarVariables(){
@@ -56,6 +51,35 @@ public class MainActivity extends AppCompatActivity {
         configButton = findViewById(R.id.config);
         nombreUsuario = findViewById(R.id.textoNombreUser);
         recyclerView = findViewById(R.id.recyclerView);
+
+    }
+
+
+
+    private void recyclerViewLayoutManager(){
+        // Establecemos como se mostraran las cosas en el recyclerview
+        // (que es el contenedor donde se alojaran las cards en la pantalla.
+        // Por defecto vertical)
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void mostrarTarjetas(){
+        // lista de elementos de ejemplo
+        itemList = new ArrayList<>();
+        itemList.add(new ListElement("Este texto es de prueba para las noticias para ver como se adapta a la card"));
+        itemList.add(new ListElement("okalsnjdkaksdmñjalkdklañndjmkalsndklasdnm´kañsjdjañklksjdmañjs-kn.dmajslmdbnakjslbdakjslbdajklbsdjaksbdjaksndkjasndkalñnsdalkñsndl"));
+        itemList.add(new ListElement("Noticia 3"));
+        itemList.add(new ListElement("Noticia 4"));
+        itemList.add(new ListElement("Este texto es de prueba para las noticias para ver como se adapta a la card"));
+        itemList.add(new ListElement("okalsnjdkaksdmñjalkdklañndjmkalsndklasdnm´kañsjdjañklksjdmañjs-kn.dmajslmdbnakjslbdakjslbdajklbsdjaksbdjaksndkjasndkalñnsdalkñsndl"));
+        itemList.add(new ListElement("Noticia 7"));
+        itemList.add(new ListElement("Noticia 8"));
+
+        //Metemos en el adapter la lista de elementos a mostrar
+        listAdapter = new ListAdapter(this, itemList);
+
+        //Seteamos el adapter dentro del recyclerView(contenedor)
+        recyclerView.setAdapter(listAdapter);
     }
 
     private void ponerNombreUser(){

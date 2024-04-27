@@ -47,16 +47,14 @@
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/twitter" />
 
-            <com.airbnb.lottie.LottieAnimationView
+            <ImageView
                 android:id="@+id/guardarNoticia"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="100dp"
-                app:lottie_autoPlay="false"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/guardar"
-                app:lottie_speed="2.0" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="112dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/save" />
 
             <LinearLayout
             android:id="@+id/linearlayoutTextoNoticia"

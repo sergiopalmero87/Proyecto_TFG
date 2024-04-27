@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +24,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<ListElement> mData;
     private LayoutInflater mInflater;
     private Context context;
-    private LottieAnimationView guardarNoticia;
+
 
     // Constructor
     public ListAdapter(Context context, List<ListElement> itemList) {
@@ -51,6 +52,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         holder.textoNoticia.setText(element.getTextoNoticia());
 
         holder.guardarNoticia(element);
+
+        holder.publicarNoticia(element);
     }
 
 
@@ -68,13 +71,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textoNoticia;
-        public LottieAnimationView guardarNoticia;
+        public ImageView guardarNoticia, publicarTwitter;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             // Inicializar las vistas
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
             guardarNoticia = itemView.findViewById(R.id.guardarNoticia);
+            publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
         }
 
         // Método guardar la noticia en bbdd
@@ -84,6 +88,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 public void onClick(View v) {
 
                     Toast.makeText(itemView.getContext(), "Guardado", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        // Método guardar la noticia en bbdd
+        public void publicarNoticia(final ListElement item) {
+            publicarTwitter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Toast.makeText(itemView.getContext(), "Publicado", Toast.LENGTH_SHORT).show();
                 }
             });
         }
