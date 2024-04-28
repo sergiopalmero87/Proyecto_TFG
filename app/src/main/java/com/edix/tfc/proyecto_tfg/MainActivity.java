@@ -34,15 +34,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         iniciarVariables();
         recyclerViewLayoutManager();
         mostrarTarjetas();
         logOut();
         config();
         verNoticiasGuardadas();
-
-
 
     }
 
@@ -122,20 +119,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void verNoticiasGuardadas () {
-        noticiasGuardadasButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                noticiasGuardadasButton.playAnimation();
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                startActivity(new Intent(MainActivity.this, NoticiasGuardadasActivity.class));
-                                finish();
-                            }
-                        },
-                        1000 // Retraso de 1 segundo para dar tiempo a la animación
-                );
-            }
+        noticiasGuardadasButton.setOnClickListener(v -> {
+            noticiasGuardadasButton.playAnimation();
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            startActivity(new Intent(MainActivity.this, NoticiasGuardadasActivity.class));
+                            finish();
+                        }
+                    },
+                    1000 // Retraso de 1 segundo para dar tiempo a la animación
+            );
         });
     }
 

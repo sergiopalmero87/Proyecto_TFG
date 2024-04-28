@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cardMain"
+    android:id="@+id/cardGuardadas"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
@@ -48,35 +48,35 @@
                 android:src="@drawable/twitter" />
 
             <ImageView
-                android:id="@+id/guardarNoticia"
+                android:id="@+id/borrarNoticia"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="112dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/save" />
+                android:src="@drawable/borrar" />
 
             <LinearLayout
-            android:id="@+id/linearlayoutTextoNoticia"
-            android:orientation="vertical"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/imagenCard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp" >
-
-            <TextView
-                android:id="@+id/textoNoticia"
+                android:id="@+id/linearlayoutTextoNoticia"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/imagenCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:text="futbol"
-                android:padding="3dp"
-                android:textSize="20sp"
-                android:fontFamily="@font/cascadia"
-                />
-        </LinearLayout>
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp" >
+
+                <TextView
+                    android:id="@+id/textoNoticia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:text="futbol"
+                    android:padding="3dp"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/cascadia"
+                    />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

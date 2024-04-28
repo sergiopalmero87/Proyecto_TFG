@@ -16,39 +16,39 @@ import com.edix.tfc.proyecto_tfg.R;
 import java.util.List;
 
 //Esta clase comunica la parte back de las cards con la parte front
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
-    private List<ListElement> mData;
+public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuardadas.ViewHolderGuardadas> {
+    private List<ListElement> mDataGuardadas;
     private LayoutInflater mInflater;
     private Context mContext;
 
 
-    public ListAdapter(Context context, List<ListElement> itemList) {
+    public ListAdapterGuardadas(Context context, List<ListElement> itemList) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = itemList;
+        this.mDataGuardadas = itemList;
         this.mContext = context;
     }
 
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.list_element, parent, false);
-        return new ViewHolder(view);
+    public ViewHolderGuardadas onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.list_element_guardadas, parent, false);
+        return new ViewHolderGuardadas(view);
     }
 
     //Sirve para atar, sujetar, vincular etc.. las cosas que vamos implementando al recyclerView
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ListElement element = mData.get(position);
-
+    public void onBindViewHolder(@NonNull ViewHolderGuardadas holder, int position) {
+        ListElement element = mDataGuardadas.get(position);
         holder.textoNoticia.setText(element.getTextoCategoriaNoticia());
-        holder.guardarNoticia(element);
+        holder.borrarNoticia(element);
         holder.publicarNoticia(element);
     }
 
     //Devolver el tamaño de la lista de datos
     @Override
     public int getItemCount() {
-            return mData.size();
+        return mDataGuardadas.size();
     }
 
     //Esta clase static lo que hace es que si o si ambas clases están relacionadas,
@@ -56,28 +56,27 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // Tambien simplifica el codigo ya que no necesito crear codigo innecesario (getter and setter)
     // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolderGuardadas extends RecyclerView.ViewHolder {
         public TextView textoNoticia;
-        public ImageView guardarNoticia, publicarTwitter;
+        public ImageView borrarNoticia, publicarTwitter;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolderGuardadas(@NonNull View itemView) {
             super(itemView);
             //Inicializar las vistas
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
-            guardarNoticia = itemView.findViewById(R.id.guardarNoticia);
+            borrarNoticia = itemView.findViewById(R.id.borrarNoticia);
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
         }
 
         //Metodo para guardar la noticia en bbdd
-        public void guardarNoticia(final ListElement item) {
-            guardarNoticia.setOnClickListener(new View.OnClickListener() {
+        public void borrarNoticia(final ListElement item) {
+            borrarNoticia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "Guardado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(itemView.getContext(), "Borrado", Toast.LENGTH_SHORT).show();
                 }
             });
         }
-
 
         //Metodo para publicar la noticia en redes
         public void publicarNoticia(final ListElement item) {
