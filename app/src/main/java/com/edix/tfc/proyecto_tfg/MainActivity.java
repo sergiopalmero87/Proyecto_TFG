@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private LottieAnimationView logOutButton, configButton;
+    private LottieAnimationView logOutButton, configButton, noticiasGuardadasButton;
     private FirebaseAuth mAuth;
     TextView nombreUsuario;
 
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mostrarTarjetas();
         logOut();
         config();
+        verNoticiasGuardadas();
 
 
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         configButton = findViewById(R.id.config);
         nombreUsuario = findViewById(R.id.textoNombreUser);
         recyclerView = findViewById(R.id.recyclerViewMain);
+        noticiasGuardadasButton = findViewById(R.id.verNoticiasGuardadas);
 
     }
 
@@ -110,6 +112,24 @@ public class MainActivity extends AppCompatActivity {
                         new Runnable() {
                             public void run() {
                                 startActivity(new Intent(MainActivity.this, ConfigActivity.class));
+                                finish();
+                            }
+                        },
+                        1000 // Retraso de 1 segundo para dar tiempo a la animación
+                );
+            }
+        });
+    }
+
+    private void verNoticiasGuardadas () {
+        noticiasGuardadasButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noticiasGuardadasButton.playAnimation();
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                startActivity(new Intent(MainActivity.this, NoticiasGuardadasActivity.class));
                                 finish();
                             }
                         },

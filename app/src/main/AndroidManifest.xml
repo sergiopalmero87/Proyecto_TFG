@@ -47,7 +47,7 @@
         </activity>
 
         <activity
-            android:name=".NoticiasGuardadas"
+            android:name=".NoticiasGuardadasActivity"
             android:exported="true">
         </activity>
     </application>

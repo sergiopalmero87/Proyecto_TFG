@@ -6,6 +6,18 @@
     android:background="@color/background"
     tools:context=".ConfigActivity">
 
+    <TextView
+        android:id="@+id/tituloActivityConfig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="20dp"
+        android:textSize="30sp"
+        android:layout_marginTop="16dp"
+        android:text="Mi configuración"
+        />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/goHome"
         android:layout_width="50dp"
