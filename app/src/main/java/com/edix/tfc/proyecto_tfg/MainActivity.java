@@ -3,23 +3,35 @@ package com.edix.tfc.proyecto_tfg;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.airbnb.lottie.LottieAnimationView;
+import com.edix.tfc.proyecto_tfg.retrofit.interfac.RetrofitApi;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapter;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
+import com.edix.tfc.proyecto_tfg.retrofit.modelo.Noticias;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+
+
 import okhttp3.Response;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,14 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
         iniciarVariables();
         recyclerViewLayoutManager();
-        mostrarTarjetas();
+
         logOut();
         config();
         verNoticiasGuardadas();
+        respuestaRetrofit();
 
     }
 
-    private void iniciarVariables(){
+    private void iniciarVariables() {
         mAuth = FirebaseAuth.getInstance();
         logOutButton = findViewById(R.id.logOut);
         configButton = findViewById(R.id.config);
@@ -60,34 +73,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    private void recyclerViewLayoutManager(){
+    private void recyclerViewLayoutManager() {
         // Establecemos como se mostraran las cosas en el recyclerview
         // (que es el contenedor donde se alojaran las cards en la pantalla.
         // Por defecto vertical)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void mostrarTarjetas(){
-        // lista de elementos de ejemplo
-        itemList = new ArrayList<>();
-        itemList.add(new ListElement("Este texto es de prueba para las noticias para ver como se adapta a la card"));
-        itemList.add(new ListElement("okalsnjdkaksdmñjalkdklañndjmkalsndklasdnm´kañsjdjañklksjdmañjs-kn.dmajslmdbnakjslbdakjslbdajklbsdjaksbdjaksndkjasndkalñnsdalkñsndl"));
-        itemList.add(new ListElement("Noticia 3"));
-        itemList.add(new ListElement("Noticia 4"));
-        itemList.add(new ListElement("Este texto es de prueba para las noticias para ver como se adapta a la card"));
-        itemList.add(new ListElement("okalsnjdkaksdmñjalkdklañndjmkalsndklasdnm´kañsjdjañklksjdmañjs-kn.dmajslmdbnakjslbdakjslbdajklbsdjaksbdjaksndkjasndkalñnsdalkñsndl"));
-        itemList.add(new ListElement("Noticia 7"));
-        itemList.add(new ListElement("Noticia 8"));
 
-        //Metemos en el adapter la lista de elementos a mostrar
-        listAdapter = new ListAdapter(this, itemList);
-
-        //Seteamos el adapter dentro del recyclerView(contenedor)
-        recyclerView.setAdapter(listAdapter);
-    }
-
-    private void logOut () {
+    private void logOut() {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void config () {
+    private void config() {
         configButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void verNoticiasGuardadas () {
+    private void verNoticiasGuardadas() {
         noticiasGuardadasButton.setOnClickListener(v -> {
             noticiasGuardadasButton.playAnimation();
             new android.os.Handler().postDelayed(
@@ -137,6 +131,19 @@ public class MainActivity extends AppCompatActivity {
                     1000 // Retraso de 1 segundo para dar tiempo a la animación
             );
         });
+    }
+
+    private void respuestaRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
+
+        Call<List<Noticias>> respuesta = retrofitApi.getPosts();
+
+
     }
 
 }
