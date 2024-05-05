@@ -24,7 +24,7 @@ import java.util.List;
 
 
 
-import okhttp3.Response;
+import retrofit2.Response;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -134,15 +134,63 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void respuestaRetrofit() {
+        // Configuración de Retrofit para la comunicación con la API
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://jsonplaceholder.typicode.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+        // Creación de la instancia de la interfaz RetrofitApi para realizar la llamada
         RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
 
+        // Llamada a la API para obtener la lista de noticias
         Call<List<Noticias>> respuesta = retrofitApi.getPosts();
 
+
+        // Manejo de la respuesta de la llamada asíncrona a la API
+        respuesta.enqueue(new Callback<List<Noticias>>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<List<Noticias>> call, Response<List<Noticias>> response) {
+                // Verificar si la respuesta es exitosa
+                if (!response.isSuccessful()) {
+                    // Mostrar un mensaje de error si la respuesta no es exitosa
+                    Toast.makeText(MainActivity.this, "Error al obtener noticias", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Inicializar itemList para almacenar los elementos de la lista de noticias
+                itemList = new ArrayList<>();
+
+                // Obtener la lista de noticias desde la respuesta
+                List<Noticias> noticias = (List<Noticias>) response.body();
+                //Por cada una de las noticias que obtenemos de la API
+                for (Noticias noticia : noticias) {
+                    // Construir el contenido de la noticia
+                    String content = "";
+                    content += "userId" + noticia.getUserId() + "\n";
+                    content += "id" + noticia.getId() + "\n";
+                    content += "title" + noticia.getTitle() + "\n";
+                    content += "body" + noticia.getBody() + "\n";
+
+                    // Agregar el contenido de la noticia a itemList
+                    itemList.add(new ListElement(content));
+
+                    // Crear un adaptador con la lista de elementos y configurarlo en el RecyclerView
+                    listAdapter = new ListAdapter(MainActivity.this, itemList);
+                    recyclerView.setAdapter(listAdapter);
+                }
+
+                // Notificar al adaptador que los datos han cambiado
+                listAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Noticias>> call, Throwable throwable) {
+                // Mostrar un mensaje de error en caso de la solicitud de Retrofit falle
+                Toast.makeText(MainActivity.this, "Error en la solicitud de Retrofit", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
