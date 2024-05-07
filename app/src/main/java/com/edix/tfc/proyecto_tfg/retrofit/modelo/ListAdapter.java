@@ -42,7 +42,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         //Aqui accedemos a cada una de las noticias gracias a su position
         ListElement element = listaNoticiasMostrar.get(position);
 
-        holder.textoNoticia.setText(element.getTextoCategoriaNoticia());
+        holder.textoNoticia.setText(element.getTextoNoticia());
         holder.guardarNoticia(element);
         holder.publicarNoticia(element);
     }

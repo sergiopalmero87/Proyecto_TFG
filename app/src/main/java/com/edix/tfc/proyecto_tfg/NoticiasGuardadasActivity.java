@@ -3,6 +3,7 @@ package com.edix.tfc.proyecto_tfg;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.edix.tfc.proyecto_tfg.retrofit.interfac.RetrofitApi;
-import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapter;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapterGuardadas;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.Noticias;
+import com.edix.tfc.proyecto_tfg.retrofit.modelo.Source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,52 +64,7 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
         recyclerViewGuardadas.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void respuestaRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
-
-        Call<List<Noticias>> respuesta = retrofitApi.getPosts();
-
-        respuesta.enqueue(new Callback<List<Noticias>>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onResponse(Call<List<Noticias>> call, Response<List<Noticias>> response) {
-                if (!response.isSuccessful()) {
-                    Toast.makeText(NoticiasGuardadasActivity.this, "Error al obtener noticias", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                itemList = new ArrayList<>();
-
-                List<Noticias> noticias = response.body();
-                for (Noticias noticia : noticias) {
-                    String content = "";
-                    content += "userId" + noticia.getUserId();
-                    content += "id" + noticia.getId();
-                    content += "title" + noticia.getTitle();
-                    content += "body" + noticia.getBody();
-
-                    // Agregar el contenido de la noticia a itemList
-                    itemList.add(new ListElement(content));
-                    listAdapterGuardadas = new ListAdapterGuardadas(NoticiasGuardadasActivity.this, itemList);
-                    recyclerViewGuardadas.setAdapter(listAdapterGuardadas);
-                }
-
-                // Notificar al adaptador que los datos han cambiado
-                listAdapterGuardadas.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<List<Noticias>> call, Throwable throwable) {
-                Toast.makeText(NoticiasGuardadasActivity.this, "Error en la solicitud de Retrofit", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
+    // Funcion para cuando se pulse el icono de home
     private void goHome () {
         // Establecer el OnClickListener para el botón de home
         goHome.setOnClickListener(new View.OnClickListener() {
@@ -130,5 +86,72 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void respuestaRetrofit() {
+        // Configuración de Retrofit para la comunicación con la API
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://newsapi.org/v2/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        // Creación de la instancia de la interfaz RetrofitApi para realizar la llamada
+        RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
+
+        // Llamada a la API para obtener la lista de noticias
+        Call<Noticias> respuesta = retrofitApi.getPosts("sports", "e0fb2227e0064938b9b9c7528fea009c");
+
+        // Manejo de la respuesta de la llamada asíncrona a la API
+        respuesta.enqueue(new Callback<Noticias>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<Noticias> call, Response<Noticias> response) {
+                // Verificar si la respuesta es exitosa
+                if (!response.isSuccessful()) {
+                    // Mostrar un mensaje de error si la respuesta no es exitosa
+                    Toast.makeText(NoticiasGuardadasActivity.this, "Error al obtener noticias", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Inicializar itemList para almacenar los elementos de la lista de noticias
+                itemList = new ArrayList<>();
+
+                // Obtener la respuesta de Noticias
+                Noticias noticiasResponse = response.body();
+                if (noticiasResponse != null && noticiasResponse.getStatus().equals("ok")) {
+                    // Obtener la lista de fuentes
+                    List<Source> sources = noticiasResponse.getSources();
+
+                    // Procesar la lista de fuentes como lo hacías antes
+                    for (Source source : sources) {
+                        String content = "id: " + source.getId() + "\n";
+                        content += "name : " + source.getName() + "\n";
+                        content += "description: " + source.getDescription() + "\n";
+                        content += "URL: " + source.getUrl() + "\n";
+
+                        // Agregar el contenido de la noticia a itemList
+                        itemList.add(new ListElement(content));
+                    }
+
+                    // Crear un adaptador con la lista de elementos y configurarlo en el RecyclerView
+                    listAdapterGuardadas = new ListAdapterGuardadas(NoticiasGuardadasActivity.this, itemList);
+                    recyclerViewGuardadas.setAdapter(listAdapterGuardadas);
+
+                    // Notificar al adaptador que los datos han cambiado
+                    listAdapterGuardadas.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Noticias> call, Throwable throwable) {
+                // Obtener el mensaje de error del throwable
+                String errorMessage = throwable.getMessage();
+                // Mostrar el mensaje de error completo en el Logcat
+                Log.e("Error Retrofit", "Error en la solicitud de Retrofit", throwable);
+                // Mostrar un mensaje de error en el Toast con un mensaje genérico
+                Toast.makeText(NoticiasGuardadasActivity.this, "Error en la solicitud de Retrofit. Revisar el Logcat para más detalles.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 }
