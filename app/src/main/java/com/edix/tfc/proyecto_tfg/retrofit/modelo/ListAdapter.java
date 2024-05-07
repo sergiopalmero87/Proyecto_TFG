@@ -53,6 +53,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             return listaNoticiasMostrar.size();
     }
 
+
     //Esta clase static lo que hace es que si o si ambas clases están relacionadas,
     // lo que es bueno para simplificar el codigo y hacer que sea mas fácil de entender.
     // Tambien simplifica el codigo ya que no necesito crear codigo innecesario (getter and setter)

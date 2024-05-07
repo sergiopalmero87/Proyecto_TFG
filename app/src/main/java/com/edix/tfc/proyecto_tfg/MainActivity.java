@@ -165,10 +165,10 @@ public class MainActivity extends AppCompatActivity {
 
                     // Procesar los datos que me llegan de la API
                     for (Source source : sources) {
-                        String content = "id: " + source.getId() + "\n";
-                        content += "name : " + source.getName() + "\n";
-                        content += "description: " + source.getDescription() + "\n";
-                        content += "URL: " + source.getUrl() + "\n";
+                        String content = "";
+                        content += source.getName() + "\n\n";
+                        content += source.getDescription() + "\n\n\n";
+                        content += source.getUrl() + "\n";
 
                         // Agregar el contenido de la noticia a itemList
                         itemList.add(new ListElement(content));
