@@ -17,14 +17,14 @@ import java.util.List;
 
 //Esta clase comunica la parte back de las cards con la parte front
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
-    private List<ListElement> mData;
+    private List<ListElement> listaNoticiasMostrar;
     private LayoutInflater mInflater;
     private Context mContext;
 
 
     public ListAdapter(Context context, List<ListElement> itemList) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = itemList;
+        this.listaNoticiasMostrar = itemList;
         this.mContext = context;
     }
 
@@ -38,7 +38,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     //Sirve para atar, sujetar, vincular etc.. las cosas que vamos implementando al recyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ListElement element = mData.get(position);
+
+        //Aqui accedemos a cada una de las noticias gracias a su position
+        ListElement element = listaNoticiasMostrar.get(position);
 
         holder.textoNoticia.setText(element.getTextoCategoriaNoticia());
         holder.guardarNoticia(element);
@@ -48,7 +50,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     //Devolver el tamaño de la lista de datos
     @Override
     public int getItemCount() {
-            return mData.size();
+            return listaNoticiasMostrar.size();
     }
 
     //Esta clase static lo que hace es que si o si ambas clases están relacionadas,
