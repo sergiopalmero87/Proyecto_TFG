@@ -40,7 +40,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
     @Override
     public void onBindViewHolder(@NonNull ViewHolderGuardadas holder, int position) {
         ListElement element = mDataGuardadas.get(position);
-        holder.textoNoticia.setText(element.getTextoCategoriaNoticia());
+        holder.textoNoticia.setText(element.getTextoNoticia());
         holder.borrarNoticia(element);
         holder.publicarNoticia(element);
     }

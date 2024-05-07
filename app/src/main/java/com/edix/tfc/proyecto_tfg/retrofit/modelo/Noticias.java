@@ -1,53 +1,33 @@
 package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 
+import java.util.List;
+
 public class Noticias {
 
-    private int userId;
-    private int id;
-    private String title;
-    private String body;
+    private String status;
+    private List<Source> sources;
 
     public Noticias() {
     }
 
-    public Noticias(int userId, int id, String title, String body) {
-        this.userId = userId;
-        this.id = id;
-        this.title = title;
-        this.body = body;
+    public Noticias(String status, List<Source> sources) {
+        this.status = status;
+        this.sources = sources;
     }
 
-
-    public int getUserId() {
-        return userId;
+    public String getStatus() {
+        return status;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public int getId() {
-        return id;
+    public List<Source> getSources() {
+        return sources;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
+    public void setSources(List<Source> sources) {
+        this.sources = sources;
     }
 }
-
