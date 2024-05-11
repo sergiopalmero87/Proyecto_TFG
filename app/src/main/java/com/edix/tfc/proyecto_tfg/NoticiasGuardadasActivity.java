@@ -106,7 +106,8 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
                                 // que es la clase que sirve de molde para las cards
                                 String descripcion = document.getString("descripcion");
                                 String url = document.getString("url");
-                                ListElement listElement = new ListElement(descripcion, url);
+                                String name = document.getString("name");;
+                                ListElement listElement = new ListElement(name, descripcion, url);
                                 // Agregamos el ListElement a la lista de noticias guardadas
                                 noticiasGuardadas.add(listElement);
                             }
@@ -131,40 +132,7 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
     }
 
 
-    private List<ListElement> obtenerNoticiasGuardadas() {
-        final List<ListElement> noticiasGuardadas = new ArrayList<>();
 
-        // Obtenemos una referencia a la colección de noticias guardadas en Firebase Firestore
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("NoticiasFav")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            // Recorremos los documentos de la colección de noticias guardadas
-                            for (DocumentSnapshot document : task.getResult()) {
-                                // Obtenemos los datos de cada documento y creamos un ListElement
-                                String descripcion = document.getString("descripcion");
-                                String url = document.getString("url");
-                                ListElement listElement = new ListElement(descripcion, url);
-                                // Agregamos el ListElement a la lista de noticias guardadas
-                                noticiasGuardadas.add(listElement);
-                            }
-                            // Notificamos al adaptador que los datos han cambiado
-                            if (listAdapterGuardadas != null) {
-                                listAdapterGuardadas.notifyDataSetChanged();
-                            }
-                        } else {
-                            // Manejamos el error en caso de que la consulta falle
-                            Log.e("Firestore", "Error al obtener noticias guardadas", task.getException());
-                        }
-                    }
-                });
-
-        // Devolvemos la lista de noticias guardadas
-        return noticiasGuardadas;
-    }
 }
 
 

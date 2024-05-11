@@ -42,6 +42,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
         ListElement element = mDataGuardadas.get(position);
         holder.textoNoticia.setText(element.getTextoNoticia());
         holder.urlNoticia.setText(element.getUrl());
+        holder.namePeriodico.setText(element.getName());
         holder.borrarNoticia(element);
         holder.publicarNoticia(element);
     }
@@ -58,7 +59,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
     // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public static class ViewHolderGuardadas extends RecyclerView.ViewHolder {
-        public TextView textoNoticia, urlNoticia;
+        public TextView textoNoticia, urlNoticia, namePeriodico;
         public ImageView borrarNoticia, publicarTwitter;
 
         public ViewHolderGuardadas(@NonNull View itemView) {
@@ -66,6 +67,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
             //Inicializar las vistas
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
             urlNoticia = itemView.findViewById(R.id.urlNoticia);
+            namePeriodico = itemView.findViewById(R.id.namePeriodico);
             borrarNoticia = itemView.findViewById(R.id.borrarNoticia);
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
         }

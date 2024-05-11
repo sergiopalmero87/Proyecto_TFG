@@ -67,6 +67,19 @@
                 android:layout_marginTop="2dp" >
 
                 <TextView
+                    android:id="@+id/namePeriodico"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="Periodico"
+                    android:padding="3dp"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/cascadia"
+                    />
+
+                <TextView
                     android:id="@+id/textoNoticia"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

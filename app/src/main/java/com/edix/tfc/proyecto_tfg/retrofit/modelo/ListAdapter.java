@@ -53,6 +53,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         holder.textoNoticia.setText(element.getTextoNoticia());
         holder.urlNoticia.setText(element.getUrl());
+        holder.namePeriodico.setText(element.getName());
         holder.guardarNoticia(element);
         holder.publicarNoticia(element);
     }
@@ -70,7 +71,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView textoNoticia,urlNoticia;
+        public TextView textoNoticia, urlNoticia, namePeriodico;
         public ImageView guardarNoticia, publicarTwitter;
 
         public ViewHolder(@NonNull View itemView) {
@@ -78,6 +79,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             //Inicializar las vistas
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
             urlNoticia = itemView.findViewById(R.id.urlNoticia);
+            namePeriodico = itemView.findViewById(R.id.namePeriodico);
             guardarNoticia = itemView.findViewById(R.id.guardarNoticia);
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
         }
@@ -91,10 +93,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     // Acceder a los valores de textoNoticia y urlNoticia a través de la instancia de ViewHolder
                     String texto = textoNoticia.getText().toString();
                     String url = urlNoticia.getText().toString();
+                    String name = namePeriodico.getText().toString();
 
                     // Guardar la noticia en la base de datos
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> noticia = new HashMap<>();
+                    noticia.put("name", name);
                     noticia.put("descripcion", texto);
                     noticia.put("url", url);
                     db.collection("NoticiasFav").document().set(noticia)

@@ -4,11 +4,21 @@ package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 public class ListElement {
 
     private String textoNoticia;
-    private String url; // Cambiado el nombre del atributo a 'url'
+    private String url;
+    private String name;
 
-    public ListElement(String descripcion, String url) {
+    public ListElement(String name, String descripcion, String url) {
+        this.name = name;
         this.textoNoticia = descripcion;
         this.url = url;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTextoNoticia() {
@@ -19,11 +29,11 @@ public class ListElement {
         this.textoNoticia = textoNoticia;
     }
 
-    public String getUrl() { // Cambiado el nombre del getter a 'getUrl'
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) { // Cambiado el nombre del setter a 'setUrl'
+    public void setUrl(String url) {
         this.url = url;
     }
 }
