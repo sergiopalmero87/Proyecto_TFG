@@ -1,6 +1,6 @@
 package com.edix.tfc.proyecto_tfg;
 
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,25 +8,25 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.edix.tfc.proyecto_tfg.retrofit.interfac.RetrofitApi;
+
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapterGuardadas;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
-import com.edix.tfc.proyecto_tfg.retrofit.modelo.Noticias;
-import com.edix.tfc.proyecto_tfg.retrofit.modelo.Source;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NoticiasGuardadasActivity extends AppCompatActivity {
 
@@ -41,23 +41,23 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
     private List<ListElement> itemList;
 
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noticiasguardadas);
 
         iniciarVariables();
         goHome();
         recyclerViewLayoutManager();
-        respuestaRetrofit();
+        mostrarNoticiasGuardadas();
     }
 
     // Funcion para iniciar variables
-    private void iniciarVariables(){
+    private void iniciarVariables() {
         goHome = findViewById(R.id.goHome);
         recyclerViewGuardadas = findViewById(R.id.recyclerViewGuardadas);
     }
 
-    private void recyclerViewLayoutManager(){
+    private void recyclerViewLayoutManager() {
         // Establecemos como se mostraran las cosas en el recyclerview
         // (que es el contenedor donde se alojaran las cards en la pantalla.
         // Por defecto vertical)
@@ -65,7 +65,7 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
     }
 
     // Funcion para cuando se pulse el icono de home
-    private void goHome () {
+    private void goHome() {
         // Establecer el OnClickListener para el botón de home
         goHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,68 +87,84 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
         });
     }
 
-    private void respuestaRetrofit() {
-        // Configuración de Retrofit para la comunicación con la API
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://newsapi.org/v2/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        // Creación de la instancia de la interfaz RetrofitApi para realizar la llamada
-        RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
+    private void mostrarNoticiasGuardadas() {
+        // Obtenemos referencia colección de noticias guardadas en Firebase Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("NoticiasFav")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    //Si el task se completa:
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        //Si el task es exitoso creamos una lista donde guardar las noticias de la bbdd
+                        if (task.isSuccessful()) {
+                            List<ListElement> noticiasGuardadas = new ArrayList<>();
+                            // Recorremos los documentos de la colección de noticias guardadas
+                            for (DocumentSnapshot document : task.getResult()) {
+                                // Obtenemos los datos de cada documento y creamos un ListElement
+                                // que es la clase que sirve de molde para las cards
+                                String descripcion = document.getString("descripcion");
+                                String url = document.getString("url");
+                                ListElement listElement = new ListElement(descripcion, url);
+                                // Agregamos el ListElement a la lista de noticias guardadas
+                                noticiasGuardadas.add(listElement);
+                            }
 
-        // Llamada a la API para obtener la lista de noticias
-        Call<Noticias> respuesta = retrofitApi.getPosts("sports", "e0fb2227e0064938b9b9c7528fea009c");
-
-        // Manejo de la respuesta de la llamada asíncrona a la API
-        respuesta.enqueue(new Callback<Noticias>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onResponse(Call<Noticias> call, Response<Noticias> response) {
-                // Verificar si la respuesta es exitosa
-                if (!response.isSuccessful()) {
-                    // Mostrar un mensaje de error si la respuesta no es exitosa
-                    Toast.makeText(NoticiasGuardadasActivity.this, "Error al obtener noticias", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Inicializar itemList para almacenar los elementos de la lista de noticias
-                itemList = new ArrayList<>();
-
-                // Obtener la respuesta de Noticias
-                Noticias noticiasResponse = response.body();
-                if (noticiasResponse != null && noticiasResponse.getStatus().equals("ok")) {
-                    // Obtener la lista de fuentes
-                    List<Source> sources = noticiasResponse.getSources();
-
-                    /// Procesar los datos que me llegan de la API
-                    for (Source source : sources) {
-                        // Crear un ListElement con los datos de la fuente
-                        ListElement listElement = new ListElement(source.getName(), source.getDescription(), source.getUrl());
-                        // Agregar el ListElement a itemList
-                        itemList.add(listElement);
+                            // Verificamos si hay noticias guardadas por el usuario
+                            if (!noticiasGuardadas.isEmpty()) {
+                                // Creamos un adaptador con la lista de noticias guardadas y lo configuramos en el RecyclerView
+                                listAdapterGuardadas = new ListAdapterGuardadas(NoticiasGuardadasActivity.this, noticiasGuardadas);
+                                recyclerViewGuardadas.setAdapter(listAdapterGuardadas);
+                                // Notificamos al adaptador que los datos han cambiado
+                                listAdapterGuardadas.notifyDataSetChanged();
+                            } else {
+                                // Mostramos un mensaje indicando que no hay noticias guardadas
+                                Toast.makeText(NoticiasGuardadasActivity.this, "No hay noticias guardadas", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            // Manejamos el error en caso de que la consulta falle
+                            Log.e("Firestore", "Error al obtener noticias guardadas", task.getException());
+                        }
                     }
-
-                    // Crear un adaptador con la lista de elementos y configurarlo en el RecyclerView
-                    listAdapterGuardadas = new ListAdapterGuardadas(NoticiasGuardadasActivity.this, itemList);
-                    recyclerViewGuardadas.setAdapter(listAdapterGuardadas);
-
-                    // Notificar al adaptador que los datos han cambiado
-                    listAdapterGuardadas.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Noticias> call, Throwable throwable) {
-                // Obtener el mensaje de error del throwable
-                String errorMessage = throwable.getMessage();
-                // Mostrar el mensaje de error completo en el Logcat
-                Log.e("Error Retrofit", "Error en la solicitud de Retrofit", throwable);
-                // Mostrar un mensaje de error en el Toast con un mensaje genérico
-                Toast.makeText(NoticiasGuardadasActivity.this, "Error en la solicitud de Retrofit. Revisar el Logcat para más detalles.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                });
     }
 
 
+    private List<ListElement> obtenerNoticiasGuardadas() {
+        final List<ListElement> noticiasGuardadas = new ArrayList<>();
+
+        // Obtenemos una referencia a la colección de noticias guardadas en Firebase Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("NoticiasFav")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // Recorremos los documentos de la colección de noticias guardadas
+                            for (DocumentSnapshot document : task.getResult()) {
+                                // Obtenemos los datos de cada documento y creamos un ListElement
+                                String descripcion = document.getString("descripcion");
+                                String url = document.getString("url");
+                                ListElement listElement = new ListElement(descripcion, url);
+                                // Agregamos el ListElement a la lista de noticias guardadas
+                                noticiasGuardadas.add(listElement);
+                            }
+                            // Notificamos al adaptador que los datos han cambiado
+                            if (listAdapterGuardadas != null) {
+                                listAdapterGuardadas.notifyDataSetChanged();
+                            }
+                        } else {
+                            // Manejamos el error en caso de que la consulta falle
+                            Log.e("Firestore", "Error al obtener noticias guardadas", task.getException());
+                        }
+                    }
+                });
+
+        // Devolvemos la lista de noticias guardadas
+        return noticiasGuardadas;
+    }
 }
+
+

@@ -6,8 +6,8 @@ public class ListElement {
     private String textoNoticia;
     private String url; // Cambiado el nombre del atributo a 'url'
 
-    public ListElement(String nombre, String descripcion, String url) {
-        this.textoNoticia = nombre + "\n\n" + descripcion;
+    public ListElement(String descripcion, String url) {
+        this.textoNoticia = descripcion;
         this.url = url;
     }
 

@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                     // Procesar los datos que me llegan de la API
                     for (Source source : sources) {
                         // Crear un ListElement con los datos de la fuente
-                        ListElement listElement = new ListElement(source.getName(), source.getDescription(), source.getUrl());
+                        ListElement listElement = new ListElement(source.getDescription(), source.getUrl());
                         // Agregar el ListElement a itemList
                         itemList.add(listElement);
                     }
