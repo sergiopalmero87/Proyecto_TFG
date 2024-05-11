@@ -21,7 +21,7 @@ public class Source {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId() {
         this.id = id;
     }
 
@@ -45,7 +45,7 @@ public class Source {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setLink(String url) {
         this.url = url;
     }
 }

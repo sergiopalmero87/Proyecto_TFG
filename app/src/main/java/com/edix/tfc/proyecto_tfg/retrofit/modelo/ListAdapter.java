@@ -12,8 +12,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edix.tfc.proyecto_tfg.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //Esta clase comunica la parte back de las cards con la parte front
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
@@ -43,7 +52,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         ListElement element = listaNoticiasMostrar.get(position);
 
         holder.textoNoticia.setText(element.getTextoNoticia());
-        holder.urlNoticia.setText(element.getUrlNoticia());
+        holder.urlNoticia.setText(element.getUrl());
         holder.guardarNoticia(element);
         holder.publicarNoticia(element);
     }
@@ -73,15 +82,40 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
         }
 
-        //Metodo para guardar la noticia en bbdd
+
+        // Método para guardar la noticia en la base de datos
         public void guardarNoticia(final ListElement item) {
             guardarNoticia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "Guardado", Toast.LENGTH_SHORT).show();
+                    // Acceder a los valores de textoNoticia y urlNoticia a través de la instancia de ViewHolder
+                    String texto = textoNoticia.getText().toString();
+                    String url = urlNoticia.getText().toString();
+
+                    // Guardar la noticia en la base de datos
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String, Object> noticia = new HashMap<>();
+                    noticia.put("descripcion", texto);
+                    noticia.put("url", url);
+                    db.collection("NoticiasFav").document().set(noticia)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Se añadió correctamente
+                                    Toast.makeText(itemView.getContext(), "Noticia guardada", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Error al añadir
+                                    Toast.makeText(itemView.getContext(), "Error al guardar noticia", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
             });
         }
+
 
 
         //Metodo para publicar la noticia en redes
