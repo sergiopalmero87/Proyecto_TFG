@@ -121,15 +121,12 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
                     // Obtener la lista de fuentes
                     List<Source> sources = noticiasResponse.getSources();
 
-                    // Procesar la lista de fuentes como lo hacías antes
+                    /// Procesar los datos que me llegan de la API
                     for (Source source : sources) {
-                        String content = "id: " + source.getId() + "\n";
-                        content += "name : " + source.getName() + "\n";
-                        content += "description: " + source.getDescription() + "\n";
-                        content += "URL: " + source.getUrl() + "\n";
-
-                        // Agregar el contenido de la noticia a itemList
-                        itemList.add(new ListElement(content));
+                        // Crear un ListElement con los datos de la fuente
+                        ListElement listElement = new ListElement(source.getName(), source.getDescription(), source.getUrl());
+                        // Agregar el ListElement a itemList
+                        itemList.add(listElement);
                     }
 
                     // Crear un adaptador con la lista de elementos y configurarlo en el RecyclerView
