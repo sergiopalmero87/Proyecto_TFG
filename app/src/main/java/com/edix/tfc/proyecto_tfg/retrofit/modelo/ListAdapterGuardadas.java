@@ -1,6 +1,9 @@
 package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edix.tfc.proyecto_tfg.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
@@ -58,7 +68,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
     // Tambien simplifica el codigo ya que no necesito crear codigo innecesario (getter and setter)
     // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
-    public static class ViewHolderGuardadas extends RecyclerView.ViewHolder {
+    public class ViewHolderGuardadas extends RecyclerView.ViewHolder {
         public TextView textoNoticia, urlNoticia, namePeriodico;
         public ImageView borrarNoticia, publicarTwitter;
 
@@ -72,12 +82,46 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
         }
 
-        //Metodo para guardar la noticia en bbdd
+        //Metodo para borrar la noticia en bbdd
         public void borrarNoticia(final ListElement item) {
             borrarNoticia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "Borrado", Toast.LENGTH_SHORT).show();
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("NoticiasFav")
+                            .whereEqualTo("url", item.getUrl())
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            // Se encontró un documento con la URL especificada, lo eliminamos
+                                            document.getReference().delete()
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            // Noticia borrada exitosamente
+                                                            mDataGuardadas.remove(item);
+                                                            notifyDataSetChanged();
+                                                            Toast.makeText(itemView.getContext(), "Borrado", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            // Error al borrar la noticia.
+                                                            // Log para ver el error en logcat mas detallado
+                                                            Log.w(TAG, "Error al borrar noticia", e);
+                                                        }
+                                                    });
+                                        }
+                                    } else {
+                                        // Error al ejecutar la consulta. Log para mas detalle
+                                        Log.w(TAG, "Error al ejecutar la consulta", task.getException());
+                                    }
+                                }
+                            });
                 }
             });
         }

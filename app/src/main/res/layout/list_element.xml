@@ -8,10 +8,11 @@
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     app:cardCornerRadius="20dp"
-    app:cardElevation="4dp"
+    app:cardElevation="8dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    >
 
     <LinearLayout
         android:id="@+id/linearLayoutCard"
@@ -32,29 +33,35 @@
                 android:id="@+id/imagenCard"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/futbolbalon" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/imagenCardTwitter"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="70dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/twitter" />
+                android:src="@drawable/twitter"
+                android:contentDescription="Publicar noticia"
+                android:background="@color/white"
+                android:scaleType= "centerInside"/>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/guardarNoticia"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="112dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="130dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/save" />
+                android:src="@drawable/save"
+                android:background="@color/white"
+                android:contentDescription="Guardar noticia"
+                android:scaleType="centerInside" />
 
             <LinearLayout
             android:id="@+id/linearlayoutTextoNoticia"
