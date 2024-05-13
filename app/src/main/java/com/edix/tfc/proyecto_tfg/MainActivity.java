@@ -154,7 +154,8 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Inicializar itemList para almacenar los elementos de la lista de noticias
+                // Inicializar itemList para almacenar los elementos de la lista de noticias.
+                //Es una lista de tipo ListElemet que es molde de lo que contienen las cards.
                 itemList = new ArrayList<>();
 
                 // Obtener la respuesta de Noticias
@@ -162,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
                 if (noticiasResponse != null && noticiasResponse.getStatus().equals("ok")) {
                     // Obtener la lista de fuentes
                     List<Source> sources = noticiasResponse.getSources();
-
 
                     // Procesar los datos que me llegan de la API
                     for (Source source : sources) {
