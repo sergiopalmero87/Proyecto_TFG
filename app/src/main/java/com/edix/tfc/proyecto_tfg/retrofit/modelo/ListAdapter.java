@@ -163,33 +163,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             publicarTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new UpdateStatusTask().execute(item.getTextoNoticia());
+                    Toast.makeText(itemView.getContext(), "Publicado", Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
-        private class UpdateStatusTask extends AsyncTask<String, Void, Void> {
-            @Override
-            protected Void doInBackground(String... params) {
-                String textoNoticia = params[0];
-                Twitter twitter = Twitter.newBuilder()
-                        .oAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET)
-                        .oAuthAccessToken(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-                        .build();
-                try {
-                    twitter.v1().tweets().updateStatus(textoNoticia);
-                } catch (TwitterException e) {
-                    Log.e("Twitter Update", "Error updating status", e);
-                }
-                return null;
-            }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                Toast.makeText(itemView.getContext(), "Tweet publicado correctamente", Toast.LENGTH_SHORT).show();
-            }
-        }
 
 
 
