@@ -3,10 +3,12 @@ package com.edix.tfc.proyecto_tfg;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,9 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
@@ -30,7 +35,7 @@ public class AuthActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText emailText, passText;
     private FirebaseFirestore db;
-
+    private ImageButton btnRegistTwitter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +46,14 @@ public class AuthActivity extends AppCompatActivity {
         verContraseña();
         iniciarSesion();
         botonRegistrar();
+        btnRegistTwitter();
 
 
     }
 
 
     private void iniciarVariables() {
+
         // Inicializamos Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -56,8 +63,11 @@ public class AuthActivity extends AppCompatActivity {
         emailText = findViewById(R.id.textoEmail);
         passText = findViewById(R.id.textoPassword);
 
-        //inicializamos la variable del loginButton y lo ponemos a la escucha
+        //inicializamos la variable del loginButton
         loginButton = findViewById(R.id.loginButton);
+
+        //Iniciamos la variable btnRegistTwitter
+        btnRegistTwitter = findViewById(R.id.btnRegistTwitter);
 
         //Incializamos el boton de ver contraseña.
         botonVerContraseña = findViewById(R.id.botonVerContraseña);
@@ -143,6 +153,58 @@ public class AuthActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AuthActivity.this, RegistActivity.class);
                 startActivity(intent);
+
+            }
+        });
+    }
+
+    private void btnRegistTwitter(){
+        btnRegistTwitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Twitter
+                OAuthProvider.Builder provider = OAuthProvider.newBuilder("twitter.com");
+
+                Task<AuthResult> pendingResultTask = mAuth.getPendingAuthResult();
+                if (pendingResultTask != null) {
+                    // There's something already here! Finish the sign-in for your user.
+                    pendingResultTask
+                            .addOnSuccessListener(
+                                    new OnSuccessListener<AuthResult>() {
+                                        @Override
+                                        public void onSuccess(AuthResult authResult) {
+                                            startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                                            Toast.makeText(AuthActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                            .addOnFailureListener(
+                                    new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(AuthActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                } else {
+                    mAuth.startActivityForSignInWithProvider(AuthActivity.this, provider.build())
+                            .addOnSuccessListener(
+                                    new OnSuccessListener<AuthResult>() {
+                                        @Override
+                                        public void onSuccess(AuthResult authResult) {
+                                            startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                                            Toast.makeText(AuthActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                            .addOnFailureListener(
+                                    new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(AuthActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                }
+
+
 
             }
         });
