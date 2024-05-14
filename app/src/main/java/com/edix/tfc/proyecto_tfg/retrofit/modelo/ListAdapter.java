@@ -1,6 +1,7 @@
 package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -26,12 +27,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import twitter4j.*;
+
+
 //Esta clase comunica la parte back de las cards con la parte front
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<ListElement> listaNoticiasMostrar;
     private LayoutInflater mInflater;
     private Context mContext;
 
+    private static final String CONSUMER_KEY = "Dbj1mX3fbVnwIOZXPtNH8JL4W";
+    private static final String CONSUMER_SECRET = "9LvUMIhJki2qDT43ywEOUvnlO6MARxyIfsIlzYGYGy7NfkK3Y7";
+    private static final String ACCESS_TOKEN = "192594075-bGZVEsrd72sNcwEQmhEgNQvfzehnAgBA0phn9kDc";
+    private static final String ACCESS_TOKEN_SECRET = "lSa2eys3A3HHvjyqDrBnmq062d5nzEFX2ZLm2Aw78JbOp";
+    private static final String ENDPOINT_POST_TWEETS = "https://api.twitter.com/2/tweets";
 
     public ListAdapter(Context context, List<ListElement> itemList) {
         this.mInflater = LayoutInflater.from(context);
@@ -63,7 +72,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     //Devolver el tamaño de la lista de datos
     @Override
     public int getItemCount() {
-            return listaNoticiasMostrar.size();
+        return listaNoticiasMostrar.size();
     }
 
 
@@ -150,15 +159,39 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
 
 
-        //Metodo para publicar la noticia en redes
         public void publicarNoticia(final ListElement item) {
             publicarTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "Publicado", Toast.LENGTH_SHORT).show();
+                    new UpdateStatusTask().execute(item.getTextoNoticia());
                 }
             });
         }
+
+        private class UpdateStatusTask extends AsyncTask<String, Void, Void> {
+            @Override
+            protected Void doInBackground(String... params) {
+                String textoNoticia = params[0];
+                Twitter twitter = Twitter.newBuilder()
+                        .oAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET)
+                        .oAuthAccessToken(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+                        .build();
+                try {
+                    twitter.v1().tweets().updateStatus(textoNoticia);
+                } catch (TwitterException e) {
+                    Log.e("Twitter Update", "Error updating status", e);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                Toast.makeText(itemView.getContext(), "Tweet publicado correctamente", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
 
         //Sirve para actualizar los elementos que haya en el ViewHolder
         void bindData(final ListElement item){
