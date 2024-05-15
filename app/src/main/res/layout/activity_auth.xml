@@ -96,7 +96,7 @@
         android:id="@+id/loginButton"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="96dp"
         android:backgroundTint="@color/button"
         android:fontFamily="@font/cascadia"
         android:text="@string/buttonAcceder"
@@ -106,44 +106,44 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/layoutPassword" />
 
+
     <ImageButton
         android:id="@+id/btnRegistTwitter"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:background="@color/background"
-        android:contentDescription="Regist twitter"
+        android:contentDescription="@string/regist_twitter"
         android:scaleType="centerInside"
         android:src="@drawable/twitter"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_bias="0.663"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
-    <ImageButton
-        android:id="@+id/btnRegistGmail"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="50dp"
-        android:background="@color/background"
-        android:contentDescription="Regist Gmail"
-        android:scaleType="centerInside"
-        android:src="@drawable/gmail"
-        app:layout_constraintHorizontal_bias="0.498"
+    <TextView
+        android:id="@+id/textRegistrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:textStyle="bold"
+        android:layout_marginTop="660dp"
+        android:fontFamily="@font/cascadia"
+        android:text="@string/no_tienes_cuenta_registrate_aqu"
+        android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/btnRegistGoogle"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:background="@color/background"
-        android:contentDescription="Regist Google"
+        android:contentDescription="@string/regist_google"
         android:scaleType="centerInside"
         android:src="@drawable/google"
-        app:layout_constraintHorizontal_bias="0.199"
+        app:layout_constraintHorizontal_bias="0.327"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton" />

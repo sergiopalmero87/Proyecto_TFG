@@ -135,67 +135,47 @@
         app:layout_constraintTop_toTopOf="@id/cajaPasswordRegist"
         />
 
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="35dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:columnCount="4"
-        android:rowCount="1"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/cajaPasswordRegist"
-        >
-
-            <CheckBox
-                android:id="@+id/chFutbol"
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-                android:text="@string/futbol"
-                android:layout_row="0"
-                android:layout_marginLeft="30dp"
-                android:layout_column="0"
-                />
-
-            <CheckBox
-                android:id="@+id/chBaloncesto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/baloncesto"
-                android:layout_row="0"
-                android:layout_column="1"
-                android:layout_marginStart="30dp"
-                />
-
-            <CheckBox
-                android:id="@+id/chF1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/formula1"
-                android:layout_row="0"
-                android:layout_column="2"
-                android:layout_marginStart="20dp"
-                />
-    </GridLayout>
-
-
-
     <Button
-        android:fontFamily="@font/cascadia"
         android:id="@+id/loginButtonRegist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/button"
+        android:fontFamily="@font/cascadia"
         android:text="@string/registrarUsuario"
-        android:textSize="28sp"
         android:textColor="@color/white"
+        android:textSize="28sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cajaPasswordRegist"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/cajaPasswordRegist" />
 
+    <ImageButton
+        android:id="@+id/btnRegistGoogle"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/background"
+        android:contentDescription="@string/regist_google"
+        android:scaleType="centerInside"
+        android:src="@drawable/google"
+        app:layout_constraintHorizontal_bias="0.327"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginButtonRegist" />
+
+    <ImageButton
+        android:id="@+id/btnRegistTwitter"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/background"
+        android:contentDescription="@string/regist_twitter"
+        android:scaleType="centerInside"
+        android:src="@drawable/twitter"
+        app:layout_constraintHorizontal_bias="0.663"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginButtonRegist" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

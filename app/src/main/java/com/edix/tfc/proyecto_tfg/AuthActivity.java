@@ -42,6 +42,7 @@ public class AuthActivity extends AppCompatActivity {
     Button botonVerContraseña;
     private FirebaseAuth mAuth;
     EditText emailText, passText;
+    TextView registrarText;
     private FirebaseFirestore db;
     private ImageButton btnRegistTwitter, btnRegistGoogle, btnRegistEmail;
     BeginSignInRequest signInRequest;
@@ -55,7 +56,7 @@ public class AuthActivity extends AppCompatActivity {
         iniciarVariables();
         verContraseña();
         iniciarSesion();
-        botonRegistGmail();
+        registUser();
         btnRegistTwitter();
         btnRegistGoogle();
 
@@ -82,10 +83,11 @@ public class AuthActivity extends AppCompatActivity {
         //Iniciamos la variable btnRegistGoogle
         btnRegistGoogle = findViewById(R.id.btnRegistGoogle);
 
-        btnRegistEmail = findViewById(R.id.btnRegistGmail);
-
         //Incializamos el boton de ver contraseña.
         botonVerContraseña = findViewById(R.id.botonVerContraseña);
+
+        //Inicializamos text registar cuenta
+        registrarText = findViewById(R.id.textRegistrar);
 
     }
 
@@ -159,8 +161,8 @@ public class AuthActivity extends AppCompatActivity {
     }
 
 
-    private void botonRegistGmail() {
-        btnRegistEmail.setOnClickListener(new View.OnClickListener() {
+    private void registUser() {
+        registrarText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AuthActivity.this, RegistActivity.class);
