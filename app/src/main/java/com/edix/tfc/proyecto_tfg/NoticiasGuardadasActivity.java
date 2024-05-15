@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -20,6 +21,9 @@ import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -31,7 +35,7 @@ import java.util.List;
 public class NoticiasGuardadasActivity extends AppCompatActivity {
 
     private LottieAnimationView goHome;
-
+    private TextView textoNoticia, urlNoticia, namePeriodico;
     //Contenedor que aloja las cards
     private RecyclerView recyclerViewGuardadas;
     //Comunica la parte back con la front de las cards. Hace
@@ -55,6 +59,7 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
     private void iniciarVariables() {
         goHome = findViewById(R.id.goHome);
         recyclerViewGuardadas = findViewById(R.id.recyclerViewGuardadas);
+
     }
 
     private void recyclerViewLayoutManager() {
@@ -89,47 +94,52 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
 
 
     private void mostrarNoticiasGuardadas() {
-        // Obtenemos referencia colección de noticias guardadas en Firebase Firestore
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("NoticiasFav")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    //Si el task se completa:
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        //Si el task es exitoso creamos una lista donde guardar las noticias de la bbdd
-                        if (task.isSuccessful()) {
-                            List<ListElement> noticiasGuardadas = new ArrayList<>();
-                            // Recorremos los documentos de la colección de noticias guardadas
-                            for (DocumentSnapshot document : task.getResult()) {
-                                // Obtenemos los datos de cada documento y creamos un ListElement
-                                // que es la clase que sirve de molde para las cards
-                                String descripcion = document.getString("descripcion");
-                                String url = document.getString("url");
-                                String name = document.getString("name");;
-                                ListElement listElement = new ListElement(name, descripcion, url);
-                                // Agregamos el ListElement a la lista de noticias guardadas
-                                noticiasGuardadas.add(listElement);
-                            }
+        // Obtenemos la referencia al usuario actual
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                            // Verificamos si hay noticias guardadas por el usuario
-                            if (!noticiasGuardadas.isEmpty()) {
-                                // Creamos un adaptador con la lista de noticias guardadas y lo configuramos en el RecyclerView
-                                listAdapterGuardadas = new ListAdapterGuardadas(NoticiasGuardadasActivity.this, noticiasGuardadas);
-                                recyclerViewGuardadas.setAdapter(listAdapterGuardadas);
-                                // Notificamos al adaptador que los datos han cambiado
-                                listAdapterGuardadas.notifyDataSetChanged();
+        // Verificamos si el usuario está autenticado
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            // Obtenemos referencia a la colección de noticias guardadas del usuario actual en Firebase Firestore
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("users").document(userId).collection("NoticiasFav")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                List<ListElement> noticiasGuardadas = new ArrayList<>();
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    String descripcion = document.getString("descripcion");
+                                    String url = document.getString("url");
+                                    String name = document.getString("name");
+                                    ListElement listElement = new ListElement(name, descripcion, url);
+                                    noticiasGuardadas.add(listElement);
+                                }
+
+                                if (!noticiasGuardadas.isEmpty()) {
+                                    // Creamos un adaptador con la lista de noticias guardadas y lo configuramos en el RecyclerView
+                                    listAdapterGuardadas = new ListAdapterGuardadas(NoticiasGuardadasActivity.this, noticiasGuardadas);
+                                    recyclerViewGuardadas.setAdapter(listAdapterGuardadas);
+                                    // Notificamos al adaptador que los datos han cambiado
+                                    listAdapterGuardadas.notifyDataSetChanged();
+                                } else {
+                                    // Mostramos un mensaje indicando que no hay noticias guardadas
+                                    Toast.makeText(NoticiasGuardadasActivity.this, "No hay noticias guardadas", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                // Mostramos un mensaje indicando que no hay noticias guardadas
-                                Toast.makeText(NoticiasGuardadasActivity.this, "No hay noticias guardadas", Toast.LENGTH_SHORT).show();
+                                // Manejamos el error en caso de que la consulta falle
+                                Log.e("Firestore", "Error al obtener noticias guardadas", task.getException());
                             }
-                        } else {
-                            // Manejamos el error en caso de que la consulta falle
-                            Log.e("Firestore", "Error al obtener noticias guardadas", task.getException());
                         }
-                    }
-                });
+                    });
+        } else {
+            // Si el usuario no está autenticado, manejar la situación en consecuencia
+            // Por ejemplo, redirigir a la pantalla de inicio de sesión
+        }
     }
+
 
 
 

@@ -48,15 +48,15 @@
         />
 
     <TextView
-        android:id="@+id/nombreUserMain"
+        android:id="@+id/nombreAppMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="20dp"
-        android:textSize="30sp"
+        android:layout_marginStart="50dp"
+        android:textSize="35sp"
         android:layout_marginTop="16dp"
-        android:text="hola"
+        android:text="SportHub"
         />
 
     <androidx.recyclerview.widget.RecyclerView

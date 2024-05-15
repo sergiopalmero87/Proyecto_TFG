@@ -18,9 +18,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -101,60 +105,73 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     // Acceder a los valores de textoNoticia y urlNoticia a través de la instancia de ViewHolder
-                    String texto = textoNoticia.getText().toString();
-                    String url = urlNoticia.getText().toString();
-                    String name = namePeriodico.getText().toString();
+                    String descripcion = item.getTextoNoticia();
+                    String url = item.getUrl();
+                    String name = item.getName();
 
-                    //Instanciamos la bbdd
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    // Obtener la referencia al usuario actual
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                    // Obtener una referencia a la colección "NoticiasFav" en Firestore
-                    // para poder comprobar si la noticia ya existe
-                    CollectionReference noticiasRef = db.collection("NoticiasFav");
-                    noticiasRef.whereEqualTo("descripcion", texto)
-                            .whereEqualTo("url", url)
-                            .whereEqualTo("name", name)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        QuerySnapshot querySnapshot = task.getResult();
-                                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                            // La noticia ya existe en la base de datos
-                                            Toast.makeText(itemView.getContext(), "La noticia ya está guardada", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            // Guardar la noticia en la base de datos
-                                            Map<String, Object> noticia = new HashMap<>();
-                                            noticia.put("name", name);
-                                            noticia.put("descripcion", texto);
-                                            noticia.put("url", url);
-                                            db.collection("NoticiasFav").document().set(noticia)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            // Se añadió correctamente
-                                                            Toast.makeText(itemView.getContext(), "Noticia guardada", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            // Error al añadir
-                                                            Toast.makeText(itemView.getContext(), "Error al guardar noticia", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                        }
+                    // Verificar si el usuario está autenticado
+                    if (currentUser != null) {
+                        String userId = currentUser.getUid();
+
+                        // Instanciamos la bbdd
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                        // Verificar si la noticia ya existe en la colección "NoticiasFav" del usuario actual
+                        CollectionReference noticiasFavRef = db.collection("users").document(userId).collection("NoticiasFav");
+                        Query query = noticiasFavRef.whereEqualTo("descripcion", descripcion)
+                                .whereEqualTo("url", url)
+                                .whereEqualTo("name", name);
+
+                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    QuerySnapshot querySnapshot = task.getResult();
+                                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                                        // La noticia ya existe en la base de datos
+                                        Toast.makeText(itemView.getContext(), "La noticia ya está guardada", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        // Error al realizar la consulta
-                                        Toast.makeText(itemView.getContext(), "Error al consultar la base de datos", Toast.LENGTH_SHORT).show();
-                                        Log.e("Firestore", "Error al consultar en la base de datos", task.getException());
+                                        // Guardar la noticia en la colección "NoticiasFav" del usuario actual
+                                        Map<String, Object> noticia = new HashMap<>();
+                                        noticia.put("name", name);
+                                        noticia.put("descripcion", descripcion);
+                                        noticia.put("url", url);
+
+                                        noticiasFavRef.add(noticia)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        // La noticia se añadió correctamente
+                                                        Toast.makeText(itemView.getContext(), "Noticia guardada", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Error al guardar la noticia
+                                                        Toast.makeText(itemView.getContext(), "Error al guardar noticia", Toast.LENGTH_SHORT).show();
+                                                        Log.e("Firestore", "Error al guardar noticia", e);
+                                                    }
+                                                });
                                     }
+                                } else {
+                                    // Error al realizar la consulta
+                                    Toast.makeText(itemView.getContext(), "Error al consultar la base de datos", Toast.LENGTH_SHORT).show();
+                                    Log.e("Firestore", "Error al consultar en la base de datos", task.getException());
                                 }
-                            });
+                            }
+                        });
+                    } else {
+                        // Si el usuario no está autenticado, manejar la situación en consecuencia
+                        // Por ejemplo, redirigir a la pantalla de inicio de sesión
+                    }
                 }
             });
         }
+
 
 
 

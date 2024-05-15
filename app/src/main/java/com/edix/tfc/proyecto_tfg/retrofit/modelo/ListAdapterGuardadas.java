@@ -19,7 +19,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -82,49 +86,65 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
         }
 
-        //Metodo para borrar la noticia en bbdd
         public void borrarNoticia(final ListElement item) {
             borrarNoticia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("NoticiasFav")
-                            .whereEqualTo("url", item.getUrl())
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            // Se encontró un documento con la URL especificada, lo eliminamos
-                                            document.getReference().delete()
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            // Noticia borrada exitosamente
-                                                            mDataGuardadas.remove(item);
-                                                            notifyDataSetChanged();
-                                                            Toast.makeText(itemView.getContext(), "Borrado", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            // Error al borrar la noticia.
-                                                            // Log para ver el error en logcat mas detallado
-                                                            Log.w(TAG, "Error al borrar noticia", e);
-                                                        }
-                                                    });
-                                        }
-                                    } else {
-                                        // Error al ejecutar la consulta. Log para mas detalle
-                                        Log.w(TAG, "Error al ejecutar la consulta", task.getException());
+                    // Obtener la referencia al usuario actual
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    // Verificar si el usuario está autenticado
+                    if (currentUser != null) {
+                        String userId = currentUser.getUid();
+
+                        // Obtener la referencia a la colección "NoticiasFav" del usuario actual en Firestore
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        CollectionReference noticiasFavRef = db.collection("users").document(userId).collection("NoticiasFav");
+
+                        // Consultar la noticia a borrar por URL
+                        Query query = noticiasFavRef.whereEqualTo("url", item.getUrl());
+
+                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        // Se encontró un documento con la URL especificada, lo eliminamos
+                                        document.getReference().delete()
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        // Noticia borrada exitosamente
+                                                        mDataGuardadas.remove(item);
+                                                        notifyDataSetChanged();
+                                                        Toast.makeText(itemView.getContext(), "Noticia borrada", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Error al borrar la noticia.
+                                                        // Log para ver el error en logcat más detallado
+                                                        Log.e(TAG, "Error al borrar noticia", e);
+                                                        Toast.makeText(itemView.getContext(), "Error al borrar noticia", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                     }
+                                } else {
+                                    // Error al ejecutar la consulta. Log para más detalle
+                                    Log.e(TAG, "Error al ejecutar la consulta", task.getException());
+                                    Toast.makeText(itemView.getContext(), "Error al ejecutar la consulta", Toast.LENGTH_SHORT).show();
                                 }
-                            });
+                            }
+                        });
+                    } else {
+                        // Si el usuario no está autenticado, manejar la situación en consecuencia
+                        // Por ejemplo, redirigir a la pantalla de inicio de sesión
+                    }
                 }
             });
         }
+
 
         //Metodo para publicar la noticia en redes
         public void publicarNoticia(final ListElement item) {

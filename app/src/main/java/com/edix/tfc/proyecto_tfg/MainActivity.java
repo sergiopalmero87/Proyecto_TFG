@@ -1,5 +1,8 @@
 package com.edix.tfc.proyecto_tfg;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +21,13 @@ import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapter;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.Noticias;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.Source;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
     private LottieAnimationView logOutButton, configButton, noticiasGuardadasButton;
     private FirebaseAuth mAuth;
-    TextView nombreUsuario;
+    private String userId;
+    FirebaseUser user;
+    private TextView nombreUsuarioMain;
 
     //Contenedor que aloja las cards
     private RecyclerView recyclerView;
@@ -55,16 +66,15 @@ public class MainActivity extends AppCompatActivity {
         config();
         verNoticiasGuardadas();
         respuestaRetrofit();
-
     }
 
     private void iniciarVariables() {
         mAuth = FirebaseAuth.getInstance();
         logOutButton = findViewById(R.id.logOut);
         configButton = findViewById(R.id.config);
-        nombreUsuario = findViewById(R.id.textoNombreUser);
         recyclerView = findViewById(R.id.recyclerViewMain);
         noticiasGuardadasButton = findViewById(R.id.verNoticiasGuardadas);
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
     }
 
@@ -75,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         // Por defecto vertical)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
 
     private void logOut() {
         logOutButton.setOnClickListener(new View.OnClickListener() {

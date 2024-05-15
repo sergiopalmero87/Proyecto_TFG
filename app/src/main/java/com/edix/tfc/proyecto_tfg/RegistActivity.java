@@ -3,6 +3,7 @@ package com.edix.tfc.proyecto_tfg;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -30,7 +31,7 @@ import java.util.Map;
 public class RegistActivity extends AppCompatActivity {
 
     EditText userNameText, emailText, passwordText;
-    Button registButton;
+    Button registButton, botonVerContraseña;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private LottieAnimationView volver;
@@ -44,6 +45,7 @@ public class RegistActivity extends AppCompatActivity {
 
         iniciarVariables();
         registrarUser();
+        verContraseña();
         volver();
 
     }
@@ -59,6 +61,7 @@ public class RegistActivity extends AppCompatActivity {
         emailText = findViewById(R.id.textoEmail);
         passwordText = findViewById(R.id.textoPassword);
         registButton = findViewById(R.id.loginButtonRegist);
+        botonVerContraseña = findViewById(R.id.botonVerContraseña);
         volver = findViewById(R.id.volver);
     }
 
@@ -135,6 +138,26 @@ public class RegistActivity extends AppCompatActivity {
                                 }
                             });
                 }
+            }
+        });
+    }
+
+    private void verContraseña() {
+        botonVerContraseña.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Si cuando demos al boton la contraseña esta visible, el ojo se cierra y la contraseña se oculta
+                if (passwordText.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)) {
+                    botonVerContraseña.setBackgroundResource(R.drawable.cerrar); // Usar setBackgroundResource para establecer un drawable
+                    passwordText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+                    //Si cuando demos al boton la contraseña no se ve, el ojo se abre y la contraseña se muestra
+                } else {
+                    botonVerContraseña.setBackgroundResource(R.drawable.abrir); // Usar setBackgroundResource para establecer un drawable
+                    passwordText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                }
+                // Mover el cursor al final del texto
+                passwordText.setSelection(passwordText.getText().length());
             }
         });
     }

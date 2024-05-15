@@ -120,9 +120,20 @@
             android:id="@+id/textoPassword"
             android:padding="2dp"
             android:inputType="textPassword"/>
+
+
     </com.google.android.material.textfield.TextInputLayout>
 
-
+    <Button
+        android:id="@+id/botonVerContraseña"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="44dp"
+        android:background="@drawable/cerrar"
+        app:layout_constraintEnd_toEndOf="@+id/cajaPasswordRegist"
+        app:layout_constraintTop_toTopOf="@id/cajaPasswordRegist"
+        />
 
     <GridLayout
         android:layout_width="wrap_content"

@@ -119,7 +119,7 @@ public class AuthActivity extends AppCompatActivity {
                             .addOnCompleteListener(task -> {
                                 //Si lo que obtenemos de la bbdd esta vacio es porque no existe.
                                 if (task.getResult().isEmpty()) {
-                                    Toast.makeText(AuthActivity.this, "Email o contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AuthActivity.this, "El usuario no está registrado", Toast.LENGTH_SHORT).show();
                                 } else {
                                     // Accedemos con email y pass a nuestra cuenta
                                     mAuth.signInWithEmailAndPassword(email, password)
@@ -131,7 +131,7 @@ public class AuthActivity extends AppCompatActivity {
                                                         Intent intent = new Intent(AuthActivity.this, MainActivity.class);
                                                         startActivity(intent);
                                                     } else if (!task.isSuccessful()) {
-                                                        Toast.makeText(AuthActivity.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(AuthActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                                                     } else {
                                                         Toast.makeText(AuthActivity.this, "Algo salió mal. Inténtelo de nuevo", Toast.LENGTH_LONG).show();
                                                     }
