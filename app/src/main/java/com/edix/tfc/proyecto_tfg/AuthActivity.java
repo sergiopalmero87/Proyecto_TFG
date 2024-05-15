@@ -1,5 +1,8 @@
 package com.edix.tfc.proyecto_tfg;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -14,8 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.SignInCredential;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,12 +38,14 @@ import java.util.Objects;
 public class AuthActivity extends AppCompatActivity {
 
     Button loginButton;
-    TextView signUpButton;
+
     Button botonVerContraseña;
     private FirebaseAuth mAuth;
     EditText emailText, passText;
     private FirebaseFirestore db;
-    private ImageButton btnRegistTwitter;
+    private ImageButton btnRegistTwitter, btnRegistGoogle, btnRegistEmail;
+    BeginSignInRequest signInRequest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +55,9 @@ public class AuthActivity extends AppCompatActivity {
         iniciarVariables();
         verContraseña();
         iniciarSesion();
-        botonRegistrar();
+        botonRegistGmail();
         btnRegistTwitter();
-
+        btnRegistGoogle();
 
     }
 
@@ -68,6 +78,11 @@ public class AuthActivity extends AppCompatActivity {
 
         //Iniciamos la variable btnRegistTwitter
         btnRegistTwitter = findViewById(R.id.btnRegistTwitter);
+
+        //Iniciamos la variable btnRegistGoogle
+        btnRegistGoogle = findViewById(R.id.btnRegistGoogle);
+
+        btnRegistEmail = findViewById(R.id.btnRegistGmail);
 
         //Incializamos el boton de ver contraseña.
         botonVerContraseña = findViewById(R.id.botonVerContraseña);
@@ -93,7 +108,6 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     private void iniciarSesion() {
@@ -145,10 +159,8 @@ public class AuthActivity extends AppCompatActivity {
     }
 
 
-    private void botonRegistrar() {
-        //Inicializamos la variable del signUpButton y la ponemos a la escucha
-        signUpButton = findViewById(R.id.signUpButton);
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+    private void botonRegistGmail() {
+        btnRegistEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AuthActivity.this, RegistActivity.class);
@@ -209,6 +221,25 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void btnRegistGoogle() {
+        btnRegistGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInRequest = BeginSignInRequest.builder()
+                        .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                                .setSupported(true)
+                                // Your server's client ID, not your Android client ID.
+                                .setServerClientId(getString(R.string.googleAuth))
+                                // Only show accounts previously used to sign in.
+                                .setFilterByAuthorizedAccounts(true)
+                                .build())
+                        .build();
+            }
+        });
+    }
+
+
 
 }
 
