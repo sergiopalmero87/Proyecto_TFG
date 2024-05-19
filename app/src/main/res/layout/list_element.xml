@@ -14,6 +14,8 @@
     app:cardUseCompatPadding="true"
     >
 
+    <!-- app:cardBackgroundColor="#F6F5F5" -->
+
     <LinearLayout
         android:id="@+id/linearLayoutCard"
         android:layout_width="match_parent"

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="#ADD2EF"
     tools:context=".NoticiasGuardadasActivity">
 
     <com.airbnb.lottie.LottieAnimationView
@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="false"
-        app:lottie_colorFilter="@color/button"
+        app:lottie_colorFilter="@color/black"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/gohome"
         app:lottie_speed="2.0" />
@@ -26,10 +26,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="50dp"
         android:textSize="30sp"
         android:layout_marginTop="16dp"
-        android:text="Mis noticias guardadas"
+        android:text="Noticias guardadas"
+        android:textColor="@color/black"
         />
 
     <androidx.recyclerview.widget.RecyclerView
