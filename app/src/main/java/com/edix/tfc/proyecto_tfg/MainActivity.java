@@ -166,10 +166,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Noticias> call, Response<Noticias> response) {
                 // Verificar si la respuesta es exitosa
-                if (!response.isSuccessful()) {
-                    // Mostrar un mensaje de error si la respuesta no es exitosa
-                    Toast.makeText(MainActivity.this, "Error al obtener noticias", Toast.LENGTH_SHORT).show();
-                    return;
+                if (!response.isSuccessful() && response.code() == 429) {
+                    Log.e(TAG, "Error en la respuesta de la API. Demasiadas solicitudes (Código 429).");
+                    Toast.makeText(MainActivity.this, "Has excedido el límite de solicitudes. Intentalo más tarde.", Toast.LENGTH_SHORT).show();
                 }
 
                 // Inicializar itemList para almacenar los elementos de la lista de noticias.
