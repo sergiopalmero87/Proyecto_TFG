@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.edix.tfc.proyecto_tfg.retrofit.interfac.RetrofitApi;
+import com.edix.tfc.proyecto_tfg.retrofit.modelo.Article;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapter;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.Noticias;
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
 
         // Llamada a la API para obtener la lista de noticias
-        Call<Noticias> respuesta = retrofitApi.getPosts("sports", "e0fb2227e0064938b9b9c7528fea009c");
+        Call<Noticias> respuesta = retrofitApi.getPosts("soccer", "es","e0fb2227e0064938b9b9c7528fea009c");
 
         // Manejo de la respuesta de la llamada asíncrona a la API
         respuesta.enqueue(new Callback<Noticias>() {
@@ -171,12 +172,12 @@ public class MainActivity extends AppCompatActivity {
                 Noticias noticiasResponse = response.body();
                 if (noticiasResponse != null && noticiasResponse.getStatus().equals("ok")) {
                     // Obtener la lista de fuentes
-                    List<Source> sources = noticiasResponse.getSources();
+                    List<Article> articles = noticiasResponse.getArticles();
 
                     // Procesar los datos que me llegan de la API
-                    for (Source source : sources) {
+                    for (Article article : articles) {
                         // Crear un ListElement con los datos de la fuente
-                        ListElement listElement = new ListElement(source.getName(),source.getDescription(), source.getUrl());
+                        ListElement listElement = new ListElement(article.getSource().getName(),article.getDescription(), article.getUrl());
                         // Agregar el ListElement a itemList
                         itemList.add(listElement);
                     }

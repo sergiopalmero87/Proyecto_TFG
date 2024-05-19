@@ -13,8 +13,9 @@ import retrofit2.http.Query;
 
 public interface RetrofitApi {
 
-    @GET("top-headlines/sources")
-    Call<Noticias> getPosts(@Query("category") String category,
+    @GET("everything")
+    Call<Noticias> getPosts(@Query("q") String q,
+                            @Query("language") String language,
                             @Query("apiKey") String apiKey);
 
 }

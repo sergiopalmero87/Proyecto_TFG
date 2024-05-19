@@ -4,17 +4,15 @@ public class Source {
 
     private String id;
     private String name;
-    private String description;
-    private String url;
+
 
     public Source() {
     }
 
-    public Source(String id, String name, String description, String url) {
+    public Source(String id, String name) {
         this.id = id;
         this.name = name;
-        this.description = description;
-        this.url = url;
+
     }
 
     public String getId() {
@@ -33,20 +31,5 @@ public class Source {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setLink(String url) {
-        this.url = url;
-    }
 }
 

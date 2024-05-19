@@ -5,14 +5,14 @@ import java.util.List;
 public class Noticias {
 
     private String status;
-    private List<Source> sources;
+    private List<Article> articles;
 
     public Noticias() {
     }
 
-    public Noticias(String status, List<Source> sources) {
+    public Noticias(String status, List<Article> articles) {
         this.status = status;
-        this.sources = sources;
+        this.articles = getArticles();
     }
 
     public String getStatus() {
@@ -23,11 +23,11 @@ public class Noticias {
         this.status = status;
     }
 
-    public List<Source> getSources() {
-        return sources;
+    public List<Article> getArticles() {
+        return articles;
     }
 
-    public void setSources(List<Source> sources) {
-        this.sources = sources;
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
     }
 }
