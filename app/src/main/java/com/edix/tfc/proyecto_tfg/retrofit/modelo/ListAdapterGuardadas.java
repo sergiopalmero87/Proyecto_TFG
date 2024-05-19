@@ -54,8 +54,28 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
     @Override
     public void onBindViewHolder(@NonNull ViewHolderGuardadas holder, int position) {
         ListElement element = mDataGuardadas.get(position);
-        holder.textoNoticia.setText(element.getTextoNoticia());
-        holder.urlNoticia.setText(element.getUrl());
+
+
+        //En esta variable guardamos el textoNoticia que haya en cada element
+        //que es de tipo ListElement(por lo que es el contenido de las cards)
+        //Si el largo es de mas de 100 caracteres, hacemos que se muestre ...
+        //para que la card no sea tan grande.
+        String descripcion = element.getTextoNoticia();
+        if (descripcion.length() > 150) {
+            //Descripcion es igual a lo que haya en la variable descripcion
+            //pero desde el caracter 0 al 100 y el resto se sustituye por ...
+            descripcion = descripcion.substring(0, 150) + "...";
+        }
+
+        String url = element.getUrl();
+        if (url.length() > 50) {
+            //url es igual a lo que haya en la variable url
+            //pero desde el caracter 0 al 50 y el resto se sustituye por ...
+            url = url.substring(0, 50) + "...";
+        }
+
+        holder.textoNoticia.setText(descripcion);
+        holder.urlNoticia.setText(url);
         holder.namePeriodico.setText(element.getName());
         holder.borrarNoticia(element);
         holder.publicarNoticia(element);

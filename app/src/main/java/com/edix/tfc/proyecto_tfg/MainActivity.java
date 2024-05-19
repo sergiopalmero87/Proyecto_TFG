@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,8 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private LottieAnimationView logOutButton, configButton, noticiasGuardadasButton;
     private FirebaseAuth mAuth;
     private String userId;
+    private ImageView imagenCard;
     FirebaseUser user;
     private TextView nombreUsuarioMain;
+    private String fecha = new Date().toString();
 
     //Contenedor que aloja las cards
     private RecyclerView recyclerView;
@@ -76,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewMain);
         noticiasGuardadasButton = findViewById(R.id.verNoticiasGuardadas);
         user = FirebaseAuth.getInstance().getCurrentUser();
-
+        imagenCard = findViewById(R.id.imagenCard);
     }
 
 
@@ -150,7 +154,11 @@ public class MainActivity extends AppCompatActivity {
         RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
 
         // Llamada a la API para obtener la lista de noticias
-        Call<Noticias> respuesta = retrofitApi.getPosts("soccer", "es","e0fb2227e0064938b9b9c7528fea009c");
+        Call<Noticias> respuesta = retrofitApi.getPosts("soccer",
+                "es",
+                fecha,
+                fecha,
+                "e0fb2227e0064938b9b9c7528fea009c");
 
         // Manejo de la respuesta de la llamada asíncrona a la API
         respuesta.enqueue(new Callback<Noticias>() {
@@ -176,10 +184,17 @@ public class MainActivity extends AppCompatActivity {
 
                     // Procesar los datos que me llegan de la API
                     for (Article article : articles) {
-                        // Crear un ListElement con los datos de la fuente
-                        ListElement listElement = new ListElement(article.getSource().getName(),article.getDescription(), article.getUrl());
-                        // Agregar el ListElement a itemList
-                        itemList.add(listElement);
+
+                        if (article.getDescription() != null
+                                && !article.getDescription().isEmpty()
+                                && !article.getDescription().contains("[Removed]")
+                                && !article.getDescription().contains("<!--cache-->")){
+                            // Crear un ListElement con los datos de la fuente
+                            ListElement listElement = new ListElement(article.getSource().getName(),article.getDescription(), article.getUrl());
+                            // Agregar el ListElement a itemList
+                            itemList.add(listElement);
+                        }
+
                     }
 
                     // Crear un adaptador con la lista de elementos y configurarlo en el RecyclerView

@@ -16,6 +16,8 @@ public interface RetrofitApi {
     @GET("everything")
     Call<Noticias> getPosts(@Query("q") String q,
                             @Query("language") String language,
+                            @Query("from") String from,
+                            @Query("to") String to,
                             @Query("apiKey") String apiKey);
 
 }
