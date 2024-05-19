@@ -85,7 +85,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
 
         holder.textoNoticia.setText(descripcion);
-        holder.urlNoticia.setText(url);
+        holder.urlNoticia.setText(element.getUrl());
         holder.namePeriodico.setText(element.getName());
         holder.guardarNoticia(element);
         holder.publicarNoticia(element);

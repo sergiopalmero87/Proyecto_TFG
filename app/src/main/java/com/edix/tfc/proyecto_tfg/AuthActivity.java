@@ -1,51 +1,66 @@
 package com.edix.tfc.proyecto_tfg;
 
-import static android.content.ContentValues.TAG;
 
-import android.app.PendingIntent;
+
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.text.InputType;
+
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.BeginSignInResult;
-import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.common.api.ApiException;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.credentials.Credential;
+import androidx.credentials.CredentialManager;
+import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.CustomCredential;
+import androidx.credentials.GetCredentialRequest;
+import androidx.credentials.GetCredentialResponse;
+import androidx.credentials.GetPasswordOption;
+import androidx.credentials.GetPublicKeyCredentialOption;
+import androidx.credentials.PasswordCredential;
+import androidx.credentials.PublicKeyCredential;
+import androidx.credentials.exceptions.GetCredentialException;
+
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 
 public class AuthActivity extends AppCompatActivity {
 
     Button loginButton;
-
     Button botonVerContraseña;
     private FirebaseAuth mAuth;
     EditText emailText, passText;
     TextView registrarText;
     private FirebaseFirestore db;
-    private ImageButton btnRegistTwitter, btnRegistGoogle, btnRegistEmail;
-    BeginSignInRequest signInRequest;
+    private ImageButton btnRegistTwitter, btnRegistGoogle;
+    private static final String WEB_CLIENT_ID = "922915579598-g61gmnm51udf52482gmoah1v8d5qi0gs.apps.googleusercontent.com";
 
 
     @Override
@@ -228,20 +243,57 @@ public class AuthActivity extends AppCompatActivity {
         btnRegistGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInRequest = BeginSignInRequest.builder()
-                        .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                                .setSupported(true)
-                                // Your server's client ID, not your Android client ID.
-                                .setServerClientId(getString(R.string.googleAuth))
-                                // Only show accounts previously used to sign in.
-                                .setFilterByAuthorizedAccounts(true)
-                                .build())
+
+                CredentialManager credentialManager = CredentialManager.create(AuthActivity.this);
+
+                GetPasswordOption getPasswordOption = new GetPasswordOption();
+
+
+
+                GetGoogleIdOption getGoogleIdOption = new GetGoogleIdOption.Builder()
+                        .setFilterByAuthorizedAccounts(true)
+                        .setServerClientId(WEB_CLIENT_ID)
+                        .setAutoSelectEnabled(true)
+                        .setNonce("my_nonce")
                         .build();
+
+
+                GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder()
+                        .addCredentialOption(getGoogleIdOption)
+                        .build();
+
+                credentialManager.getCredentialAsync(
+                        AuthActivity.this, // Use activity-based context to avoid undefined system UI launching behavior
+                        getCredRequest,
+                        null, // No need for cancellation signal in this case
+                        Executors.newSingleThreadExecutor(), // Use a single thread executor
+                        new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                            @Override
+                            public void onResult(GetCredentialResponse result) {
+                                // Handle the successfully returned credential.
+                                Credential credential = result.getCredential();
+                                if (credential instanceof GoogleIdTokenCredential) {
+                                    GoogleIdTokenCredential googleIdTokenCredential = (GoogleIdTokenCredential) credential;
+                                    // Use googleIdTokenCredential.getId() or googleIdTokenCredential.getToken() to authenticate
+                                    // You can get the Google ID token or the entire token string from here
+                                    String idToken = googleIdTokenCredential.getType();
+                                    // Now you can use this token for authentication
+                                    Log.d("AuthActivity", "Google ID Token: " + idToken);
+                                } else {
+                                    // Handle unexpected credential type
+                                    Log.e("AuthActivity", "Unexpected type of credential");
+                                }
+                            }
+
+                            @Override
+                            public void onError(GetCredentialException e) {
+                                // Handle error
+                                Log.e("AuthActivity", "Error retrieving credentials", e);
+                            }
+                        }
+                );
             }
         });
     }
 
-
-
 }
-
