@@ -3,9 +3,9 @@ package com.edix.tfc.proyecto_tfg;
 
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CancellationSignal;
 import android.text.InputType;
 
 import android.util.Log;
@@ -24,14 +24,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.credentials.Credential;
 import androidx.credentials.CredentialManager;
 import androidx.credentials.CredentialManagerCallback;
-import androidx.credentials.CustomCredential;
 import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.GetPasswordOption;
 import androidx.credentials.GetPublicKeyCredentialOption;
-import androidx.credentials.PasswordCredential;
-import androidx.credentials.PublicKeyCredential;
+
 import androidx.credentials.exceptions.GetCredentialException;
+import androidx.credentials.exceptions.NoCredentialException;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,15 +38,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
-import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
-import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 
@@ -248,18 +244,20 @@ public class AuthActivity extends AppCompatActivity {
 
                 GetPasswordOption getPasswordOption = new GetPasswordOption();
 
+                String requestJson = null;
+                GetPublicKeyCredentialOption getPublicKeyCredentialOption =
+                        new GetPublicKeyCredentialOption(requestJson);
 
+                GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder()
+                        .addCredentialOption(getPasswordOption)
+                        .addCredentialOption(getPublicKeyCredentialOption)
+                        .build();
 
                 GetGoogleIdOption getGoogleIdOption = new GetGoogleIdOption.Builder()
                         .setFilterByAuthorizedAccounts(true)
                         .setServerClientId(WEB_CLIENT_ID)
                         .setAutoSelectEnabled(true)
                         .setNonce("my_nonce")
-                        .build();
-
-
-                GetCredentialRequest getCredRequest = new GetCredentialRequest.Builder()
-                        .addCredentialOption(getGoogleIdOption)
                         .build();
 
                 credentialManager.getCredentialAsync(

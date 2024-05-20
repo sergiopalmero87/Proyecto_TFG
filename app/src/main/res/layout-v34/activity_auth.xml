@@ -42,6 +42,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
+        android:isCredential="true"
         app:layout_constraintTop_toBottomOf="@+id/tituloApp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -50,6 +51,7 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/cascadia"
             android:hint="@string/hintEmail"
+            android:isCredential="true"
             android:padding="2dp"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
