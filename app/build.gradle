@@ -52,7 +52,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     //Auth en firebase
-    implementation 'com.google.firebase:firebase-auth:23.0.0'
+    implementation 'com.google.firebase:firebase-auth'
 
     //Lottie
     implementation 'com.airbnb.android:lottie:6.4.0'
