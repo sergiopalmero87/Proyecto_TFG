@@ -115,7 +115,7 @@
         android:background="@color/background"
         android:contentDescription="@string/regist_twitter"
         android:scaleType="centerInside"
-        android:src="@drawable/twitter"
+        android:src="@drawable/twitterx"
         app:layout_constraintHorizontal_bias="0.663"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
