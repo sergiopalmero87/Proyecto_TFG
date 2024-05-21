@@ -14,4 +14,5 @@
     <string name="regist_twitter">Regist twitter</string>
     <string name="no_tienes_cuenta_registrate_aqu">¿No tienes cuenta? Registrate aquí</string>
     <string name="regist_google">Regist Google</string>
+    <string name="default_web_client_id">922915579598-g61gmnm51udf52482gmoah1v8d5qi0gs.apps.googleusercontent.com</string>
 </resources>
