@@ -77,13 +77,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             descripcion = descripcion.substring(0, 150) + "...";
         }
 
-        String url = element.getUrl();
-        if (url.length() > 50) {
-            //url es igual a lo que haya en la variable url
-            //pero desde el caracter 0 al 50 y el resto se sustituye por ...
-            url = url.substring(0, 50) + "...";
-        }
-
         holder.textoNoticia.setText(descripcion);
         holder.urlNoticia.setText(element.getUrl());
         holder.namePeriodico.setText(element.getName());

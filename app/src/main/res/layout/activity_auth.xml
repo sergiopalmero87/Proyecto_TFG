@@ -127,14 +127,15 @@
         android:id="@+id/textRegistrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
         android:layout_marginTop="660dp"
         android:fontFamily="@font/cascadia"
         android:text="@string/no_tienes_cuenta_registrate_aqu"
+        android:textColor="@color/black"
         android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton

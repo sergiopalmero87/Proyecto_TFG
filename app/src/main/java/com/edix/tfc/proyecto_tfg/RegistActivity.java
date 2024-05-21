@@ -9,18 +9,29 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -32,10 +43,14 @@ public class RegistActivity extends AppCompatActivity {
 
     EditText userNameText, emailText, passwordText;
     Button registButton, botonVerContraseña;
+    private ImageButton btnRegistTwitter, btnRegistGoogle;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private LottieAnimationView volver;
-
+    FirebaseUser currentUser;
+    int RC_SING_IN = 20;
+    private GoogleSignInClient googleSignInClient;
+    private GoogleSignInOptions googleSignInOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +62,8 @@ public class RegistActivity extends AppCompatActivity {
         registrarUser();
         verContraseña();
         volver();
+        btnRegistTwitter();
+        btnRegistGoogle();
 
     }
 
@@ -57,12 +74,16 @@ public class RegistActivity extends AppCompatActivity {
         //bbdd
         db = FirebaseFirestore.getInstance();
 
+        currentUser = mAuth.getCurrentUser();
+
         userNameText = findViewById(R.id.textoNombreUser);
         emailText = findViewById(R.id.textoEmail);
         passwordText = findViewById(R.id.textoPassword);
         registButton = findViewById(R.id.loginButtonRegist);
         botonVerContraseña = findViewById(R.id.botonVerContraseña);
         volver = findViewById(R.id.volver);
+        btnRegistTwitter = findViewById(R.id.btnRegistTwitter);
+        btnRegistGoogle = findViewById(R.id.btnRegistGoogle);
     }
 
     private void registrarUser(){
@@ -182,6 +203,136 @@ public class RegistActivity extends AppCompatActivity {
                 );
             }
         });
+    }
+
+    private void btnRegistTwitter(){
+        btnRegistTwitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Twitter
+                OAuthProvider.Builder provider = OAuthProvider.newBuilder("twitter.com");
+
+                Task<AuthResult> pendingResultTask = mAuth.getPendingAuthResult();
+                if (pendingResultTask != null) {
+                    // There's something already here! Finish the sign-in for your user.
+                    pendingResultTask
+                            .addOnSuccessListener(
+                                    new OnSuccessListener<AuthResult>() {
+                                        @Override
+                                        public void onSuccess(AuthResult authResult) {
+                                            startActivity(new Intent(RegistActivity.this, MainActivity.class));
+                                            Toast.makeText(RegistActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                            .addOnFailureListener(
+                                    new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(RegistActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                } else {
+                    mAuth.startActivityForSignInWithProvider(RegistActivity.this, provider.build())
+                            .addOnSuccessListener(
+                                    new OnSuccessListener<AuthResult>() {
+                                        @Override
+                                        public void onSuccess(AuthResult authResult) {
+                                            startActivity(new Intent(RegistActivity.this, MainActivity.class));
+                                            Toast.makeText(RegistActivity.this, "Registro con Twitter correcto", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                            .addOnFailureListener(
+                                    new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(RegistActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                }
+
+
+
+            }
+        });
+    }
+
+    private void btnRegistGoogle() {
+        btnRegistGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail().build();
+
+                googleSignInClient = GoogleSignIn.getClient(RegistActivity.this,googleSignInOptions);
+
+                googleSingIn();
+
+            }
+        });
+    }
+
+    private void googleSingIn(){
+
+        Intent intent = googleSignInClient.getSignInIntent();
+        startActivityForResult(intent,RC_SING_IN);
+
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == RC_SING_IN){
+
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+            try{
+
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuth(account.getIdToken());
+
+            }catch (ApiException e) {
+                throw new RuntimeException(e);
+            }
+
+
+
+        }
+    }
+
+    private void firebaseAuth(String idToken) {
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if(task.isSuccessful()){
+
+                            //Obtenemos el usuario actual
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            HashMap<String,Object> map = new HashMap<>();
+                            map.put("id",user.getUid());
+                            map.put("name", user.getDisplayName());
+                            map.put("profile", user.getPhotoUrl());
+
+                            Intent intent = new Intent(RegistActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            Toast.makeText(RegistActivity.this, "Registro con Google correcto", Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            Toast.makeText(RegistActivity.this, "NO", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
     }
 
 }

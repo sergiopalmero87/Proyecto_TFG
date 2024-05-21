@@ -24,20 +24,8 @@ import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.credentials.Credential;
 import androidx.credentials.CredentialManager;
-import androidx.credentials.CredentialManagerCallback;
-import androidx.credentials.GetCredentialRequest;
-import androidx.credentials.GetCredentialResponse;
-import androidx.credentials.GetPasswordOption;
-import androidx.credentials.GetPublicKeyCredentialOption;
 
-import androidx.credentials.exceptions.GetCredentialException;
-import androidx.credentials.exceptions.NoCredentialException;
-
-
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,8 +35,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,7 +45,6 @@ import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
-import java.util.concurrent.Executors;
 
 
 public class AuthActivity extends AppCompatActivity {
@@ -68,14 +54,12 @@ public class AuthActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient googleSignInClient;
     private GoogleSignInOptions googleSignInOptions;
-    private CredentialManager credentialManager;
     EditText emailText, passText;
     TextView registrarText;
     private FirebaseFirestore db;
     private ImageButton btnRegistTwitter, btnRegistGoogle;
     FirebaseUser currentUser;
     int RC_SING_IN = 20;
-    private static final String WEB_CLIENT_ID = "922915579598-g61gmnm51udf52482gmoah1v8d5qi0gs.apps.googleusercontent.com";
 
 
     @Override
@@ -238,7 +222,7 @@ public class AuthActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
                                             startActivity(new Intent(AuthActivity.this, MainActivity.class));
-                                            Toast.makeText(AuthActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(AuthActivity.this, "Login con Twitter correcto", Toast.LENGTH_SHORT).show();
                                         }
                                     })
                             .addOnFailureListener(
@@ -323,6 +307,7 @@ public class AuthActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(AuthActivity.this, MainActivity.class);
                             startActivity(intent);
+                            Toast.makeText(AuthActivity.this, "Login con Google correcto", Toast.LENGTH_SHORT).show();
 
                         }else{
                             Toast.makeText(AuthActivity.this, "NO", Toast.LENGTH_SHORT).show();
