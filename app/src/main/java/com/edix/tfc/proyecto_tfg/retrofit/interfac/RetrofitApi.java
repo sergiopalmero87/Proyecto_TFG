@@ -4,6 +4,7 @@ package com.edix.tfc.proyecto_tfg.retrofit.interfac;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.Noticias;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.Source;
 
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -16,8 +17,8 @@ public interface RetrofitApi {
     @GET("everything")
     Call<Noticias> getPosts(@Query("q") String q,
                             @Query("language") String language,
-                            @Query("from") String from,
-                            @Query("to") String to,
+                            @Query("sortBy") String sortBy,
+                            @Query("domains") String domains,
                             @Query("apiKey") String apiKey);
 
 }

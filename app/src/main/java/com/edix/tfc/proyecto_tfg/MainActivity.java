@@ -31,6 +31,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imagenCard;
     FirebaseUser user;
     private TextView nombreUsuarioMain;
+    //Obtenemos fecha del dia actual. Pero tendremos que formatearla a yyyy-mm-dd
     private String fecha = new Date().toString();
 
     //Contenedor que aloja las cards
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         iniciarVariables();
         recyclerViewLayoutManager();
@@ -143,7 +147,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void respuestaRetrofit() {
+
         // Configuración de Retrofit para la comunicación con la API
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://newsapi.org/v2/")
@@ -154,10 +160,14 @@ public class MainActivity extends AppCompatActivity {
         RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
 
         // Llamada a la API para obtener la lista de noticias
-        Call<Noticias> respuesta = retrofitApi.getPosts("soccer",
+        Call<Noticias> respuesta = retrofitApi.getPosts("basket",
                 "es",
-                fecha,
-                fecha,
+                "publishedAt",
+                "marca.com,as.com,lavozdegalicia.es," +
+                        "nytimes.com,washingtonpost.com,theguardian.com,bbc.com," +
+                        "espn.com,sports.yahoo.com,cbssports.com," +
+                        "si.com,nbcsports.com,sport.es,mundodeportivo.com,eurosport.com," +
+                        "goal.com,fifa.com,uefa.com",
                 "e0fb2227e0064938b9b9c7528fea009c");
 
         // Manejo de la respuesta de la llamada asíncrona a la API
