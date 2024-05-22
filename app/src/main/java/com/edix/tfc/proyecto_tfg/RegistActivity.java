@@ -276,6 +276,7 @@ public class RegistActivity extends AppCompatActivity {
 
     private void googleSingIn(){
 
+        //Intent de google
         Intent intent = googleSignInClient.getSignInIntent();
         startActivityForResult(intent,RC_SING_IN);
 
@@ -317,10 +318,26 @@ public class RegistActivity extends AppCompatActivity {
 
                             //Obtenemos el usuario actual
                             FirebaseUser user = mAuth.getCurrentUser();
-                            HashMap<String,Object> map = new HashMap<>();
-                            map.put("id",user.getUid());
-                            map.put("name", user.getDisplayName());
-                            map.put("profile", user.getPhotoUrl());
+
+                            // Guardar usuario en la base de datos con google
+                            Map<String, Object> userGoogle = new HashMap<>();
+                            userGoogle.put("email", user.getEmail());
+                            userGoogle.put("nombreUsuario", user.getDisplayName());
+
+                            db.collection("users")
+                                    .add(userGoogle)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e("RegistActivity", "Error al agregar usuario a la base de datos", e);
+                                        }
+                                    });
 
                             Intent intent = new Intent(RegistActivity.this, MainActivity.class);
                             startActivity(intent);
