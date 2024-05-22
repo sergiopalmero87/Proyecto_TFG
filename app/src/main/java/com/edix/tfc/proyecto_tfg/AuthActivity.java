@@ -42,9 +42,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class AuthActivity extends AppCompatActivity {
@@ -204,8 +209,45 @@ public class AuthActivity extends AppCompatActivity {
                                     new OnSuccessListener<AuthResult>() {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
-                                            startActivity(new Intent(AuthActivity.this, MainActivity.class));
-                                            Toast.makeText(AuthActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
+                                            // Obtenemos el usuario actual
+                                            FirebaseUser user = mAuth.getCurrentUser();
+
+                                            // Verificar si el usuario ya está registrado
+                                            db.collection("users")
+                                                    .whereEqualTo("email", user.getEmail())
+                                                    .get()
+                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                                                                // Usuario ya está registrado
+                                                                startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                                                                Toast.makeText(AuthActivity.this, "Login con Twitter correcto", Toast.LENGTH_SHORT).show();
+                                                            } else {
+                                                                // Usuario no está registrado, guardarlo en la base de datos
+                                                                Map<String, Object> userTwitter = new HashMap<>();
+                                                                userTwitter.put("email", user.getEmail());
+                                                                userTwitter.put("nombreUsuario", user.getDisplayName());
+
+                                                                db.collection("users")
+                                                                        .add(userTwitter)
+                                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                            @Override
+                                                                            public void onSuccess(DocumentReference documentReference) {
+                                                                                startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                                                                                Toast.makeText(AuthActivity.this, "Registro con Twitter correcto", Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        })
+                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                Log.e("AuthActivity", "Error al agregar usuario a la base de datos", e);
+                                                                                Toast.makeText(AuthActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        });
+                                                            }
+                                                        }
+                                                    });
                                         }
                                     })
                             .addOnFailureListener(
@@ -221,8 +263,45 @@ public class AuthActivity extends AppCompatActivity {
                                     new OnSuccessListener<AuthResult>() {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
-                                            startActivity(new Intent(AuthActivity.this, MainActivity.class));
-                                            Toast.makeText(AuthActivity.this, "Login con Twitter correcto", Toast.LENGTH_SHORT).show();
+                                            // Obtenemos el usuario actual
+                                            FirebaseUser user = mAuth.getCurrentUser();
+
+                                            // Verificar si el usuario ya está registrado
+                                            db.collection("users")
+                                                    .whereEqualTo("email", user.getEmail())
+                                                    .get()
+                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                                                                // Usuario ya está registrado
+                                                                startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                                                                Toast.makeText(AuthActivity.this, "Login con Twitter correcto", Toast.LENGTH_SHORT).show();
+                                                            } else {
+                                                                // Usuario no está registrado, guardarlo en la base de datos
+                                                                Map<String, Object> userTwitter = new HashMap<>();
+                                                                userTwitter.put("email", user.getEmail());
+                                                                userTwitter.put("nombreUsuario", user.getDisplayName());
+
+                                                                db.collection("users")
+                                                                        .add(userTwitter)
+                                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                            @Override
+                                                                            public void onSuccess(DocumentReference documentReference) {
+                                                                                startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                                                                                Toast.makeText(AuthActivity.this, "Registro con Twitter correcto", Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        })
+                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                Log.e("AuthActivity", "Error al agregar usuario a la base de datos", e);
+                                                                                Toast.makeText(AuthActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        });
+                                                            }
+                                                        }
+                                                    });
                                         }
                                     })
                             .addOnFailureListener(
@@ -233,88 +312,98 @@ public class AuthActivity extends AppCompatActivity {
                                         }
                                     });
                 }
-
-
-
             }
         });
     }
+
 
     private void btnRegistGoogle() {
         btnRegistGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(getString(R.string.default_web_client_id))
                         .requestEmail().build();
 
-                googleSignInClient = GoogleSignIn.getClient(AuthActivity.this,googleSignInOptions);
+                googleSignInClient = GoogleSignIn.getClient(AuthActivity.this, googleSignInOptions);
 
                 googleSingIn();
-
             }
         });
     }
 
-    private void googleSingIn(){
-
+    private void googleSingIn() {
+        // Intent de google
         Intent intent = googleSignInClient.getSignInIntent();
-        startActivityForResult(intent,RC_SING_IN);
-
-
-
+        startActivityForResult(intent, RC_SING_IN);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SING_IN){
-
+        if (requestCode == RC_SING_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
-            try{
-
+            try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuth(account.getIdToken());
-
-            }catch (ApiException e) {
+            } catch (ApiException e) {
                 throw new RuntimeException(e);
             }
-
-
-
         }
     }
 
     private void firebaseAuth(String idToken) {
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if(task.isSuccessful()){
-
-                            //Obtenemos el usuario actual
+                        if (task.isSuccessful()) {
+                            // Obtenemos el usuario actual
                             FirebaseUser user = mAuth.getCurrentUser();
-                            HashMap<String,Object> map = new HashMap<>();
-                            map.put("id",user.getUid());
-                            map.put("name", user.getDisplayName());
-                            map.put("profile", user.getPhotoUrl());
 
-                            Intent intent = new Intent(AuthActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(AuthActivity.this, "Login con Google correcto", Toast.LENGTH_SHORT).show();
+                            // Verificar si el usuario ya está registrado
+                            db.collection("users")
+                                    .whereEqualTo("email", user.getEmail())
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                                                // Usuario ya está registrado
+                                                startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                                                Toast.makeText(AuthActivity.this, "Login con Google correcto", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                // Usuario no está registrado, guardarlo en la base de datos
+                                                Map<String, Object> userGoogle = new HashMap<>();
+                                                userGoogle.put("email", user.getEmail());
+                                                userGoogle.put("nombreUsuario", user.getDisplayName());
 
-                        }else{
+                                                db.collection("users")
+                                                        .add(userGoogle)
+                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentReference documentReference) {
+                                                                startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                                                                Toast.makeText(AuthActivity.this, "Registro con Google correcto", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.e("RegistActivity", "Error al agregar usuario a la base de datos", e);
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                    });
+                        } else {
                             Toast.makeText(AuthActivity.this, "NO", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
-
     }
+
 }
