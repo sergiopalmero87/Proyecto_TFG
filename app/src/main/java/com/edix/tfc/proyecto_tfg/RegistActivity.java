@@ -221,8 +221,30 @@ public class RegistActivity extends AppCompatActivity {
                                     new OnSuccessListener<AuthResult>() {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
-                                            startActivity(new Intent(RegistActivity.this, MainActivity.class));
-                                            Toast.makeText(RegistActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
+                                            // Obtenemos el usuario actual
+                                            FirebaseUser user = mAuth.getCurrentUser();
+
+                                            // Guardar usuario en la base de datos con Twitter
+                                            Map<String, Object> userTwitter = new HashMap<>();
+                                            userTwitter.put("email", user.getEmail());
+                                            userTwitter.put("nombreUsuario", user.getDisplayName());
+
+                                            db.collection("users")
+                                                    .add(userTwitter)
+                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentReference documentReference) {
+                                                            startActivity(new Intent(RegistActivity.this, MainActivity.class));
+                                                            Toast.makeText(RegistActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Log.e("RegistActivity", "Error al agregar usuario a la base de datos", e);
+                                                            Toast.makeText(RegistActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                         }
                                     })
                             .addOnFailureListener(
@@ -238,8 +260,30 @@ public class RegistActivity extends AppCompatActivity {
                                     new OnSuccessListener<AuthResult>() {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
-                                            startActivity(new Intent(RegistActivity.this, MainActivity.class));
-                                            Toast.makeText(RegistActivity.this, "Registro con Twitter correcto", Toast.LENGTH_SHORT).show();
+                                            // Obtenemos el usuario actual
+                                            FirebaseUser user = mAuth.getCurrentUser();
+
+                                            // Guardar usuario en la base de datos con Twitter
+                                            Map<String, Object> userTwitter = new HashMap<>();
+                                            userTwitter.put("email", user.getEmail());
+                                            userTwitter.put("nombreUsuario", user.getDisplayName());
+
+                                            db.collection("users")
+                                                    .add(userTwitter)
+                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentReference documentReference) {
+                                                            startActivity(new Intent(RegistActivity.this, MainActivity.class));
+                                                            Toast.makeText(RegistActivity.this, "Registro con Twitter correcto", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Log.e("RegistActivity", "Error al agregar usuario a la base de datos", e);
+                                                            Toast.makeText(RegistActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                         }
                                     })
                             .addOnFailureListener(
@@ -250,12 +294,10 @@ public class RegistActivity extends AppCompatActivity {
                                         }
                                     });
                 }
-
-
-
             }
         });
     }
+
 
     private void btnRegistGoogle() {
         btnRegistGoogle.setOnClickListener(new View.OnClickListener() {
