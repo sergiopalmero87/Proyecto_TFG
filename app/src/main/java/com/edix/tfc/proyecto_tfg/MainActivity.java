@@ -2,13 +2,12 @@ package com.edix.tfc.proyecto_tfg;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,19 +21,10 @@ import com.edix.tfc.proyecto_tfg.retrofit.modelo.Article;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapter;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.Noticias;
-import com.edix.tfc.proyecto_tfg.retrofit.modelo.Source;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -51,19 +41,21 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     private TextView nombreUsuarioMain;
 
-    //Contenedor que aloja las cards
+    // Contenedor que aloja las cards
     private RecyclerView recyclerView;
-    //Comunica la parte back con la front de las cards. Hace
-    //Hace que se muestren las cosas en las cards
+    // Comunica la parte back con la front de las cards. Hace
+    // Hace que se muestren las cosas en las cards
     private ListAdapter listAdapter;
-    //La lista de las cards a mostrar
+    // La lista de las cards a mostrar
     private List<ListElement> itemList;
+
+    public static final String CATEGORY_KEY = "categoria";
+    public static final String PREFS_NAME = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         iniciarVariables();
         recyclerViewLayoutManager();
@@ -85,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         imagenCard = findViewById(R.id.imagenCard);
         nombreUsuarioMain = findViewById(R.id.nombreAppMain);
     }
-
 
     private void recyclerViewLayoutManager() {
         // Establecemos como se mostraran las cosas en el recyclerview
@@ -146,8 +137,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void respuestaRetrofit() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String categoria = prefs.getString(CATEGORY_KEY, "soccer");
 
         // Configuración de Retrofit para la comunicación con la API
         Retrofit retrofit = new Retrofit.Builder()
@@ -159,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
 
         // Llamada a la API para obtener la lista de noticias
-        Call<Noticias> respuesta = retrofitApi.getPosts("tennis",
+        Call<Noticias> respuesta = retrofitApi.getPosts(categoria,
                 "es",
                 "publishedAt",
                 "marca.com,as.com,lavozdegalicia.es," +
@@ -171,21 +163,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Manejo de la respuesta de la llamada asíncrona a la API
         respuesta.enqueue(new Callback<Noticias>() {
-            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<Noticias> call, Response<Noticias> response) {
                 // Verificar si la respuesta es exitosa
                 if (!response.isSuccessful() && response.code() == 429) {
                     Log.e(TAG, "Error en la respuesta de la API. Demasiadas solicitudes (Código 429).");
                     Toast.makeText(MainActivity.this, "Has excedido el límite de solicitudes. Intentalo más tarde.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 // Inicializar itemList para almacenar los elementos de la lista de noticias.
-                //Es una lista de tipo ListElemet que es molde de lo que contienen las cards.
                 itemList = new ArrayList<>();
 
-                String categoria = "tennis";
-                // Obtener la respuesta de Noticias
                 Noticias noticiasResponse = response.body();
                 if (noticiasResponse != null && noticiasResponse.getStatus().equals("ok")) {
                     // Obtener la lista de fuentes
@@ -193,17 +182,15 @@ public class MainActivity extends AppCompatActivity {
 
                     // Procesar los datos que me llegan de la API
                     for (Article article : articles) {
-
                         if (article.getDescription() != null
                                 && !article.getDescription().isEmpty()
                                 && !article.getDescription().contains("[Removed]")
-                                && !article.getDescription().contains("<!--cache-->")){
+                                && !article.getDescription().contains("<!--cache-->")) {
                             // Crear un ListElement con los datos de la fuente
-                            ListElement listElement = new ListElement(article.getSource().getName(),article.getDescription(), article.getUrl(), categoria);
+                            ListElement listElement = new ListElement(article.getSource().getName(), article.getDescription(), article.getUrl(), categoria);
                             // Agregar el ListElement a itemList
                             itemList.add(listElement);
                         }
-
                     }
 
                     // Crear un adaptador con la lista de elementos y configurarlo en el RecyclerView
@@ -226,13 +213,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    private void nombreUser(){
+    private void nombreUser() {
         String nombre = user.getDisplayName();
-        if (nombre.length() > 14){
+        if (nombre.length() > 14) {
             nombre = nombre.substring(0, 10) + "...";
         }
         nombreUsuarioMain.setText(nombre);
     }
-
 }
