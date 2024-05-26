@@ -28,6 +28,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +48,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private static final String CONSUMER_KEY = "pXlnHHaziTj4im59YbRq0U2RS";
     private static final String CONSUMER_SECRET = "5v6f6Wv7KMw1y6EPvLSZEFAYu3uAf5Lgs2cI6j4pSOgKJrVRfQ";
-    private static final String ACCESS_TOKEN = "192594075-pPbLf4SQvnDyxV2a5EQrxfm4U1cIVmq9quEcvvoM";
-    private static final String ACCESS_TOKEN_SECRET = "aBr78j3xgEEcEcGv0UsTaC5EyHC83f6cZZMCTc24ZXnmq";
+    private static final String ACCESS_TOKEN = "192594075-IX1pQ6weQatfLmhLtaEPmW2338mboxFvaVGIoGyU";
+    private static final String ACCESS_TOKEN_SECRET = "6BI16RJ8NtM5Qlk0bv6PrtpfQUqPWW0v1AsX6RO1PB1li";
 
     public ListAdapter(Context context, List<ListElement> itemList) {
         this.mInflater = LayoutInflater.from(context);
@@ -210,17 +214,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             publicarTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Configura las credenciales de Twitter
-                    ConfigurationBuilder cb = new ConfigurationBuilder();
-                    cb.setDebugEnabled(true)
-                            .setOAuthConsumerKey(CONSUMER_KEY)
-                            .setOAuthConsumerSecret(CONSUMER_SECRET)
-                            .setOAuthAccessToken(ACCESS_TOKEN)
-                            .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
-
-                    TwitterFactory tf = new TwitterFactory(cb.build());
-                    Twitter twitter = tf.getInstance();
-
                     // Mensaje a publicar
                     String tweetText = item.getTextoNoticia();
                     if (tweetText.length() > 280) {
@@ -233,7 +226,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                         @Override
                         public void run() {
                             try {
-                                twitter.updateStatus(finalTweetText);
+                                // Configura las credenciales de Twitter
+                                ConfigurationBuilder cb = new ConfigurationBuilder();
+                                cb.setDebugEnabled(true)
+                                        .setOAuthConsumerKey(CONSUMER_KEY)
+                                        .setOAuthConsumerSecret(CONSUMER_SECRET)
+                                        .setOAuthAccessToken(ACCESS_TOKEN)
+                                        .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+
+                                TwitterFactory tf = new TwitterFactory(cb.build());
+                                Twitter twitter = tf.getInstance();
+
+                                // Publica el tweet
+                                Status status = twitter.updateStatus(finalTweetText);
+
                                 // Mostrar un mensaje de éxito en el hilo principal de la UI
                                 ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
                                     @Override
@@ -246,7 +252,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                 ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(itemView.getContext(), "Error al publicar en Twitter", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(itemView.getContext(), "Error al publicar en Twitter: " + e.getErrorMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                                 e.printStackTrace();
@@ -256,6 +262,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 }
             });
         }
+
 
 
 
