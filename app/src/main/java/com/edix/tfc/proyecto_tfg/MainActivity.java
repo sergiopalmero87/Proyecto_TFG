@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         config();
         verNoticiasGuardadas();
         respuestaRetrofit();
+        nombreUser();
     }
 
     private void iniciarVariables() {
@@ -83,8 +84,9 @@ public class MainActivity extends AppCompatActivity {
         configButton = findViewById(R.id.config);
         recyclerView = findViewById(R.id.recyclerViewMain);
         noticiasGuardadasButton = findViewById(R.id.verNoticiasGuardadas);
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        user = mAuth.getCurrentUser();
         imagenCard = findViewById(R.id.imagenCard);
+        nombreUsuarioMain = findViewById(R.id.nombreAppMain);
     }
 
 
@@ -224,6 +226,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    private void nombreUser(){
+        String nombre = user.getDisplayName();
+        if (nombre.length() > 14){
+            nombre = nombre.substring(0, 10) + "...";
+        }
+        nombreUsuarioMain.setText(nombre);
     }
 
 }
