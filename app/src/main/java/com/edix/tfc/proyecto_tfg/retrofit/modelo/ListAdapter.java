@@ -42,11 +42,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private LayoutInflater mInflater;
     private Context mContext;
 
-    private static final String CONSUMER_KEY = "Dbj1mX3fbVnwIOZXPtNH8JL4W";
-    private static final String CONSUMER_SECRET = "9LvUMIhJki2qDT43ywEOUvnlO6MARxyIfsIlzYGYGy7NfkK3Y7";
-    private static final String ACCESS_TOKEN = "192594075-bGZVEsrd72sNcwEQmhEgNQvfzehnAgBA0phn9kDc";
-    private static final String ACCESS_TOKEN_SECRET = "lSa2eys3A3HHvjyqDrBnmq062d5nzEFX2ZLm2Aw78JbOp";
-    private static final String ENDPOINT_POST_TWEETS = "https://api.twitter.com/2/tweets";
+    private static final String CONSUMER_KEY = "pXlnHHaziTj4im59YbRq0U2RS";
+    private static final String CONSUMER_SECRET = "5v6f6Wv7KMw1y6EPvLSZEFAYu3uAf5Lgs2cI6j4pSOgKJrVRfQ";
+    private static final String ACCESS_TOKEN = "192594075-pPbLf4SQvnDyxV2a5EQrxfm4U1cIVmq9quEcvvoM";
+    private static final String ACCESS_TOKEN_SECRET = "aBr78j3xgEEcEcGv0UsTaC5EyHC83f6cZZMCTc24ZXnmq";
 
     public ListAdapter(Context context, List<ListElement> itemList) {
         this.mInflater = LayoutInflater.from(context);

@@ -298,6 +298,7 @@ public class RegistActivity extends AppCompatActivity {
     }
 
 
+
     private void btnRegistGoogle() {
         btnRegistGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
