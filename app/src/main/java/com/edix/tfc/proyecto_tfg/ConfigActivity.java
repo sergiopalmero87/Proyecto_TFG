@@ -93,6 +93,6 @@ public class ConfigActivity extends AppCompatActivity {
         // Aplica los cambios de manera asincrónica
         editor.apply();
         // Muestra un Toast para confirmar que la categoría ha sido cambiada
-        Toast.makeText(ConfigActivity.this, "Categoría cambiada: " + categoria, Toast.LENGTH_SHORT).show();
+        Toast.makeText(ConfigActivity.this, "Categoría cambiada", Toast.LENGTH_SHORT).show();
     }
 }

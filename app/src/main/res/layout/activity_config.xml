@@ -94,5 +94,4 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/botonBasket" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
