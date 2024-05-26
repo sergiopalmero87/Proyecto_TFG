@@ -47,12 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
     private LottieAnimationView logOutButton, configButton, noticiasGuardadasButton;
     private FirebaseAuth mAuth;
-    private String userId;
     private ImageView imagenCard;
     FirebaseUser user;
     private TextView nombreUsuarioMain;
-    //Obtenemos fecha del dia actual. Pero tendremos que formatearla a yyyy-mm-dd
-    private String fecha = new Date().toString();
 
     //Contenedor que aloja las cards
     private RecyclerView recyclerView;
@@ -162,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
 
         // Llamada a la API para obtener la lista de noticias
-        Call<Noticias> respuesta = retrofitApi.getPosts("basket",
+        Call<Noticias> respuesta = retrofitApi.getPosts("tennis",
                 "es",
                 "publishedAt",
                 "marca.com,as.com,lavozdegalicia.es," +
@@ -187,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 //Es una lista de tipo ListElemet que es molde de lo que contienen las cards.
                 itemList = new ArrayList<>();
 
+                String categoria = "tennis";
                 // Obtener la respuesta de Noticias
                 Noticias noticiasResponse = response.body();
                 if (noticiasResponse != null && noticiasResponse.getStatus().equals("ok")) {
@@ -201,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                                 && !article.getDescription().contains("[Removed]")
                                 && !article.getDescription().contains("<!--cache-->")){
                             // Crear un ListElement con los datos de la fuente
-                            ListElement listElement = new ListElement(article.getSource().getName(),article.getDescription(), article.getUrl());
+                            ListElement listElement = new ListElement(article.getSource().getName(),article.getDescription(), article.getUrl(), categoria);
                             // Agregar el ListElement a itemList
                             itemList.add(listElement);
                         }

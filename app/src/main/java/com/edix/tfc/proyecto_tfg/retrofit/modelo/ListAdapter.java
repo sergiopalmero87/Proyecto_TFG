@@ -80,6 +80,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         holder.textoNoticia.setText(descripcion);
         holder.urlNoticia.setText(element.getUrl());
         holder.namePeriodico.setText(element.getName());
+        switch (element.getCategoria()) {
+            case "soccer":
+                holder.imagenCard.setImageResource(R.drawable.futbolbalon);
+                break;
+            case "basket":
+                holder.imagenCard.setImageResource(R.drawable.baloncestobalon);
+                break;
+            case "tennis":
+                holder.imagenCard.setImageResource(R.drawable.tenisbalon);
+                break;
+            default:
+                holder.imagenCard.setImageResource(R.drawable.futbolbalon);
+                break;
+        }
         holder.guardarNoticia(element);
         holder.publicarNoticia(element);
     }
@@ -98,7 +112,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textoNoticia, urlNoticia, namePeriodico;
-        public ImageView guardarNoticia, publicarTwitter;
+        public ImageView guardarNoticia, publicarTwitter, imagenCard;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -108,6 +122,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             namePeriodico = itemView.findViewById(R.id.namePeriodico);
             guardarNoticia = itemView.findViewById(R.id.guardarNoticia);
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
+            imagenCard = itemView.findViewById(R.id.imagenCard);
         }
 
 
@@ -115,10 +130,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             guardarNoticia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Acceder a los valores de textoNoticia y urlNoticia a través de la instancia de ViewHolder
+                    // Acceder a los valores de textoNoticia, urlNoticia, name y categoria a través de la instancia de ListElement
                     String descripcion = item.getTextoNoticia();
                     String url = item.getUrl();
                     String name = item.getName();
+                    String categoria = item.getCategoria(); // Añadimos la categoría
 
                     // Obtener la referencia al usuario actual
                     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -150,6 +166,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                         noticia.put("name", name);
                                         noticia.put("descripcion", descripcion);
                                         noticia.put("url", url);
+                                        noticia.put("categoria", categoria); // Guardamos la categoría
 
                                         noticiasFavRef.add(noticia)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -182,6 +199,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 }
             });
         }
+
 
 
 

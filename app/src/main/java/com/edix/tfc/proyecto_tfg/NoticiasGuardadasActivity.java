@@ -114,7 +114,8 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
                                     String descripcion = document.getString("descripcion");
                                     String url = document.getString("url");
                                     String name = document.getString("name");
-                                    ListElement listElement = new ListElement(name, descripcion, url);
+                                    String categoria = document.getString("categoria");
+                                    ListElement listElement = new ListElement(name, descripcion, url,categoria);
                                     noticiasGuardadas.add(listElement);
                                 }
 

@@ -55,7 +55,6 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
     public void onBindViewHolder(@NonNull ViewHolderGuardadas holder, int position) {
         ListElement element = mDataGuardadas.get(position);
 
-
         //En esta variable guardamos el textoNoticia que haya en cada element
         //que es de tipo ListElement(por lo que es el contenido de las cards)
         //Si el largo es de mas de 100 caracteres, hacemos que se muestre ...
@@ -70,6 +69,20 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
         holder.textoNoticia.setText(descripcion);
         holder.urlNoticia.setText(element.getUrl());
         holder.namePeriodico.setText(element.getName());
+        switch (element.getCategoria()) {
+            case "soccer":
+                holder.imagenCard.setImageResource(R.drawable.futbolbalon);
+                break;
+            case "basket":
+                holder.imagenCard.setImageResource(R.drawable.baloncestobalon);
+                break;
+            case "tennis":
+                holder.imagenCard.setImageResource(R.drawable.tenisbalon);
+                break;
+            default:
+                holder.imagenCard.setImageResource(R.drawable.futbolbalon);
+                break;
+        }
         holder.borrarNoticia(element);
         holder.publicarNoticia(element);
     }
@@ -87,7 +100,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public class ViewHolderGuardadas extends RecyclerView.ViewHolder {
         public TextView textoNoticia, urlNoticia, namePeriodico;
-        public ImageView borrarNoticia, publicarTwitter;
+        public ImageView borrarNoticia, publicarTwitter,imagenCard;
 
         public ViewHolderGuardadas(@NonNull View itemView) {
             super(itemView);
@@ -97,6 +110,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
             namePeriodico = itemView.findViewById(R.id.namePeriodico);
             borrarNoticia = itemView.findViewById(R.id.borrarNoticia);
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
+            imagenCard = itemView.findViewById(R.id.imagenCard);
         }
 
         public void borrarNoticia(final ListElement item) {

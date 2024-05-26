@@ -6,11 +6,13 @@ public class ListElement {
     private String textoNoticia;
     private String url;
     private String name;
+    private String categoria;
 
-    public ListElement(String name, String descripcion, String url) {
+    public ListElement(String name, String descripcion, String url,String categoria) {
         this.name = name;
         this.textoNoticia = descripcion;
         this.url = url;
+        this.categoria = categoria;
     }
 
     public String getName() {
@@ -35,5 +37,13 @@ public class ListElement {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }
