@@ -96,7 +96,7 @@
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="175dp"
+        android:layout_width="185dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
         android:backgroundTint="#202020"
@@ -127,7 +127,7 @@
         android:id="@+id/textRegistrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="660dp"
+        android:layout_marginTop="50dp"
         android:fontFamily="@font/cascadia"
         android:text="@string/no_tienes_cuenta_registrate_aqu"
         android:textColor="@color/black"
@@ -136,7 +136,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRegistGoogle"  />
 
     <ImageButton
         android:id="@+id/btnRegistGoogle"

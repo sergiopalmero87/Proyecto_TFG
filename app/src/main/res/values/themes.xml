@@ -2,7 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Proyecto_TFG" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">#ADD2EF</item> <!-- Set background color -->
     </style>
 
     <style name="Theme.Proyecto_TFG" parent="Base.Theme.Proyecto_TFG" />
