@@ -1,5 +1,6 @@
 package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import twitter4j.*;
+import twitter4j.conf.ConfigurationBuilder;
 
 
 //Esta clase comunica la parte back de las cards con la parte front
@@ -209,10 +211,53 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             publicarTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "Publicado", Toast.LENGTH_SHORT).show();
+                    // Configura las credenciales de Twitter
+                    ConfigurationBuilder cb = new ConfigurationBuilder();
+                    cb.setDebugEnabled(true)
+                            .setOAuthConsumerKey(CONSUMER_KEY)
+                            .setOAuthConsumerSecret(CONSUMER_SECRET)
+                            .setOAuthAccessToken(ACCESS_TOKEN)
+                            .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+
+                    TwitterFactory tf = new TwitterFactory(cb.build());
+                    Twitter twitter = tf.getInstance();
+
+                    // Mensaje a publicar
+                    String tweetText = item.getTextoNoticia();
+                    if (tweetText.length() > 280) {
+                        tweetText = tweetText.substring(0, 277) + "...";
+                    }
+
+                    // Publicar el tweet en un hilo separado para evitar el bloqueo de la UI
+                    String finalTweetText = tweetText;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                twitter.updateStatus(finalTweetText);
+                                // Mostrar un mensaje de éxito en el hilo principal de la UI
+                                ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(itemView.getContext(), "Publicado en Twitter", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } catch (TwitterException e) {
+                                // Manejar errores de Twitter y mostrar un mensaje en la UI
+                                ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(itemView.getContext(), "Error al publicar en Twitter", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
                 }
             });
         }
+
 
 
 
