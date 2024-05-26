@@ -91,7 +91,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 holder.imagenCard.setImageResource(R.drawable.tenisbalon);
                 break;
             default:
-                holder.imagenCard.setImageResource(R.drawable.futbolbalon);
+                holder.imagenCard.setImageResource(R.drawable.iconoapp);
                 break;
         }
         holder.guardarNoticia(element);

@@ -80,7 +80,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
                 holder.imagenCard.setImageResource(R.drawable.tenisbalon);
                 break;
             default:
-                holder.imagenCard.setImageResource(R.drawable.futbolbalon);
+                holder.imagenCard.setImageResource(R.drawable.iconoapp);
                 break;
         }
         holder.borrarNoticia(element);
