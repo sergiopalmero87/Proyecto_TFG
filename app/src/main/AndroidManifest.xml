@@ -50,6 +50,11 @@
             android:name=".NoticiasGuardadasActivity"
             android:exported="true">
         </activity>
+
+        <activity
+            android:name=".CategActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

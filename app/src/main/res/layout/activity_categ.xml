@@ -1,0 +1,90 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ADD2EF"
+    tools:context=".ConfigActivity">
+
+    <TextView
+        android:id="@+id/tituloApp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:background="@color/cardview_light_background"
+        android:elevation="20dp"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+
+    <Button
+        android:id="@+id/botonSoccer"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/futbol"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:backgroundTint="#202020"
+        android:elevation="4dp"
+        android:padding="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tituloApp" />
+
+    <Button
+        android:id="@+id/botonBasket"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/baloncesto"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:backgroundTint="#202020"
+        android:elevation="4dp"
+        android:padding="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonSoccer" />
+
+    <Button
+        android:id="@+id/botonTennis"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Tenis"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:backgroundTint="#202020"
+        android:elevation="4dp"
+        android:padding="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonBasket" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonTennis"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        android:fontFamily="@font/cascadia"
+        android:textSize="24sp"
+        android:text="Elige una categoria para ver.\n\nPodrás cambiarla más adelante en 'Configuración'"
+        android:padding="20dp"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

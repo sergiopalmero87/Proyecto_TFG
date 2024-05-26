@@ -215,9 +215,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void nombreUser() {
         String nombre = user.getDisplayName();
-        if (nombre.length() > 14) {
-            nombre = nombre.substring(0, 10) + "...";
+        if (nombre != null && nombre.length() > 0) {
+            if (nombre.length() > 15) {
+                nombre = nombre.substring(0, 10) + "...";
+            }
+            nombreUsuarioMain.setText(nombre);
+        } else {
+            // Manejar el caso en el que el nombre sea nulo o vacío
+            // Por ejemplo, mostrar un nombre predeterminado o un mensaje de error
+            nombreUsuarioMain.setText("SportHub");
         }
-        nombreUsuarioMain.setText(nombre);
     }
+
 }

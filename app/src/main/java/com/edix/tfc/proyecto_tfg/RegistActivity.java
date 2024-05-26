@@ -141,8 +141,7 @@ public class RegistActivity extends AppCompatActivity {
                                                                     });
 
                                                             // Ir a la actividad principal y mandamos el nombre de usuario para que la UI sea mas personal.
-                                                            Intent intent = new Intent(RegistActivity.this, MainActivity.class);
-                                                            intent.putExtra("nombreUsuario",nombreUser);
+                                                            Intent intent = new Intent(RegistActivity.this, CategActivity.class);
                                                             startActivity(intent);
                                                         } else {
                                                             // Error al crear el usuario
@@ -273,7 +272,7 @@ public class RegistActivity extends AppCompatActivity {
                                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                         @Override
                                                         public void onSuccess(DocumentReference documentReference) {
-                                                            startActivity(new Intent(RegistActivity.this, MainActivity.class));
+                                                            startActivity(new Intent(RegistActivity.this, CategActivity.class));
                                                             Toast.makeText(RegistActivity.this, "Registro con Twitter correcto", Toast.LENGTH_SHORT).show();
                                                         }
                                                     })
@@ -381,7 +380,7 @@ public class RegistActivity extends AppCompatActivity {
                                         }
                                     });
 
-                            Intent intent = new Intent(RegistActivity.this, MainActivity.class);
+                            Intent intent = new Intent(RegistActivity.this, CategActivity.class);
                             startActivity(intent);
                             Toast.makeText(RegistActivity.this, "Registro con Google correcto", Toast.LENGTH_SHORT).show();
 
