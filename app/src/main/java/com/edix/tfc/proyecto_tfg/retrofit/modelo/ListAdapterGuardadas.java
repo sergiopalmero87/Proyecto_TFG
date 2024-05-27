@@ -3,6 +3,8 @@ package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,8 +68,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
             descripcion = descripcion.substring(0, 150) + "...";
         }
 
-        holder.textoNoticia.setText(descripcion);
-        holder.urlNoticia.setText(element.getUrl());
+        holder.textoNoticia.setText(element.getTextoNoticia());
         holder.namePeriodico.setText(element.getName());
         switch (element.getCategoria()) {
             case "soccer":
@@ -85,6 +86,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
         }
         holder.borrarNoticia(element);
         holder.publicarNoticia(element);
+        holder.urlVer(element);
     }
 
     //Devolver el tamaño de la lista de datos
@@ -100,17 +102,17 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public class ViewHolderGuardadas extends RecyclerView.ViewHolder {
         public TextView textoNoticia, urlNoticia, namePeriodico;
-        public ImageView borrarNoticia, publicarTwitter,imagenCard;
+        public ImageView borrarNoticia, publicarTwitter,imagenCard,urlVer;
 
         public ViewHolderGuardadas(@NonNull View itemView) {
             super(itemView);
             //Inicializar las vistas
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
-            urlNoticia = itemView.findViewById(R.id.urlNoticia);
             namePeriodico = itemView.findViewById(R.id.namePeriodico);
             borrarNoticia = itemView.findViewById(R.id.borrarNoticia);
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
             imagenCard = itemView.findViewById(R.id.imagenCard);
+            urlVer = itemView.findViewById(R.id.urlVer);
         }
 
         public void borrarNoticia(final ListElement item) {
@@ -179,6 +181,17 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(itemView.getContext(), "Publicado", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        public void urlVer(final ListElement item){
+            urlVer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String urlNoticia = item.getUrl();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlNoticia));
+                    itemView.getContext().startActivity(intent);
                 }
             });
         }

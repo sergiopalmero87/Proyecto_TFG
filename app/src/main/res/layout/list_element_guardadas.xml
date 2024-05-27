@@ -62,6 +62,18 @@
                 android:contentDescription="Borrar noticia"
                 android:scaleType="centerInside" />
 
+            <ImageButton
+                android:id="@+id/urlVer"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="220dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/enlace"
+                android:background="@color/white"
+                android:contentDescription="Guardar noticia"
+                android:scaleType="centerInside" />
+
 
             <LinearLayout
                 android:id="@+id/linearlayoutTextoNoticia"
@@ -98,19 +110,6 @@
                     android:fontFamily="@font/cascadia"
                     />
 
-                <TextView
-                    android:id="@+id/urlNoticia"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginRight="5dp"
-                    android:text="url"
-                    android:layout_marginTop="30dp"
-                    android:padding="3dp"
-                    android:textSize="20sp"
-                    android:autoLink="web"
-                    android:fontFamily="@font/cascadia"
-                    />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

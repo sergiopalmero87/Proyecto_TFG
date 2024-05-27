@@ -1,7 +1,11 @@
 package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.edix.tfc.proyecto_tfg.MainActivity;
 import com.edix.tfc.proyecto_tfg.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,7 +49,7 @@ import twitter4j.conf.ConfigurationBuilder;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<ListElement> listaNoticiasMostrar;
     private LayoutInflater mInflater;
-    private Context mContext;
+    private static Context mContext;
 
     private static final String CONSUMER_KEY = "pXlnHHaziTj4im59YbRq0U2RS";
     private static final String CONSUMER_SECRET = "5v6f6Wv7KMw1y6EPvLSZEFAYu3uAf5Lgs2cI6j4pSOgKJrVRfQ";
@@ -82,8 +87,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             descripcion = descripcion.substring(0, 150) + "...";
         }
 
-        holder.textoNoticia.setText(descripcion);
-        holder.urlNoticia.setText(element.getUrl());
+        holder.textoNoticia.setText(element.getTextoNoticia());
         holder.namePeriodico.setText(element.getName());
         switch (element.getCategoria()) {
             case "soccer":
@@ -101,6 +105,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
         holder.guardarNoticia(element);
         holder.publicarNoticia(element);
+        holder.urlVer(element);
     }
 
     //Devolver el tamaño de la lista de datos
@@ -117,17 +122,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textoNoticia, urlNoticia, namePeriodico;
-        public ImageView guardarNoticia, publicarTwitter, imagenCard;
+        public ImageView guardarNoticia, publicarTwitter, imagenCard, urlVer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             //Inicializar las vistas
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
-            urlNoticia = itemView.findViewById(R.id.urlNoticia);
             namePeriodico = itemView.findViewById(R.id.namePeriodico);
             guardarNoticia = itemView.findViewById(R.id.guardarNoticia);
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
             imagenCard = itemView.findViewById(R.id.imagenCard);
+            urlVer = itemView.findViewById(R.id.urlVer);
         }
 
 
@@ -206,10 +211,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
 
 
-
-
-
-
         public void publicarNoticia(final ListElement item) {
             publicarTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -263,11 +264,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             });
         }
 
-
-
-
-
-
+        public void urlVer(final ListElement item){
+            urlVer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String urlNoticia = item.getUrl();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlNoticia));
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+        }
 
         //Sirve para actualizar los elementos que haya en el ViewHolder
         void bindData(final ListElement item){
