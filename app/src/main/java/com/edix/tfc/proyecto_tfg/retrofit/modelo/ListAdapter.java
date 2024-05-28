@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.edix.tfc.proyecto_tfg.MainActivity;
 import com.edix.tfc.proyecto_tfg.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,15 +31,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import twitter4j.*;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import twitter4j.Status;
+import twitter4j.StatusUpdate;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 
@@ -215,45 +218,53 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             publicarTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Mensaje a publicar
-                    String tweetText = item.getTextoNoticia();
-                    if (tweetText.length() > 280) {
-                        tweetText = tweetText.substring(0, 277) + "...";
-                    }
-
-                    // Publicar el tweet en un hilo separado para evitar el bloqueo de la UI
-                    String finalTweetText = tweetText;
+                    // Crear y ejecutar un nuevo hilo para realizar la publicación del tweet
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            // Mensaje a publicar
+                            String tweetText = item.getTextoNoticia();
+                            String mediaUrl = item.getUrl();
+
+                            String finalTweetText = "";
+                            if (tweetText.length() > 240) {
+                                finalTweetText = tweetText.substring(0, 237) + "...";
+                            }
+                            finalTweetText += "\n\nMedio oficial: " + mediaUrl + "\n\nDescarga SportHub en Google Play: ";
+
+                            // Configurar las credenciales de Twitter
+                            ConfigurationBuilder cb = new ConfigurationBuilder();
+                            cb.setDebugEnabled(true)
+                                    .setOAuthConsumerKey(CONSUMER_KEY)
+                                    .setOAuthConsumerSecret(CONSUMER_SECRET)
+                                    .setOAuthAccessToken(ACCESS_TOKEN)
+                                    .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+
+                            // Crear un TwitterFactory y obtener una instancia de Twitter
+                            TwitterFactory tf = new TwitterFactory(cb.build());
+                            Twitter twitter = tf.getInstance();
+
+                            // Intentar publicar el tweet
                             try {
-                                // Configura las credenciales de Twitter
-                                ConfigurationBuilder cb = new ConfigurationBuilder();
-                                cb.setDebugEnabled(true)
-                                        .setOAuthConsumerKey(CONSUMER_KEY)
-                                        .setOAuthConsumerSecret(CONSUMER_SECRET)
-                                        .setOAuthAccessToken(ACCESS_TOKEN)
-                                        .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+                                // Crear un StatusUpdate con el texto final del tweet
+                                StatusUpdate statusUpdate = new StatusUpdate(finalTweetText);
 
-                                TwitterFactory tf = new TwitterFactory(cb.build());
-                                Twitter twitter = tf.getInstance();
-
-                                // Publica el tweet
-                                Status status = twitter.updateStatus(finalTweetText);
+                                // Publicar el tweet
+                                Status status = twitter.updateStatus(statusUpdate);
 
                                 // Mostrar un mensaje de éxito en el hilo principal de la UI
                                 ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(itemView.getContext(), "Publicado en Twitter", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(itemView.getContext(), "Tweet publicado correctamente", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             } catch (TwitterException e) {
-                                // Manejar errores de Twitter y mostrar un mensaje en la UI
+                                // Mostrar un mensaje de error en el hilo principal de la UI
                                 ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(itemView.getContext(), "Error al publicar en Twitter: " + e.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(itemView.getContext(), "Error al publicar el tweet", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                                 e.printStackTrace();
@@ -263,6 +274,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 }
             });
         }
+
+
+
+
 
         public void urlVer(final ListElement item){
             urlVer.setOnClickListener(new View.OnClickListener() {
