@@ -3,15 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cardGuardadas"
+    android:id="@+id/cardMain"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     app:cardCornerRadius="20dp"
-    app:cardElevation="8dp"
+    app:cardElevation="10dp"
+    app:cardBackgroundColor="#E6F9FCFF"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    >
 
     <LinearLayout
         android:id="@+id/linearLayoutCard"
@@ -47,7 +49,7 @@
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/twitterx"
                 android:contentDescription="Publicar noticia"
-                android:background="@color/white"
+                android:background="#E6F9FCFF"
                 android:scaleType= "centerInside"/>
 
             <ImageButton
@@ -58,7 +60,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/borrar"
-                android:background="@color/white"
+                android:background="#E6F9FCFF"
                 android:contentDescription="Borrar noticia"
                 android:scaleType="centerInside" />
 
@@ -70,7 +72,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/enlace"
-                android:background="@color/white"
+                android:background="#E6F9FCFF"
                 android:contentDescription="Guardar noticia"
                 android:scaleType="centerInside" />
 

@@ -21,8 +21,8 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/goHome"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,11 +40,13 @@
         app:layout_constraintTop_toTopOf="@+id/tituloActivityConfig"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="Categoría"
+        android:text="Elige una categoría para ver"
+        android:padding="15dp"
         android:fontFamily="@font/cascadia"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:layout_marginTop="150dp"
         android:elegantTextHeight="true"
+        android:textAlignment="center"
         android:textColor="@color/black"
         />
 
