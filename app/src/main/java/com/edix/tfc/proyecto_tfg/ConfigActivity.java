@@ -3,6 +3,7 @@ package com.edix.tfc.proyecto_tfg;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -94,5 +95,15 @@ public class ConfigActivity extends AppCompatActivity {
         editor.apply();
         // Muestra un Toast para confirmar que la categoría ha sido cambiada
         Toast.makeText(ConfigActivity.this, "Categoría cambiada", Toast.LENGTH_SHORT).show();
+        // Crear un Handler para programar el retraso
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Código para iniciar la MainActivity después del retraso
+                startActivity(new Intent(ConfigActivity.this, MainActivity.class));
+                // Opcionalmente, puedes finalizar la actividad actual si no deseas que el usuario vuelva a ella
+                // finish();
+            }
+        }, 250);
     }
 }
