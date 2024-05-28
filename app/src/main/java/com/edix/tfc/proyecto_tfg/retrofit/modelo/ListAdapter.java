@@ -107,7 +107,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 break;
         }
         holder.guardarNoticia(element);
-        holder.publicarNoticia(element);
+        holder.publicarNoticiaIntent(element);
         holder.urlVer(element);
     }
 
@@ -274,6 +274,38 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 }
             });
         }
+
+        public void publicarNoticiaIntent(final ListElement item) {
+            publicarTwitter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Mensaje a publicar
+                    String tweetText = item.getTextoNoticia();
+                    String mediaUrl = item.getUrl();
+                    String finalTweetText = tweetText;
+
+                    if (tweetText.length() > 200) {
+                        finalTweetText = tweetText.substring(0, 150) + "...";
+                    }
+                    finalTweetText += "\n " + mediaUrl + "\n\nCompartido a traves de Sporthub";
+
+                    // Crear un intent para compartir en Twitter
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.putExtra(Intent.EXTRA_TEXT, finalTweetText);
+                    intent.setType("text/plain");
+
+                    // Verificar si hay aplicaciones que pueden manejar el intent
+                    if (intent.resolveActivity(itemView.getContext().getPackageManager()) != null) {
+                        // Abrir la actividad para compartir en Twitter
+                        itemView.getContext().startActivity(intent);
+                    } else {
+                        // Si no hay aplicaciones que puedan manejar el intent, mostrar un mensaje de error
+                        Toast.makeText(itemView.getContext(), "No se encontró una aplicación para compartir en Twitter", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
 
 
 
