@@ -7,9 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="10dp"
-    app:cardBackgroundColor="#E6F9FCFF"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp"
+    app:cardBackgroundColor="@color/white"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     app:cardUseCompatPadding="true"
@@ -51,7 +51,7 @@
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/twitterx"
                 android:contentDescription="Publicar noticia"
-                android:background="#E6F9FCFF"
+                android:background="#EEF9FCFF"
                 android:scaleType= "centerInside"/>
 
             <ImageButton
@@ -61,8 +61,8 @@
                 android:layout_marginTop="150dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/save"
-                android:background="#E6F9FCFF"
+                android:src="@drawable/descargar"
+                android:background="#EEF9FCFF"
                 android:contentDescription="Guardar noticia"
                 android:scaleType="centerInside" />
 
@@ -73,8 +73,8 @@
                 android:layout_marginTop="220dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/enlace"
-                android:background="#E6F9FCFF"
+                android:src="@drawable/internet"
+                android:background="#EEF9FCFF"
                 android:contentDescription="Ver noticia"
                 android:scaleType="centerInside" />
 

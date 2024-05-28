@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="#80FFFFFF"
     tools:context=".AuthActivity">
 
 
@@ -163,7 +163,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
-        android:background="#3F7199"
+        android:background="@color/transparente"
         android:contentDescription="@string/regist_google"
         android:scaleType="centerInside"
         android:src="@drawable/google"
@@ -177,7 +177,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
-        android:background="#3F7199"
+        android:background="@color/transparente"
         android:contentDescription="@string/regist_twitter"
         android:scaleType="centerInside"
         android:src="@drawable/twitterx"
