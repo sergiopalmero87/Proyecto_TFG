@@ -1,11 +1,8 @@
 package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,29 +32,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import twitter4j.Status;
-import twitter4j.StatusUpdate;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.conf.ConfigurationBuilder;
-
-
-//Esta clase comunica la parte back de las cards con la parte front
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<ListElement> listaNoticiasMostrar;
     private LayoutInflater mInflater;
     private static Context mContext;
-
-    private static final String CONSUMER_KEY = "pXlnHHaziTj4im59YbRq0U2RS";
-    private static final String CONSUMER_SECRET = "5v6f6Wv7KMw1y6EPvLSZEFAYu3uAf5Lgs2cI6j4pSOgKJrVRfQ";
-    private static final String ACCESS_TOKEN = "192594075-IX1pQ6weQatfLmhLtaEPmW2338mboxFvaVGIoGyU";
-    private static final String ACCESS_TOKEN_SECRET = "6BI16RJ8NtM5Qlk0bv6PrtpfQUqPWW0v1AsX6RO1PB1li";
 
     public ListAdapter(Context context, List<ListElement> itemList) {
         this.mInflater = LayoutInflater.from(context);
@@ -72,24 +50,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
-    //Sirve para atar, sujetar, vincular etc.. las cosas que vamos implementando al recyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-        //Aqui accedemos a cada una de las noticias gracias a su position
         ListElement element = listaNoticiasMostrar.get(position);
-
-        //En esta variable guardamos el textoNoticia que haya en cada element
-        //que es de tipo ListElement(por lo que es el contenido de las cards)
-        //Si el largo es de mas de 100 caracteres, hacemos que se muestre ...
-        //para que la card no sea tan grande.
         String descripcion = element.getTextoNoticia();
         if (descripcion.length() > 100) {
-            //Descripcion es igual a lo que haya en la variable descripcion
-            //pero desde el caracter 0 al 100 y el resto se sustituye por ...
             descripcion = descripcion.substring(0, 97) + "...";
         }
-
         holder.tituloNoticia.setText(element.getTitulo());
         holder.textoNoticia.setText(descripcion);
         holder.namePeriodico.setText(element.getName());
@@ -114,25 +81,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         holder.urlVer(element);
     }
 
-    //Devolver el tamaño de la lista de datos
     @Override
     public int getItemCount() {
         return listaNoticiasMostrar.size();
     }
 
-
-    //Esta clase static lo que hace es que si o si ambas clases están relacionadas,
-    // lo que es bueno para simplificar el codigo y hacer que sea mas fácil de entender.
-    // Tambien simplifica el codigo ya que no necesito crear codigo innecesario (getter and setter)
-    // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
-    // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textoNoticia, urlNoticia, namePeriodico, fechaPublicacion, tituloNoticia;
         public ImageView guardarNoticia, publicarTwitter, imagenCard, urlVer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            //Inicializar las vistas
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
             namePeriodico = itemView.findViewById(R.id.namePeriodico);
             fechaPublicacion = itemView.findViewById(R.id.fecha);
@@ -143,12 +102,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             urlVer = itemView.findViewById(R.id.urlVer);
         }
 
-
         public void guardarNoticia(final ListElement item) {
             guardarNoticia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Acceder a los valores de textoNoticia, urlNoticia, name y categoria a través de la instancia de ListElement
                     String descripcion = item.getTextoNoticia();
                     String url = item.getUrl();
                     String name = item.getName();
@@ -156,42 +113,27 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     String fecha = item.getFechaPublicacion();
                     String titulo = item.getTitulo();
 
-                    // Obtener la referencia al usuario actual
                     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                    // Verificar si el usuario está autenticado
                     if (currentUser != null) {
                         String userId = currentUser.getUid();
-
-                        // Instanciamos la bbdd
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                        // Verificar si la noticia ya existe en la colección "NoticiasFav" del usuario actual
                         CollectionReference noticiasFavRef = db.collection("users").document(userId).collection("NoticiasFav");
-                        Query query = noticiasFavRef.whereEqualTo("descripcion", descripcion)
+                        Query queryFav = noticiasFavRef.whereEqualTo("descripcion", descripcion)
                                 .whereEqualTo("url", url)
                                 .whereEqualTo("name", name)
                                 .whereEqualTo("fecha", fecha)
                                 .whereEqualTo("titulo", titulo);
 
-                        // Verificar si la noticia ya existe en la colección "NoticiasMasGuardadas" del usuario actual
-                        CollectionReference noticiasMasGuardadas = db.collection("users").document(userId).collection("NoticiasMasGuardadas");
-                        Query queryMas = noticiasMasGuardadas.whereEqualTo("descripcion", descripcion)
-                                .whereEqualTo("url", url)
-                                .whereEqualTo("name", name)
-                                .whereEqualTo("fecha", fecha)
-                                .whereEqualTo("titulo", titulo);
-
-                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        queryFav.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     QuerySnapshot querySnapshot = task.getResult();
                                     if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                        // La noticia ya existe en la base de datos
                                         Toast.makeText(itemView.getContext(), "La noticia ya está guardada", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        // Guardar la noticia en la colección "NoticiasFav" del usuario actual
                                         Map<String, Object> noticia = new HashMap<>();
                                         noticia.put("name", name);
                                         noticia.put("descripcion", descripcion);
@@ -199,38 +141,62 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                         noticia.put("categoria", categoria);
                                         noticia.put("fecha", fecha);
                                         noticia.put("titulo", titulo);
+                                        noticia.put("contador", 1);
 
                                         noticiasFavRef.add(noticia)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
-                                                        // La noticia se añadió correctamente
                                                         Toast.makeText(itemView.getContext(), "Noticia guardada", Toast.LENGTH_SHORT).show();
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        // Error al guardar la noticia
                                                         Toast.makeText(itemView.getContext(), "Error al guardar noticia", Toast.LENGTH_SHORT).show();
                                                         Log.e("Firestore", "Error al guardar noticia", e);
                                                     }
                                                 });
                                     }
                                 } else {
-                                    // Error al realizar la consulta
                                     Toast.makeText(itemView.getContext(), "Error al consultar la base de datos", Toast.LENGTH_SHORT).show();
                                     Log.e("Firestore", "Error al consultar en la base de datos", task.getException());
                                 }
                             }
                         });
 
+                        CollectionReference noticiasMasGuardadasRef = db.collection("NoticiasMasGuardadas");
+                        Query queryMas = noticiasMasGuardadasRef.whereEqualTo("descripcion", descripcion)
+                                .whereEqualTo("url", url)
+                                .whereEqualTo("name", name)
+                                .whereEqualTo("fecha", fecha)
+                                .whereEqualTo("titulo", titulo);
+
                         queryMas.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-
-                                        // Guardar la noticia en la colección "NoticiasMasGuardadas" del usuario actual
+                                    QuerySnapshot querySnapshot = task.getResult();
+                                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                                            Long contadorActual = document.getLong("contador");
+                                            if (contadorActual != null) {
+                                                document.getReference().update("contador", contadorActual + 1)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                Log.d("Firestore", "Contador actualizado correctamente");
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.e("Firestore", "Error al actualizar contador", e);
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                    } else {
                                         Map<String, Object> noticia = new HashMap<>();
                                         noticia.put("name", name);
                                         noticia.put("descripcion", descripcion);
@@ -238,46 +204,38 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                         noticia.put("categoria", categoria);
                                         noticia.put("fecha", fecha);
                                         noticia.put("titulo", titulo);
+                                        noticia.put("contador", 1);
 
-                                        noticiasMasGuardadas.add(noticia)
+                                        noticiasMasGuardadasRef.add(noticia)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
-                                                        // La noticia se añadió correctamente
-                                                        //No mostramos nada para no confundir al user
+                                                        Log.d("Firestore", "Noticia guardada en NoticiasMasGuardadas");
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        // Error al guardar la noticia
-                                                        Toast.makeText(itemView.getContext(), "Error al guardar noticia en NoticiasMasGuardadas", Toast.LENGTH_SHORT).show();
-                                                        Log.e("Firestore", "Error al guardar noticia", e);
+                                                        Log.e("Firestore", "Error al guardar noticia en NoticiasMasGuardadas", e);
                                                     }
                                                 });
-
+                                    }
                                 } else {
-                                    // Error al realizar la consulta
-                                    Toast.makeText(itemView.getContext(), "Error al consultar la base de datos", Toast.LENGTH_SHORT).show();
                                     Log.e("Firestore", "Error al consultar en la base de datos", task.getException());
                                 }
                             }
                         });
-
                     } else {
-                        // Si el usuario no está autenticado, manejar la situación en consecuencia
-                        // Por ejemplo, redirigir a la pantalla de inicio de sesión
+                        Toast.makeText(itemView.getContext(), "Debes estar autenticado para guardar noticias", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
 
-
         public void publicarNoticiaIntent(final ListElement item) {
             publicarTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Mensaje a publicar
                     String tweetText = item.getTextoNoticia();
                     String mediaUrl = item.getUrl();
                     String finalTweetText = tweetText;
@@ -287,24 +245,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     }
                     finalTweetText += "\n " + mediaUrl + "\n\nCompartido a traves de Sporthub";
 
-                    // Crear un intent para compartir en Twitter
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.putExtra(Intent.EXTRA_TEXT, finalTweetText);
                     intent.setType("text/plain");
 
-                    // Verificar si hay aplicaciones que pueden manejar el intent
                     if (intent.resolveActivity(itemView.getContext().getPackageManager()) != null) {
-                        // Abrir la actividad para compartir en Twitter
                         itemView.getContext().startActivity(intent);
                     } else {
-                        // Si no hay aplicaciones que puedan manejar el intent, mostrar un mensaje de error
                         Toast.makeText(itemView.getContext(), "No se encontró una aplicación para compartir en Twitter", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
 
-        public void urlVer(final ListElement item){
+        public void urlVer(final ListElement item) {
             urlVer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -315,8 +269,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             });
         }
 
-        //Sirve para actualizar los elementos que haya en el ViewHolder
-        void bindData(final ListElement item){
+        void bindData(final ListElement item) {
 
         }
     }
