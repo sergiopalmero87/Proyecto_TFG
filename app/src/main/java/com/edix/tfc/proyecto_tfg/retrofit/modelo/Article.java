@@ -55,22 +55,28 @@ public class Article {
     }
 
     public static String fechaFormateada(String fecha) {
-        String fechaRetrofit = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-        String fechaCard = "dd-MM-yyyy";
+        String fechaRetrofit = "yyyy-MM-dd'T'HH:mm:ss'Z'"; //Asi es como nos llega de retrofit
+        String fechaCard = "dd-MM-yyyy"; //Asi es como queremos que se quede
+
+        // Creamos un objeto SimpleDateFormat para la fecha en el formato que nos llega de Retrofit.
         SimpleDateFormat inputFormat = new SimpleDateFormat(fechaRetrofit, Locale.getDefault());
+        // Creamos otro objeto SimpleDateFormat para el formato en el que queremos que se quede la fecha.
         SimpleDateFormat outputFormat = new SimpleDateFormat(fechaCard, Locale.getDefault());
 
+        // Objeto Date que actuará como intermediario entre los dos formatos de cadena
         Date date = null;
-        String formattedDate = null;
+        String fechaFormateada = null;
 
         try {
+            //Con el objeto date, parseamos la fecha que nos llega de retrofit
+            // y despues almacenamos en la fechaFormateada ese objeto date
             date = inputFormat.parse(fecha);
-            formattedDate = outputFormat.format(date);
+            fechaFormateada = outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return formattedDate;
+        return fechaFormateada;
     }
 
 
