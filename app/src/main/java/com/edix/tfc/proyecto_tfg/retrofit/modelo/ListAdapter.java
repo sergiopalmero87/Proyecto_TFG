@@ -106,6 +106,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 holder.imagenCard.setImageResource(R.drawable.iconoapp);
                 break;
         }
+        String fecha = Article.fechaFormateada(element.getFechaPublicacion());
+        holder.fechaPublicacion.setText(fecha);
         holder.guardarNoticia(element);
         holder.publicarNoticiaIntent(element);
         holder.urlVer(element);
@@ -124,7 +126,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView textoNoticia, urlNoticia, namePeriodico;
+        public TextView textoNoticia, urlNoticia, namePeriodico, fechaPublicacion;
         public ImageView guardarNoticia, publicarTwitter, imagenCard, urlVer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -132,6 +134,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             //Inicializar las vistas
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
             namePeriodico = itemView.findViewById(R.id.namePeriodico);
+            fechaPublicacion = itemView.findViewById(R.id.fecha);
             guardarNoticia = itemView.findViewById(R.id.guardarNoticia);
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
             imagenCard = itemView.findViewById(R.id.imagenCard);
@@ -147,7 +150,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     String descripcion = item.getTextoNoticia();
                     String url = item.getUrl();
                     String name = item.getName();
-                    String categoria = item.getCategoria(); // Añadimos la categoría
+                    String categoria = item.getCategoria();
+                    String fecha = item.getFechaPublicacion();
 
                     // Obtener la referencia al usuario actual
                     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -163,7 +167,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                         CollectionReference noticiasFavRef = db.collection("users").document(userId).collection("NoticiasFav");
                         Query query = noticiasFavRef.whereEqualTo("descripcion", descripcion)
                                 .whereEqualTo("url", url)
-                                .whereEqualTo("name", name);
+                                .whereEqualTo("name", name)
+                                .whereEqualTo("fecha", fecha);
 
                         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -179,7 +184,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                         noticia.put("name", name);
                                         noticia.put("descripcion", descripcion);
                                         noticia.put("url", url);
-                                        noticia.put("categoria", categoria); // Guardamos la categoría
+                                        noticia.put("categoria", categoria);
+                                        noticia.put("fecha", fecha);
 
                                         noticiasFavRef.add(noticia)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

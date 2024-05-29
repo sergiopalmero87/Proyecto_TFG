@@ -7,12 +7,14 @@ public class ListElement {
     private String url;
     private String name;
     private String categoria;
+    private String fechaPublicacion;
 
-    public ListElement(String name, String descripcion, String url,String categoria) {
+    public ListElement(String name, String descripcion, String url,String categoria, String fechaPublicacion) {
         this.name = name;
         this.textoNoticia = descripcion;
         this.url = url;
         this.categoria = categoria;
+        this.fechaPublicacion = fechaPublicacion;
     }
 
     public String getName() {
@@ -45,5 +47,13 @@ public class ListElement {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public String getFechaPublicacion() {
+        return fechaPublicacion;
+    }
+
+    public void setFechaPublicacion(String fechaPublicacion) {
+        this.fechaPublicacion = fechaPublicacion;
     }
 }
