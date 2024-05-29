@@ -11,15 +11,19 @@ public class Article {
     private String description;
     private String url;
     private String publishedAt;
+    private String title;
+    private String content;
 
     public Article() {
     }
 
-    public Article(Source source, String description, String url, String publishedAt) {
+    public Article(Source source, String description, String url, String publishedAt, String title, String content) {
         this.source = source;
         this.description = description;
         this.url = url;
         this.publishedAt = publishedAt;
+        this.title = title;
+        this.content = content;
     }
 
     public Source getSource() {
@@ -52,6 +56,22 @@ public class Article {
 
     public void setPublishedAt(String publishedAt) {
         this.publishedAt = publishedAt;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public static String fechaFormateada(String fecha) {

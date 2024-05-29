@@ -84,13 +84,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         //Si el largo es de mas de 100 caracteres, hacemos que se muestre ...
         //para que la card no sea tan grande.
         String descripcion = element.getTextoNoticia();
-        if (descripcion.length() > 150) {
+        if (descripcion.length() > 100) {
             //Descripcion es igual a lo que haya en la variable descripcion
             //pero desde el caracter 0 al 100 y el resto se sustituye por ...
-            descripcion = descripcion.substring(0, 150) + "...";
+            descripcion = descripcion.substring(0, 97) + "...";
         }
 
-        holder.textoNoticia.setText(element.getTextoNoticia());
+        holder.tituloNoticia.setText(element.getTitulo());
+        holder.textoNoticia.setText(descripcion);
         holder.namePeriodico.setText(element.getName());
         switch (element.getCategoria()) {
             case "soccer":
@@ -126,7 +127,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView textoNoticia, urlNoticia, namePeriodico, fechaPublicacion;
+        public TextView textoNoticia, urlNoticia, namePeriodico, fechaPublicacion, tituloNoticia;
         public ImageView guardarNoticia, publicarTwitter, imagenCard, urlVer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -135,6 +136,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             textoNoticia = itemView.findViewById(R.id.textoNoticia);
             namePeriodico = itemView.findViewById(R.id.namePeriodico);
             fechaPublicacion = itemView.findViewById(R.id.fecha);
+            tituloNoticia = itemView.findViewById(R.id.tituloNoticia);
             guardarNoticia = itemView.findViewById(R.id.guardarNoticia);
             publicarTwitter = itemView.findViewById(R.id.imagenCardTwitter);
             imagenCard = itemView.findViewById(R.id.imagenCard);
@@ -152,6 +154,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     String name = item.getName();
                     String categoria = item.getCategoria();
                     String fecha = item.getFechaPublicacion();
+                    String titulo = item.getTitulo();
 
                     // Obtener la referencia al usuario actual
                     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -168,7 +171,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                         Query query = noticiasFavRef.whereEqualTo("descripcion", descripcion)
                                 .whereEqualTo("url", url)
                                 .whereEqualTo("name", name)
-                                .whereEqualTo("fecha", fecha);
+                                .whereEqualTo("fecha", fecha)
+                                .whereEqualTo("titulo", titulo);
 
                         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -186,6 +190,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                         noticia.put("url", url);
                                         noticia.put("categoria", categoria);
                                         noticia.put("fecha", fecha);
+                                        noticia.put("titulo", titulo);
 
                                         noticiasFavRef.add(noticia)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
