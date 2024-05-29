@@ -78,6 +78,19 @@
                 android:contentDescription="Ver noticia"
                 android:scaleType="centerInside" />
 
+            <TextView
+                android:id="@+id/contador"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="290dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="0"
+                android:textSize="35sp"
+                android:textAlignment="center"
+                />
+
             <LinearLayout
             android:id="@+id/linearlayoutTextoNoticia"
             android:orientation="vertical"

@@ -9,14 +9,16 @@ public class ListElement {
     private String categoria;
     private String fechaPublicacion;
     private String titulo;
+    private String contador;
 
-    public ListElement(String name, String descripcion, String url,String categoria, String fechaPublicacion, String titulo) {
+    public ListElement(String name, String descripcion, String url,String categoria, String fechaPublicacion, String titulo, String contador) {
         this.name = name;
         this.textoNoticia = descripcion;
         this.url = url;
         this.categoria = categoria;
         this.fechaPublicacion = fechaPublicacion;
         this.titulo = titulo;
+        this.contador = contador;
     }
 
     public String getName() {
@@ -65,5 +67,13 @@ public class ListElement {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public String getContador() {
+        return contador;
+    }
+
+    public void setContador(String contador) {
+        this.contador = contador;
     }
 }

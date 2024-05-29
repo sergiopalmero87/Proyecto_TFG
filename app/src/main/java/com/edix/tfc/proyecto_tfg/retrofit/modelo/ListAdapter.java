@@ -174,6 +174,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                 .whereEqualTo("fecha", fecha)
                                 .whereEqualTo("titulo", titulo);
 
+                        // Verificar si la noticia ya existe en la colección "NoticiasMasGuardadas" del usuario actual
+                        CollectionReference noticiasMasGuardadas = db.collection("users").document(userId).collection("NoticiasMasGuardadas");
+                        Query queryMas = noticiasMasGuardadas.whereEqualTo("descripcion", descripcion)
+                                .whereEqualTo("url", url)
+                                .whereEqualTo("name", name)
+                                .whereEqualTo("fecha", fecha)
+                                .whereEqualTo("titulo", titulo);
+
                         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -216,6 +224,46 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                 }
                             }
                         });
+
+                        queryMas.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+
+                                        // Guardar la noticia en la colección "NoticiasMasGuardadas" del usuario actual
+                                        Map<String, Object> noticia = new HashMap<>();
+                                        noticia.put("name", name);
+                                        noticia.put("descripcion", descripcion);
+                                        noticia.put("url", url);
+                                        noticia.put("categoria", categoria);
+                                        noticia.put("fecha", fecha);
+                                        noticia.put("titulo", titulo);
+
+                                        noticiasMasGuardadas.add(noticia)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        // La noticia se añadió correctamente
+                                                        //No mostramos nada para no confundir al user
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Error al guardar la noticia
+                                                        Toast.makeText(itemView.getContext(), "Error al guardar noticia en NoticiasMasGuardadas", Toast.LENGTH_SHORT).show();
+                                                        Log.e("Firestore", "Error al guardar noticia", e);
+                                                    }
+                                                });
+
+                                } else {
+                                    // Error al realizar la consulta
+                                    Toast.makeText(itemView.getContext(), "Error al consultar la base de datos", Toast.LENGTH_SHORT).show();
+                                    Log.e("Firestore", "Error al consultar en la base de datos", task.getException());
+                                }
+                            }
+                        });
+
                     } else {
                         // Si el usuario no está autenticado, manejar la situación en consecuencia
                         // Por ejemplo, redirigir a la pantalla de inicio de sesión
@@ -224,67 +272,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             });
         }
 
-
-        public void publicarNoticia(final ListElement item) {
-            publicarTwitter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Crear y ejecutar un nuevo hilo para realizar la publicación del tweet
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Mensaje a publicar
-                            String tweetText = item.getTextoNoticia();
-                            String mediaUrl = item.getUrl();
-
-                            String finalTweetText = "";
-                            if (tweetText.length() > 240) {
-                                finalTweetText = tweetText.substring(0, 237) + "...";
-                            }
-                            finalTweetText += "\n\nMedio oficial: " + mediaUrl + "\n\nDescarga SportHub en Google Play: ";
-
-                            // Configurar las credenciales de Twitter
-                            ConfigurationBuilder cb = new ConfigurationBuilder();
-                            cb.setDebugEnabled(true)
-                                    .setOAuthConsumerKey(CONSUMER_KEY)
-                                    .setOAuthConsumerSecret(CONSUMER_SECRET)
-                                    .setOAuthAccessToken(ACCESS_TOKEN)
-                                    .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
-
-                            // Crear un TwitterFactory y obtener una instancia de Twitter
-                            TwitterFactory tf = new TwitterFactory(cb.build());
-                            Twitter twitter = tf.getInstance();
-
-                            // Intentar publicar el tweet
-                            try {
-                                // Crear un StatusUpdate con el texto final del tweet
-                                StatusUpdate statusUpdate = new StatusUpdate(finalTweetText);
-
-                                // Publicar el tweet
-                                Status status = twitter.updateStatus(statusUpdate);
-
-                                // Mostrar un mensaje de éxito en el hilo principal de la UI
-                                ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(itemView.getContext(), "Tweet publicado correctamente", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            } catch (TwitterException e) {
-                                // Mostrar un mensaje de error en el hilo principal de la UI
-                                ((Activity) itemView.getContext()).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(itemView.getContext(), "Error al publicar el tweet", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
-                }
-            });
-        }
 
         public void publicarNoticiaIntent(final ListElement item) {
             publicarTwitter.setOnClickListener(new View.OnClickListener() {
@@ -316,11 +303,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 }
             });
         }
-
-
-
-
-
 
         public void urlVer(final ListElement item){
             urlVer.setOnClickListener(new View.OnClickListener() {

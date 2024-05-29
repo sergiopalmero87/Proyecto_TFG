@@ -13,17 +13,19 @@ public class Article {
     private String publishedAt;
     private String title;
     private String content;
+    private String contador;
 
     public Article() {
     }
 
-    public Article(Source source, String description, String url, String publishedAt, String title, String content) {
+    public Article(Source source, String description, String url, String publishedAt, String title, String content, String contador) {
         this.source = source;
         this.description = description;
         this.url = url;
         this.publishedAt = publishedAt;
         this.title = title;
         this.content = content;
+        this.contador = contador;
     }
 
     public Source getSource() {
@@ -72,6 +74,14 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getContador() {
+        return contador;
+    }
+
+    public void setContador(String contador) {
+        this.contador = contador;
     }
 
     public static String fechaFormateada(String fecha) {

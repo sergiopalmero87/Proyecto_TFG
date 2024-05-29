@@ -24,12 +24,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //Esta clase comunica la parte back de las cards con la parte front
 public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuardadas.ViewHolderGuardadas> {
@@ -221,6 +224,9 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
                 }
             });
         }
+
+
+
 
         //Sirve para actualizar los elementos que haya en el ViewHolder
         void bindData(final ListElement item){

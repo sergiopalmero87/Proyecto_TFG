@@ -23,7 +23,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,7 +33,7 @@ import java.util.List;
 
 public class NoticiasGuardadasActivity extends AppCompatActivity {
 
-    private LottieAnimationView goHome;
+    private LottieAnimationView goHome, moreSaved;
     private TextView textoNoticia, urlNoticia, namePeriodico;
     //Contenedor que aloja las cards
     private RecyclerView recyclerViewGuardadas;
@@ -93,6 +92,8 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
     }
 
 
+
+
     private void mostrarNoticiasGuardadas() {
         // Obtenemos la referencia al usuario actual
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -117,7 +118,8 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
                                     String categoria = document.getString("categoria");
                                     String fecha = document.getString("fecha");
                                     String titulo = document.getString("titulo");
-                                    ListElement listElement = new ListElement(name, descripcion, url,categoria, fecha,titulo);
+                                    String contador = document.getString("contador");
+                                    ListElement listElement = new ListElement(name, descripcion, url,categoria, fecha,titulo,contador);
                                     noticiasGuardadas.add(listElement);
                                 }
 

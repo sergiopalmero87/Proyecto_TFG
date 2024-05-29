@@ -55,6 +55,7 @@
             android:name=".CategActivity"
             android:exported="true">
         </activity>
+        
     </application>
 
 </manifest>
