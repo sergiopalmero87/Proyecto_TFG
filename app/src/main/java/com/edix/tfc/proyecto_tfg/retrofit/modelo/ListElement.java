@@ -9,9 +9,9 @@ public class ListElement {
     private String categoria;
     private String fechaPublicacion;
     private String titulo;
-    private String contador;
+    private Long contador;
 
-    public ListElement(String name, String descripcion, String url,String categoria, String fechaPublicacion, String titulo, String contador) {
+    public ListElement(String name, String descripcion, String url,String categoria, String fechaPublicacion, String titulo, Long contador) {
         this.name = name;
         this.textoNoticia = descripcion;
         this.url = url;
@@ -69,11 +69,11 @@ public class ListElement {
         this.titulo = titulo;
     }
 
-    public String getContador() {
+    public Long getContador() {
         return contador;
     }
 
-    public void setContador(String contador) {
+    public void setContador(Long contador) {
         this.contador = contador;
     }
 }

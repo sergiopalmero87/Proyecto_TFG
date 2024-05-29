@@ -13,12 +13,12 @@ public class Article {
     private String publishedAt;
     private String title;
     private String content;
-    private String contador;
+    private Long contador;
 
     public Article() {
     }
 
-    public Article(Source source, String description, String url, String publishedAt, String title, String content, String contador) {
+    public Article(Source source, String description, String url, String publishedAt, String title, String content, Long contador) {
         this.source = source;
         this.description = description;
         this.url = url;
@@ -76,11 +76,11 @@ public class Article {
         this.content = content;
     }
 
-    public String getContador() {
+    public Long getContador() {
         return contador;
     }
 
-    public void setContador(String contador) {
+    public void setContador(Long contador) {
         this.contador = contador;
     }
 

@@ -118,7 +118,7 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
                                     String categoria = document.getString("categoria");
                                     String fecha = document.getString("fecha");
                                     String titulo = document.getString("titulo");
-                                    String contador = document.getString("contador");
+                                    Long contador = document.getLong("contador");
                                     ListElement listElement = new ListElement(name, descripcion, url,categoria, fecha,titulo,contador);
                                     noticiasGuardadas.add(listElement);
                                 }
