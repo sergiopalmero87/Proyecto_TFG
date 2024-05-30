@@ -4,35 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#80FFFFFF"
-    tools:context=".NoticiasGuardadasActivity">
+    tools:context=".NoticiasMasGuardadasActivity">
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/goHome"
+        android:id="@+id/back"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="false"
         app:lottie_colorFilter="@color/black"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/gohome"
-        app:lottie_speed="2.0" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/moresave"
-        android:layout_width="55dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="65dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="false"
-        app:lottie_colorFilter="@color/black"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/moresave"
-        app:lottie_speed="0.5" />
+        app:lottie_rawRes="@raw/back"
+        app:lottie_speed="0.7" />
 
     <TextView
         android:id="@+id/tituloActivityNoticiasGuardadas"
@@ -40,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Mis Noticias"
+        android:text="Más guardadas"
         android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -58,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goHome" />
+        app:layout_constraintTop_toBottomOf="@+id/back" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

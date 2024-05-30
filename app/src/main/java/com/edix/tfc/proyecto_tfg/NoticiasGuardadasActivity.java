@@ -52,11 +52,13 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
         goHome();
         recyclerViewLayoutManager();
         mostrarNoticiasGuardadas();
+        goMasGuardadas();
     }
 
     // Funcion para iniciar variables
     private void iniciarVariables() {
         goHome = findViewById(R.id.goHome);
+        moreSaved = findViewById(R.id.moresave);
         recyclerViewGuardadas = findViewById(R.id.recyclerViewGuardadas);
 
     }
@@ -82,6 +84,29 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
                         new Runnable() {
                             public void run() {
                                 startActivity(new Intent(NoticiasGuardadasActivity.this, MainActivity.class));
+                                finish();
+                            }
+                        },
+                        1000 // Retraso de 1 segundo para dar tiempo a la animación
+                );
+            }
+        });
+    }
+
+
+    private void goMasGuardadas() {
+        // Establecer el OnClickListener para el botón de home
+        moreSaved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Reproducir la animación
+                moreSaved.playAnimation();
+
+                // Cerrar sesión después de un breve retraso
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                startActivity(new Intent(NoticiasGuardadasActivity.this, NoticiasMasGuardadasActivity.class));
                                 finish();
                             }
                         },
