@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                                 && !article.getDescription().contains("[Removed]")
                                 && !article.getDescription().contains("<!--cache-->")) {
                             // Crear un ListElement con los datos de la fuente
-                            ListElement listElement = new ListElement(article.getSource().getName(), article.getDescription(), article.getUrl(), categoria, article.getPublishedAt(), article.getTitle(), article.getContador());
+                            ListElement listElement = new ListElement(article.getSource().getName(), article.getDescription(), article.getUrl(), categoria, article.getPublishedAt(), article.getTitle());
                             // Agregar el ListElement a itemList
                             itemList.add(listElement);
                         }

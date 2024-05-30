@@ -40,35 +40,13 @@
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/futbolbalon" />
 
-            <ImageButton
-                android:id="@+id/imagenCardTwitter"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="80dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/twitterx"
-                android:contentDescription="Publicar noticia"
-                android:background="#EEF9FCFF"
-                android:scaleType= "centerInside"/>
 
-            <ImageButton
-                android:id="@+id/borrarNoticia"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="150dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/eliminar"
-                android:background="#EEF9FCFF"
-                android:contentDescription="Borrar noticia"
-                android:scaleType="centerInside" />
 
             <ImageButton
                 android:id="@+id/urlVer"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="220dp"
+                android:layout_marginTop="80dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/internet"
@@ -81,7 +59,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="290dp"
+                android:layout_marginTop="150dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="0"

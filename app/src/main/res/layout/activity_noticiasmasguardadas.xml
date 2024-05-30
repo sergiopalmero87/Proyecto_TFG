@@ -34,7 +34,7 @@
         android:textStyle="italic"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewGuardadas"
+        android:id="@+id/recyclerViewMasGuardadas"
         android:layout_width="409dp"
         android:layout_height="663dp"
         android:layout_marginStart="1dp"
