@@ -1,47 +1,29 @@
 package com.edix.tfc.proyecto_tfg.retrofit.modelo;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edix.tfc.proyecto_tfg.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 //Esta clase comunica la parte back de las cards con la parte front
 public class ListAdapterMasGuardadas extends RecyclerView.Adapter<ListAdapterMasGuardadas.ViewHolderMasGuardadas> {
-    private List<ListElement> mDataMasGuardadas;
+    private List<ListElementMasGuardadas> mDataMasGuardadas;
     private LayoutInflater mInflater;
     private Context mContext;
 
 
-    public ListAdapterMasGuardadas(Context context, List<ListElement> itemList) {
+    public ListAdapterMasGuardadas(Context context, List<ListElementMasGuardadas> itemList) {
         this.mInflater = LayoutInflater.from(context);
         this.mDataMasGuardadas = itemList;
         this.mContext = context;
@@ -58,7 +40,7 @@ public class ListAdapterMasGuardadas extends RecyclerView.Adapter<ListAdapterMas
     //Sirve para atar, sujetar, vincular etc.. las cosas que vamos implementando al recyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolderMasGuardadas holder, int position) {
-        ListElement element = mDataMasGuardadas.get(position);
+        ListElementMasGuardadas element = mDataMasGuardadas.get(position);
 
         //En esta variable guardamos el textoNoticia que haya en cada element
         //que es de tipo ListElement(por lo que es el contenido de las cards)
@@ -91,6 +73,7 @@ public class ListAdapterMasGuardadas extends RecyclerView.Adapter<ListAdapterMas
         String fecha = Article.fechaFormateada(element.getFechaPublicacion());
         holder.fechaPublicacion.setText(fecha);
         holder.urlVer(element);
+        holder.contador.setText(String.valueOf(element.getContador()));
     }
 
     //Devolver el tamaño de la lista de datos
@@ -105,7 +88,7 @@ public class ListAdapterMasGuardadas extends RecyclerView.Adapter<ListAdapterMas
     // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
     // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public class ViewHolderMasGuardadas extends RecyclerView.ViewHolder {
-        public TextView textoNoticia, namePeriodico, fechaPublicacion, tituloNoticia;
+        public TextView textoNoticia, namePeriodico, fechaPublicacion, tituloNoticia, contador;
         public ImageView imagenCard,urlVer;
 
         public ViewHolderMasGuardadas(@NonNull View itemView) {
@@ -117,9 +100,10 @@ public class ListAdapterMasGuardadas extends RecyclerView.Adapter<ListAdapterMas
             tituloNoticia = itemView.findViewById(R.id.tituloNoticia);
             imagenCard = itemView.findViewById(R.id.imagenCard);
             urlVer = itemView.findViewById(R.id.urlVer);
+            contador = itemView.findViewById(R.id.contador);
         }
 
-        public void urlVer(final ListElement item){
+        public void urlVer(final ListElementMasGuardadas item){
             urlVer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

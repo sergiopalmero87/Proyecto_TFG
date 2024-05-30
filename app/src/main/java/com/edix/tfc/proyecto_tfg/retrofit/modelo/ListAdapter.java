@@ -141,13 +141,73 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                         noticia.put("categoria", categoria);
                                         noticia.put("fecha", fecha);
                                         noticia.put("titulo", titulo);
-                                        noticia.put("contador", 1);
 
                                         noticiasFavRef.add(noticia)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
                                                         Toast.makeText(itemView.getContext(), "Noticia guardada", Toast.LENGTH_SHORT).show();
+                                                        CollectionReference noticiasMasGuardadasRef = db.collection("NoticiasMasGuardadas");
+                                                        Query queryMas = noticiasMasGuardadasRef.whereEqualTo("descripcion", descripcion)
+                                                                .whereEqualTo("url", url)
+                                                                .whereEqualTo("name", name)
+                                                                .whereEqualTo("fecha", fecha)
+                                                                .whereEqualTo("titulo", titulo);
+
+                                                        queryMas.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    QuerySnapshot querySnapshot = task.getResult();
+                                                                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                                                                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                                                                            Long contadorActual = document.getLong("contador");
+                                                                            if (contadorActual != null) {
+                                                                                document.getReference().update("contador", contadorActual + 1)
+                                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                            @Override
+                                                                                            public void onSuccess(Void aVoid) {
+                                                                                                Log.d("Firestore", "Contador actualizado correctamente");
+                                                                                            }
+                                                                                        })
+                                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                                            @Override
+                                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                                Log.e("Firestore", "Error al actualizar contador", e);
+                                                                                            }
+                                                                                        });
+                                                                            }
+                                                                        }
+                                                                    } else {
+                                                                        Map<String, Object> noticia = new HashMap<>();
+                                                                        noticia.put("name", name);
+                                                                        noticia.put("descripcion", descripcion);
+                                                                        noticia.put("url", url);
+                                                                        noticia.put("categoria", categoria);
+                                                                        noticia.put("fecha", fecha);
+                                                                        noticia.put("titulo", titulo);
+                                                                        noticia.put("contador", 1);
+
+                                                                        noticiasMasGuardadasRef.add(noticia)
+                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                                    @Override
+                                                                                    public void onSuccess(DocumentReference documentReference) {
+                                                                                        Log.d("Firestore", "Noticia guardada en NoticiasMasGuardadas");
+                                                                                    }
+                                                                                })
+                                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                                    @Override
+                                                                                    public void onFailure(@NonNull Exception e) {
+                                                                                        Log.e("Firestore", "Error al guardar noticia en NoticiasMasGuardadas", e);
+                                                                                    }
+                                                                                });
+                                                                    }
+                                                                } else {
+                                                                    Log.e("Firestore", "Error al consultar en la base de datos", task.getException());
+                                                                }
+                                                            }
+                                                        });
+
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
@@ -165,66 +225,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                             }
                         });
 
-                        CollectionReference noticiasMasGuardadasRef = db.collection("NoticiasMasGuardadas");
-                        Query queryMas = noticiasMasGuardadasRef.whereEqualTo("descripcion", descripcion)
-                                .whereEqualTo("url", url)
-                                .whereEqualTo("name", name)
-                                .whereEqualTo("fecha", fecha)
-                                .whereEqualTo("titulo", titulo);
-
-                        queryMas.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    QuerySnapshot querySnapshot = task.getResult();
-                                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                                            Long contadorActual = document.getLong("contador");
-                                            if (contadorActual != null) {
-                                                document.getReference().update("contador", contadorActual + 1)
-                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-                                                                Log.d("Firestore", "Contador actualizado correctamente");
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Log.e("Firestore", "Error al actualizar contador", e);
-                                                            }
-                                                        });
-                                            }
-                                        }
-                                    } else {
-                                        Map<String, Object> noticia = new HashMap<>();
-                                        noticia.put("name", name);
-                                        noticia.put("descripcion", descripcion);
-                                        noticia.put("url", url);
-                                        noticia.put("categoria", categoria);
-                                        noticia.put("fecha", fecha);
-                                        noticia.put("titulo", titulo);
-                                        noticia.put("contador", 1);
-
-                                        noticiasMasGuardadasRef.add(noticia)
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                    @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        Log.d("Firestore", "Noticia guardada en NoticiasMasGuardadas");
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.e("Firestore", "Error al guardar noticia en NoticiasMasGuardadas", e);
-                                                    }
-                                                });
-                                    }
-                                } else {
-                                    Log.e("Firestore", "Error al consultar en la base de datos", task.getException());
-                                }
-                            }
-                        });
                     } else {
                         Toast.makeText(itemView.getContext(), "Debes estar autenticado para guardar noticias", Toast.LENGTH_SHORT).show();
                     }
