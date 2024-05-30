@@ -155,7 +155,7 @@ public class NoticiasGuardadasActivity extends AppCompatActivity {
                                     listAdapterGuardadas.notifyDataSetChanged();
                                 } else {
                                     // Mostramos un mensaje indicando que no hay noticias guardadas
-                                    Toast.makeText(NoticiasGuardadasActivity.this, "No hay noticias guardadas", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NoticiasGuardadasActivity.this, "No tienes noticias guardadas", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 // Manejamos el error en caso de que la consulta falle

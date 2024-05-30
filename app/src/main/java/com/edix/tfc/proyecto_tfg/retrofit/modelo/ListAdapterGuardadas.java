@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -154,7 +155,50 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
                                                         // Noticia borrada exitosamente
                                                         mDataGuardadas.remove(item);
                                                         notifyDataSetChanged();
+                                                        String descripcion = item.getTextoNoticia();
+                                                        String url = item.getUrl();
+                                                        String name = item.getName();
+                                                        String categoria = item.getCategoria();
+                                                        String fecha = item.getFechaPublicacion();
+                                                        String titulo = item.getTitulo();
                                                         Toast.makeText(itemView.getContext(), "Noticia borrada", Toast.LENGTH_SHORT).show();
+                                                        CollectionReference noticiasMasGuardadasRef = db.collection("NoticiasMasGuardadas");
+                                                        Query queryMas = noticiasMasGuardadasRef.whereEqualTo("descripcion", descripcion)
+                                                                .whereEqualTo("url", url)
+                                                                .whereEqualTo("name", name)
+                                                                .whereEqualTo("fecha", fecha)
+                                                                .whereEqualTo("titulo", titulo);
+
+                                                        queryMas.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    QuerySnapshot querySnapshot = task.getResult();
+                                                                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                                                                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                                                                            Long contadorActual = document.getLong("contador");
+                                                                            if (contadorActual != null) {
+                                                                                document.getReference().update("contador", contadorActual - 1)
+                                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                            @Override
+                                                                                            public void onSuccess(Void aVoid) {
+                                                                                                Log.d("Firestore", "Contador actualizado correctamente");
+                                                                                            }
+                                                                                        })
+                                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                                            @Override
+                                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                                Log.e("Firestore", "Error al actualizar contador", e);
+                                                                                            }
+                                                                                        });
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    Log.e("Firestore", "Error al consultar en la base de datos", task.getException());
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {

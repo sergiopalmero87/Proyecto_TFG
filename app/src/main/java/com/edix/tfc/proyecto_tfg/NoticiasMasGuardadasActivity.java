@@ -17,6 +17,8 @@ import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapterMasGuardadas;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElementMasGuardadas;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -87,49 +89,61 @@ public class NoticiasMasGuardadasActivity extends AppCompatActivity {
     }
 
     private void mostrarNoticiasMasGuardadas() {
-        // Obtenemos la referencia al usuario actual
-        //FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        // Obtenemos referencia a la colección de noticias más guardadas en Firebase
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("NoticiasMasGuardadas")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<ListElementMasGuardadas> noticiasMasGuardadas = new ArrayList<>();
+                            for (DocumentSnapshot document : task.getResult()) {
+                                String descripcion = document.getString("descripcion");
+                                String url = document.getString("url");
+                                String name = document.getString("name");
+                                String categoria = document.getString("categoria");
+                                String fecha = document.getString("fecha");
+                                String titulo = document.getString("titulo");
+                                Long contador = document.getLong("contador");
 
-
-            // Obtenemos referencia a la colección de noticias mas guardadas en Firebase
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("NoticiasMasGuardadas")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                List<ListElementMasGuardadas> noticiasMasGuardadas = new ArrayList<>();
-                                for (DocumentSnapshot document : task.getResult()) {
-                                    String descripcion = document.getString("descripcion");
-                                    String url = document.getString("url");
-                                    String name = document.getString("name");
-                                    String categoria = document.getString("categoria");
-                                    String fecha = document.getString("fecha");
-                                    String titulo = document.getString("titulo");
-                                    Long contador = document.getLong("contador");
-                                    ListElementMasGuardadas listElementMasGuardadas = new ListElementMasGuardadas(name, descripcion, url,categoria, fecha,titulo, contador);
+                                if (contador != null && contador > 0) {
+                                    ListElementMasGuardadas listElementMasGuardadas = new ListElementMasGuardadas(name, descripcion, url, categoria, fecha, titulo, contador);
                                     noticiasMasGuardadas.add(listElementMasGuardadas);
-                                }
-
-                                if (!noticiasMasGuardadas.isEmpty()) {
-                                    // Creamos un adaptador con la lista de noticias guardadas y lo configuramos en el RecyclerView
-                                    listAdapterMasGuardadas = new ListAdapterMasGuardadas(NoticiasMasGuardadasActivity.this, noticiasMasGuardadas);
-                                    recyclerViewMasGuardadas.setAdapter(listAdapterMasGuardadas);
-                                    // Notificamos al adaptador que los datos han cambiado
-                                    listAdapterMasGuardadas.notifyDataSetChanged();
                                 } else {
-                                    // Mostramos un mensaje indicando que no hay noticias guardadas
-                                    Toast.makeText(NoticiasMasGuardadasActivity.this, "No hay noticias guardadas", Toast.LENGTH_SHORT).show();
+                                    // Eliminar el documento si el contador es 0
+                                    document.getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d("Firestore", "Documento con contador 0 eliminado");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e("Firestore", "Error al eliminar documento con contador 0", e);
+                                        }
+                                    });
                                 }
-                            } else {
-                                // Manejamos el error en caso de que la consulta falle
-                                Log.e("Firestore", "Error al obtener noticias guardadas", task.getException());
                             }
-                        }
-                    });
 
+                            if (!noticiasMasGuardadas.isEmpty()) {
+                                // Creamos un adaptador con la lista de noticias guardadas y lo configuramos en el RecyclerView
+                                listAdapterMasGuardadas = new ListAdapterMasGuardadas(NoticiasMasGuardadasActivity.this, noticiasMasGuardadas);
+                                recyclerViewMasGuardadas.setAdapter(listAdapterMasGuardadas);
+                                // Notificamos al adaptador que los datos han cambiado
+                                listAdapterMasGuardadas.notifyDataSetChanged();
+                            } else {
+                                // Mostramos un mensaje indicando que no hay noticias guardadas
+                                Toast.makeText(NoticiasMasGuardadasActivity.this, "La lista está vacía", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            // Manejamos el error en caso de que la consulta falle
+                            Log.e("Firestore", "Error al obtener noticias guardadas", task.getException());
+                        }
+                    }
+                });
     }
+
 
 
 }
