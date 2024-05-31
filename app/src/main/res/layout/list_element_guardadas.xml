@@ -97,7 +97,7 @@
                     android:text="Periodico"
                     android:padding="3dp"
                     android:textSize="20sp"
-                    android:fontFamily="@font/cascadia"
+                    android:fontFamily="@font/roboto"
                     />
 
                 <TextView
@@ -110,7 +110,7 @@
                     android:text="Titulo"
                     android:padding="3dp"
                     android:textSize="20sp"
-                    android:fontFamily="@font/cascadia"
+                    android:fontFamily="@font/roboto"
                     />
 
                 <TextView
@@ -122,7 +122,7 @@
                     android:text="futbol"
                     android:padding="3dp"
                     android:textSize="20sp"
-                    android:fontFamily="@font/cascadia"
+                    android:fontFamily="@font/roboto"
                     />
 
                 <TextView
@@ -135,7 +135,7 @@
                     android:text="fecha"
                     android:padding="3dp"
                     android:textSize="20sp"
-                    android:fontFamily="@font/cascadia"
+                    android:fontFamily="@font/roboto"
                     />
 
             </LinearLayout>
