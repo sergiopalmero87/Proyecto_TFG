@@ -166,6 +166,7 @@ public class AuthActivity extends AppCompatActivity {
                                                     if (task.isSuccessful()) {
                                                         // User autenticado correctamente
                                                         Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                                                        Toast.makeText(AuthActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
                                                         startActivity(intent);
                                                     } else if (!task.isSuccessful()) {
                                                         Toast.makeText(AuthActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();

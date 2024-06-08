@@ -2,6 +2,7 @@ package com.edix.tfc.proyecto_tfg;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,8 +23,12 @@ import com.edix.tfc.proyecto_tfg.retrofit.modelo.Article;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListAdapter;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.ListElement;
 import com.edix.tfc.proyecto_tfg.retrofit.modelo.Noticias;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ImageView imagenCard;
     FirebaseUser user;
+    private FirebaseFirestore db;
     private TextView nombreUsuarioMain;
 
     // Contenedor que aloja las cards
@@ -72,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void iniciarVariables() {
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         logOutButton = findViewById(R.id.logOut);
         configButton = findViewById(R.id.config);
         recyclerView = findViewById(R.id.recyclerViewMain);
@@ -217,17 +224,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void nombreUser() {
-        String nombre = user.getDisplayName();
-        if (nombre != null && nombre.length() > 0) {
-            if (nombre.length() > 15) {
-                nombre = nombre.substring(0, 10) + "...";
-            }
-            nombreUsuarioMain.setText(nombre);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            db.collection("users").document(uid).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String nombre = document.getString("nombreUsuario");
+                                    if (nombre != null && !nombre.isEmpty()) {
+                                        nombreUsuarioMain.setText(nombre);
+                                    } else {
+                                        nombreUsuarioMain.setText("SportHub");
+                                    }
+                                } else {
+                                    nombreUsuarioMain.setText("SportHub");
+                                }
+                            } else {
+                                nombreUsuarioMain.setText("SportHub");
+                            }
+                        }
+                    });
         } else {
-            // Manejar el caso en el que el nombre sea nulo o vacío
-            // Por ejemplo, mostrar un nombre predeterminado o un mensaje de error
             nombreUsuarioMain.setText("SportHub");
         }
     }
+
 
 }

@@ -120,17 +120,22 @@ public class RegistActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                                         if (task.isSuccessful()) {
+                                                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                                                            String uid = currentUser.getUid();
                                                             // Guardar usuario en la base de datos con email y nombreUsuario
                                                             Map<String, Object> user = new HashMap<>();
                                                             user.put("email", email);
                                                             user.put("nombreUsuario", nombreUser);
 
-                                                            db.collection("users")
-                                                                    .add(user)
-                                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                            db.collection("users").document(uid)
+                                                                    .set(user)
+                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
-                                                                        public void onSuccess(DocumentReference documentReference) {
-
+                                                                        public void onSuccess(Void aVoid) {
+                                                                            Intent intent = new Intent(RegistActivity.this, CategActivity.class);
+                                                                            startActivity(intent);
+                                                                            Toast.makeText(RegistActivity.this, "Registro correcto.", Toast.LENGTH_SHORT).show();
+                                                                            finish();
                                                                         }
                                                                     })
                                                                     .addOnFailureListener(new OnFailureListener() {
@@ -139,10 +144,6 @@ public class RegistActivity extends AppCompatActivity {
                                                                             Log.e("RegistActivity", "Error al agregar usuario a la base de datos", e);
                                                                         }
                                                                     });
-
-                                                            // Ir a la actividad principal y mandamos el nombre de usuario para que la UI sea mas personal.
-                                                            Intent intent = new Intent(RegistActivity.this, CategActivity.class);
-                                                            startActivity(intent);
                                                         } else {
                                                             // Error al crear el usuario
                                                             Toast.makeText(RegistActivity.this, "Error al registrar usuario", Toast.LENGTH_SHORT).show();
@@ -223,18 +224,22 @@ public class RegistActivity extends AppCompatActivity {
                                             // Obtenemos el usuario actual
                                             FirebaseUser user = mAuth.getCurrentUser();
 
+                                            String uid = user.getUid();
+
                                             // Guardar usuario en la base de datos con Twitter
                                             Map<String, Object> userTwitter = new HashMap<>();
                                             userTwitter.put("email", user.getEmail());
                                             userTwitter.put("nombreUsuario", user.getDisplayName());
 
-                                            db.collection("users")
-                                                    .add(userTwitter)
-                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            db.collection("users").document(uid)
+                                                    .set(userTwitter)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
-                                                        public void onSuccess(DocumentReference documentReference) {
-                                                            startActivity(new Intent(RegistActivity.this, MainActivity.class));
-                                                            Toast.makeText(RegistActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
+                                                        public void onSuccess(Void aVoid) {
+                                                            Intent intent = new Intent(RegistActivity.this, CategActivity.class);
+                                                            startActivity(intent);
+                                                            Toast.makeText(RegistActivity.this, "Login con Twitter correcto.", Toast.LENGTH_SHORT).show();
+                                                            finish(); // Añadido para cerrar la actividad actual
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -262,18 +267,22 @@ public class RegistActivity extends AppCompatActivity {
                                             // Obtenemos el usuario actual
                                             FirebaseUser user = mAuth.getCurrentUser();
 
+                                            String uid = user.getUid();
+
                                             // Guardar usuario en la base de datos con Twitter
                                             Map<String, Object> userTwitter = new HashMap<>();
                                             userTwitter.put("email", user.getEmail());
                                             userTwitter.put("nombreUsuario", user.getDisplayName());
 
-                                            db.collection("users")
-                                                    .add(userTwitter)
-                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            db.collection("users").document(uid)
+                                                    .set(userTwitter)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
-                                                        public void onSuccess(DocumentReference documentReference) {
-                                                            startActivity(new Intent(RegistActivity.this, CategActivity.class));
+                                                        public void onSuccess(Void aVoid) {
+                                                            Intent intent = new Intent(RegistActivity.this, CategActivity.class);
+                                                            startActivity(intent);
                                                             Toast.makeText(RegistActivity.this, "Registro con Twitter correcto", Toast.LENGTH_SHORT).show();
+                                                            finish(); // Añadido para cerrar la actividad actual
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -361,17 +370,22 @@ public class RegistActivity extends AppCompatActivity {
                             //Obtenemos el usuario actual
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            String uid = user.getUid();
+
                             // Guardar usuario en la base de datos con google
                             Map<String, Object> userGoogle = new HashMap<>();
                             userGoogle.put("email", user.getEmail());
                             userGoogle.put("nombreUsuario", user.getDisplayName());
 
-                            db.collection("users")
-                                    .add(userGoogle)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            db.collection("users").document(uid)
+                                    .set(userGoogle)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
-                                        public void onSuccess(DocumentReference documentReference) {
-
+                                        public void onSuccess(Void aVoid) {
+                                            Intent intent = new Intent(RegistActivity.this, CategActivity.class);
+                                            startActivity(intent);
+                                            Toast.makeText(RegistActivity.this, "Registro con Google correcto", Toast.LENGTH_SHORT).show();
+                                            finish();  // Añadido para cerrar la actividad actual
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -380,11 +394,6 @@ public class RegistActivity extends AppCompatActivity {
                                             Log.e("RegistActivity", "Error al agregar usuario a la base de datos", e);
                                         }
                                     });
-
-                            Intent intent = new Intent(RegistActivity.this, CategActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(RegistActivity.this, "Registro con Google correcto", Toast.LENGTH_SHORT).show();
-
                         }else{
                             Toast.makeText(RegistActivity.this, "NO", Toast.LENGTH_SHORT).show();
                         }
