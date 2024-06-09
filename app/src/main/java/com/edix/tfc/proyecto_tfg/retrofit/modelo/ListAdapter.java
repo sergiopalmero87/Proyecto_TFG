@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//Esta clase comunica la parte back de las cards con la parte front
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<ListElement> listaNoticiasMostrar;
     private LayoutInflater mInflater;
@@ -50,9 +51,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
+    //Sirve para atar, sujetar, vincular etc.. las cosas que vamos implementando al recyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ListElement element = listaNoticiasMostrar.get(position);
+
+        //En esta variable guardamos el textoNoticia que haya en cada element
+        //que es de tipo ListElement(por lo que es el contenido de las cards)
+        //Si el largo es de mas de 100 caracteres, hacemos que se muestre ...
+        //para que la card no sea tan grande.
         String descripcion = element.getTextoNoticia();
         if (descripcion.length() > 100) {
             descripcion = descripcion.substring(0, 97) + "...";
@@ -81,11 +88,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         holder.urlVer(element);
     }
 
+    //Devolver el tamaño de la lista de datos
     @Override
     public int getItemCount() {
         return listaNoticiasMostrar.size();
     }
 
+    //Esta clase static lo que hace es que si o si ambas clases están relacionadas,
+    // lo que es bueno para simplificar el codigo y hacer que sea mas fácil de entender.
+    // Tambien simplifica el codigo ya que no necesito crear codigo innecesario (getter and setter)
+    // porque la clase static puede acceder a las cosas privadas de la clase en la que esta implementada
+    // El ViewHolder contendrá las vistas(las cosas) que irán dentro de las cards
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textoNoticia, urlNoticia, namePeriodico, fechaPublicacion, tituloNoticia;
         public ImageView guardarNoticia, publicarTwitter, imagenCard, urlVer;
@@ -236,6 +249,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             publicarTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Mensaje a publicar
                     String tweetText = item.getTextoNoticia();
                     String mediaUrl = item.getUrl();
                     String finalTweetText = tweetText;
@@ -245,13 +259,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     }
                     finalTweetText += "\n " + mediaUrl + "\n\nCompartido a traves de Sporthub";
 
+                    // Crear un intent para compartir en Twitter
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.putExtra(Intent.EXTRA_TEXT, finalTweetText);
                     intent.setType("text/plain");
 
+                    // Verificar si hay aplicaciones que pueden manejar el intent
                     if (intent.resolveActivity(itemView.getContext().getPackageManager()) != null) {
                         itemView.getContext().startActivity(intent);
                     } else {
+                        // Si no hay aplicaciones que puedan manejar el intent, mostrar un mensaje de error
                         Toast.makeText(itemView.getContext(), "No se encontró una aplicación para compartir en Twitter", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -269,6 +286,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             });
         }
 
+
+        //Sirve para actualizar los elementos que haya en el ViewHolder
         void bindData(final ListElement item) {
 
         }

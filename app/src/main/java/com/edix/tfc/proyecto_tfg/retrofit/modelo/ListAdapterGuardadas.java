@@ -219,8 +219,7 @@ public class ListAdapterGuardadas extends RecyclerView.Adapter<ListAdapterGuarda
                             }
                         });
                     } else {
-                        // Si el usuario no está autenticado, manejar la situación en consecuencia
-                        // Por ejemplo, redirigir a la pantalla de inicio de sesión
+
                     }
                 }
             });
